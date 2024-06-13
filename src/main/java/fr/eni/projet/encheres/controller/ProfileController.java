@@ -26,7 +26,7 @@ public class ProfileController {
 
 	@GetMapping
 	public String afficherProfil(@RequestParam(name = "pseudo") String pseudo,Model model) {
-		Utilisateur utilisateur = utilisateurService.findByPseudo(pseudo);
+		Utilisateur utilisateur = utilisateurService.consulterUtilisateur(pseudo);
 		if (utilisateur != null) {
 			model.addAttribute("utilisateur", utilisateur);
 			return "view-profile"; // Vue à afficher
