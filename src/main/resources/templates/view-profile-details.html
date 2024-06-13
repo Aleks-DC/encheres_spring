@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(
+			titrePage=~{:: title}, 
+			contenuPage=~{:: main}, 
+			ressourcesSupp=~{})}">
+<head>
+    <meta charset="UTF-8">
+    <title> Profil</title>
+    <link rel="stylesheet" data-th-href="@{/css/general.css}" />
+</head>	
+	
+<body>
+    <h1 data-th-text="${utilisateur.pseudo}"></h1>
+    <div>
+        <label>Prénom :</label>
+        <input data-th-text="${utilisateur.prenom}"></input>
+    </div>
+    <div>
+        <label>Nom :</label>
+        <input data-th-text="${utilisateur.nom}"></input>
+    </div>
+    <div>
+        <label>Email :</label>
+        <input data-th-text="${utilisateur.email}"></input>
+    </div>
+    <div>
+        <label>Téléphone :</label>
+        <input data-th-text="${utilisateur.telephone}"></input>
+    </div>
+    <div>
+        <!-- Affiche le bouton Modifier si l'utilisateur en session correspond au profil -->
+        <button data-th-if="${#authentication.name == utilisateur.pseudo}" data-th-onclick="@{/view-profile-update}">Modifier</button>
+        <!-- Affiche le bouton Retour sinon -->
+        <button data-th-if="${#authentication.name != utilisateur.pseudo}" type="button" onclick="window.history.back()">Retour</button>
+        <!--  le code onclick="window.history.back()" permet à un bouton d'agir comme un bouton "Retour", 
+        		en utilisant JavaScript pour revenir à la page précédente dans l'historique du navigateur.  -->
+    </div>
+</body>
+</html>

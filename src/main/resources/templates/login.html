@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title data-th-text="#{index.title}"></title>
+    <link rel="stylesheet" data-th-href="@{/css/form.css}" />
+    <link rel="stylesheet" data-th-href="@{/css/tp-error.css}" />
+</head>
+<body>
+    <main class="center-main">
+        <form data-th-action="@{/login}" method="post">
+            <h1>Connexion</h1>
+            <ul>
+                <li>
+                    <label for="inputUsername">Nom d'utilisateur :</label> 
+                    <input id="inputUsername" type="text" name="username" />
+                </li>
+                <li>
+                    <label for="inputPwd">Mot de passe :</label> 
+                    <input id="inputPwd" type="password" name="password" />
+                </li>
+                <li>
+                    <button type="submit">Connexion</button>
+                </li>
+            </ul>
+        </form>
+         <div>
+            <a data-th-href="@{/forgot-password}">Mot de passe oublié ?</a>
+        </div>
+        <div>
+            <a data-th-href="@{/register}">
+                <button>Créer un compte</button>
+            </a>
+        </div>
+    </main>
+</body>
+</html>

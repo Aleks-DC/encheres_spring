@@ -1,0 +1,18 @@
+<form th:action="@{/enchere/creer}" method="post" th:object="${articleVendu}">
+    <label for="nom">Nom de l'article :</label>
+    <input type="text" id="nom" th:field="*{nom}">
+
+    <label for="description">Description :</label>
+    <textarea id="description" th:field="*{description}"></textarea>
+
+    <label for="dateDebutEncheres">Date de début des enchères :</label>
+    <input type="date" id="dateDebutEncheres" th:field="*{dateDebutEncheres}">
+
+    <label for="dateFinEncheres">Date de fin des enchères :</label>
+    <input type="date" id="dateFinEncheres" th:field="*{dateFinEncheres}">
+
+    <label for="prixInitial">Prix initial :</label>
+    <input type="number" id="prixInitial" th:field="*{prixInitial}">
+
+    <button type="submit">Créer l'enchère</button>
+</form>
