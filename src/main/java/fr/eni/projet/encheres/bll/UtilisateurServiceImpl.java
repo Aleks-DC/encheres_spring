@@ -1,57 +1,50 @@
 package fr.eni.projet.encheres.bll;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import fr.eni.projet.encheres.bo.Utilisateur;
 import fr.eni.projet.encheres.dal.UtilisateurDAO;
-import fr.eni.projet.encheres.exception.UtilisateurNonTrouveException;
-
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService {
-	   private final UtilisateurDAO utilisateurDAO;
-	   
-//	   @Autowired
-	    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	    public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO, BCryptPasswordEncoder bCryptPasswordEncoder) {
-	        this.utilisateurDAO = utilisateurDAO;
-	        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-	    }
-	    
-    public Utilisateur findByPseudo(String pseudo) {
-    	Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
-        if (utilisateur == null) {
-            throw new UtilisateurNonTrouveException("Utilisateur non trouvé avec le pseudo : " + pseudo);
-        }
-        return utilisateur;
-    }
-   
-//        Optional<Utilisateur> utilisateurOptional = Optional.of(utilisateurDAO.findByPseudo(pseudo));
-//        if (utilisateurOptional.isPresent()) {
-//            return utilisateurOptional.get();
-//        } else {
-//            throw new UtilisateurNonTrouveException("Utilisateur non trouvé avec le pseudo : " + pseudo);
-//        }
-//    } 
-
-    public void updateUtilisateur(Utilisateur utilisateur) {
-    	Utilisateur utilisateurExistant = findByPseudo(utilisateur.getPseudo()); // Utilisation du pseudo
-        if (utilisateurExistant == null) {
-            throw new UtilisateurNonTrouveException("Utilisateur non trouvé pour la mise à jour");
-        }
-        // Logique de mise à jour des champs de l'utilisateur
-        // ... (Assurez-vous de ne pas modifier le pseudo ici si vous l'utilisez comme clé unique)
-        utilisateurDAO.updateUtilisateur(utilisateur);
-    }
+	@Autowired
+	private UtilisateurDAO utilisateurDAO;
 
 	@Override
-	public void saveUtilisateur(Utilisateur utilisateur) {
-		// TODO Auto-generated method stub
-		
+	public Utilisateur createUtilisateur(Utilisateur utilisateur) {
+		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
+		return utilisateurDAO.create(utilisateur);
+	}
+	
+	// Pas besoin, mais je garde de côté pour le passwordEncoder.matches ==> future méthode changeMotDePasse()
+	@Override
+	public Utilisateur connexion(String pseudo, String motDePasse) {
+//		Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
+//		if (utilisateur != null && passwordEncoder.matches(motDePasse, utilisateur.getMotDePasse())) {
+//			return utilisateur;
+//		}
+		return null;
+	}
+
+	@Override
+	public Utilisateur updateUtilisateur(Utilisateur utilisateur) {
+		return utilisateurDAO.update(utilisateur);
+	}
+
+	@Override
+	public List<Utilisateur> consulterUtilisateurs() {
+		return utilisateurDAO.findAll();
+	}
+
+	@Override
+	public Utilisateur consulterUtilisateur(String pseudo) {
+		return utilisateurDAO.findByPseudo(pseudo);
 	}
 }
