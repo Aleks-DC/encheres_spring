@@ -29,7 +29,7 @@ public class ProfileController {
 		Utilisateur utilisateur = utilisateurService.findByPseudo(pseudo);
 		if (utilisateur != null) {
 			model.addAttribute("utilisateur", utilisateur);
-			return "view-profile?"+pseudo; // Vue à afficher
+			return "view-profile"; // Vue à afficher
 		} else {
 			// Gérer le cas où aucun utilisateur n'est trouvé avec le pseudo donné
 			return "redirect:/"; // Rediriger vers accueil pour test

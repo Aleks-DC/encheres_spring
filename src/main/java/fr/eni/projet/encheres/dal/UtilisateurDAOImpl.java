@@ -20,9 +20,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	@Autowired 
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
-	private final String FIND_BY_PSEUDO = "SELECT * FROM Utilisateurs WHERE pseudo = :pseudo";
-	private final String UPDATE = "UPDATE Utilisateurs SET (nom = :nom, prenom = :prenom, email = :email, telephone = :telephone WHERE pseudo = :pseudo ";
-									//Ajouter élément Adresse du create
+	private final String FIND_BY_PSEUDO = "SELECT u.pseudo, u.nom, u.prenom, u.email, u.telephone, u.mot_de_passe, u.credit, u.administrateur, a.rue, a.code_postal, a.ville " +
+								            "FROM Utilisateurs u " +
+								            "INNER JOIN Adresses a ON u.no_adresse = a.no_adresse " +
+								            "WHERE u.pseudo = :pseudo";
+	private final String UPDATE_UTILISATEUR= "UPDATE Utilisateurs SET (nom = :nom, prenom = :prenom, email = :email, telephone = :telephone WHERE pseudo = :pseudo ";
+	private final String UPDATE_ADRESSE = "UPDATE Adresses SET rue = :rue, code_postal = :codePostal, ville = :ville WHERE no_adresse = :noAdresse";
 	
 
 	@Override
@@ -40,12 +43,23 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	//Abdallah : Est-ce qu'il faut séparer INSERT TABLE Utilisateurs et Adresses ? 
 	@Override
 	public void updateUtilisateur(Utilisateur utilisateur) {
-		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-		namedParameters.addValue("nom", utilisateur.getNom());
-		namedParameters.addValue("prenom", utilisateur.getPrenom());
-		namedParameters.addValue("email", utilisateur.getEmail());
-		namedParameters.addValue("telephone", utilisateur.getTelephone());
-		jdbcTemplate.update(UPDATE, namedParameters);
+	    MapSqlParameterSource namedParametersUtilisateur = new MapSqlParameterSource();
+	    namedParametersUtilisateur.addValue("nom", utilisateur.getNom());
+	    namedParametersUtilisateur.addValue("prenom", utilisateur.getPrenom());
+	    namedParametersUtilisateur.addValue("email", utilisateur.getEmail());
+	    namedParametersUtilisateur.addValue("telephone", utilisateur.getTelephone());
+	    namedParametersUtilisateur.addValue("pseudo", utilisateur.getPseudo());
+	    jdbcTemplate.update(UPDATE_UTILISATEUR, namedParametersUtilisateur);
+
+	    if (utilisateur.getAdresse() != null) {
+	        MapSqlParameterSource namedParametersAdresse = new MapSqlParameterSource();
+	        namedParametersAdresse.addValue("rue", utilisateur.getAdresse().getRue());
+	        namedParametersAdresse.addValue("codePostal", utilisateur.getAdresse().getCodePostal());
+	        namedParametersAdresse.addValue("ville", utilisateur.getAdresse().getVille());
+	        namedParametersAdresse.addValue("noAdresse", utilisateur.getAdresse().getId());
+
+	        jdbcTemplate.update(UPDATE_ADRESSE, namedParametersAdresse);
+	    }
 	}
 	
 	private static class UtilisateurRowMapper implements RowMapper<Utilisateur> {
@@ -57,6 +71,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	        utilisateur.setNom(rs.getString("nom"));
 	        utilisateur.setEmail(rs.getString("Email"));
 	        utilisateur.setTelephone(rs.getString("telephone"));
+	        utilisateur.setMotDePasse(rs.getString("mot_de_passe"));
+	        utilisateur.setCredit(rs.getInt("credit"));
+	        utilisateur.setAdmin(rs.getBoolean("administrateur"));
 	        // ... (mapper les autres champs de l'utilisateur)
 	        
 	        // Mapper l'adresse
