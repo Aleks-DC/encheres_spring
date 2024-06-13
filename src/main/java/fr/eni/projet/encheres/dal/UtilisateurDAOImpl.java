@@ -21,7 +21,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	private final String FIND_BY_PSEUDO = "SELECT * FROM Utilisateurs WHERE pseudo = :pseudo";
-	private final String UPDATE = "UPDATE Utilisateurs SET (nom = :nom, prenom = :prenom, email = :email, telephone = :telephone, rue= :rue, codePostale = :codePostale, ville= :ville WHERE pseudo = :pseudo ";
+	private final String UPDATE = "UPDATE Utilisateurs SET (nom = :nom, prenom = :prenom, email = :email, telephone = :telephone WHERE pseudo = :pseudo ";
 									//Ajouter élément Adresse du create
 	
 
@@ -45,9 +45,6 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		namedParameters.addValue("prenom", utilisateur.getPrenom());
 		namedParameters.addValue("email", utilisateur.getEmail());
 		namedParameters.addValue("telephone", utilisateur.getTelephone());
-		namedParameters.addValue("rue", utilisateur.getAdresse().getRue());
-		namedParameters.addValue("codePostale", utilisateur.getAdresse().getCodePostal());
-		namedParameters.addValue("ville", utilisateur.getAdresse().getVille());
 		jdbcTemplate.update(UPDATE, namedParameters);
 	}
 	
@@ -56,10 +53,10 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	    public Utilisateur mapRow(ResultSet rs, int rowNum) throws SQLException {
 	        Utilisateur utilisateur = new Utilisateur();
 	        utilisateur.setPseudo(rs.getString("pseudo"));
-	        utilisateur.setPrenom(rs.getString("pseudo"));
-	        utilisateur.setPseudo(rs.getString("pseudo"));
-	        utilisateur.setPseudo(rs.getString("pseudo"));
-	        utilisateur.setPseudo(rs.getString("pseudo"));
+	        utilisateur.setPrenom(rs.getString("prenom"));
+	        utilisateur.setNom(rs.getString("nom"));
+	        utilisateur.setEmail(rs.getString("Email"));
+	        utilisateur.setTelephone(rs.getString("telephone"));
 	        // ... (mapper les autres champs de l'utilisateur)
 	        
 	        // Mapper l'adresse

@@ -54,7 +54,4 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		// TODO Auto-generated method stub
 		
 	}
-
-
-
 }

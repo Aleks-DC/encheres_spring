@@ -1,4 +1,10 @@
-<form th:action="@{/enchere/creer}" method="post" th:object="${articleVendu}">
+<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main})}">
+<head>
+
+</head>
+
+<main>
+<form th:action="@{/enchere/creer}" method="post" th:object="${articleAVendre}">
     <label for="nom">Nom de l'article :</label>
     <input type="text" id="nom" th:field="*{nom}">
 
@@ -16,3 +22,5 @@
 
     <button type="submit">Créer l'enchère</button>
 </form>
+</main>
+</html>

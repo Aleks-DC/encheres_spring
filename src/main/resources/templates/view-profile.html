@@ -13,8 +13,8 @@
 	<form th:action="@{/profile?utilisateur.pseudo}" method="get">
 	    <h1 data-th-text="${utilisateur.pseudo}"></h1>
 	    <div>
-	        <label for="inputPrenom">Prénom :</label>
-	        <input type="text" id="inputPrenom"data-th-value="${utilisateur.prenom}" readonly></input>
+	        <label >Prénom :</label>
+	        <input type="text" data-th-value="${utilisateur.prenom}" readonly></input>
 	    </div>
 	    <div>
 	        <label>Nom :</label>

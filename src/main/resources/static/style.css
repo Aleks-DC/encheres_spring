@@ -1,0 +1,90 @@
+header {
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#nav-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logoTitre {
+	display: flex;
+    justify-content: space-between;
+}
+
+.logoSite {
+    max-height: 90px;
+    margin-right: 1rem;
+}
+
+.aLanguage {
+	text-decoration: none;
+}
+
+.titreSite {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
+.a-titreSite {
+	text-decoration : none;
+}
+
+.language {
+    max-height: 20px; 
+    margin-left: 10px; 
+    border-radius: 10%;
+    text-decoration: none;
+}
+
+.divLanguage {
+	margin-right: 50px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+nav li {
+    margin: 0 1rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 5px; 
+}
+
+nav a:hover {
+    background-color: #ddd;
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 0.5rem 0;
+    }
+    #nav-title {
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 1rem;
+    }
+    .titreSite {
+        font-size: 1.5rem;
+    }
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    nav li {
+        margin: 0.5rem 0;
+    }
+}

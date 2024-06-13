@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
+<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main})}">
 
 <head>
     <title>Accueil - ENI-Enchères</title>
 </head>
 
 <body>
-    <main layout:fragment="contenuPage">
+    <main>
         <div class="container">
 
             <div class="date-container">

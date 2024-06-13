@@ -1,20 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" data-th-fragment="layout-enchere(contenuPage)">
 <head>
-	<meta charset="UTF-8">
-	<title>Enchere ENI</title>
-	
-	<link rel="stylesheet" data-th-href="@{/css/general.css}">
-	
+<title>Accueil - ENI-Enchères</title>
+<link rel="stylesheet" href="../style.css">
 </head>
 <body>
-	
-	<!--  Gérer les fragments 
-	<div data-th-replace="~{fragments/fragment-entete :: frag-entete}"></div> -->
-	
-	<!-- Variable 
-	<main data-th-replace="${contenuPage}?:~{}"></main> -->
-	
+
+	<div data-th-replace="~{fragments/fragment-entete :: frag-entete}"></div>
+
+	<main data-th-replace="${contenuPage}?:~{}"></main>
+
 	<div data-th-replace="~{fragments/fragment-piedpage :: frag-piedpage}"></div>
+
 </body>
 </html>

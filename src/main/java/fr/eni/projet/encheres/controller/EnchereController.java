@@ -23,13 +23,13 @@ public class EnchereController {
     @GetMapping("/creer")
     public String afficherFormulaireCreation(Model model) {
         model.addAttribute("articleAVendre", new ArticleAVendre());
-        return "creerEnchere";
+        return "creer-enchere";
     }
 
     @PostMapping("/creer")
     public String creerEnchere(@Valid @ModelAttribute("articleVendu") ArticleAVendre articleAVendre, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "creerEnchere";
+            return "creer-enchere";
         }
 
         articleAVendreService.creerEnchere(articleAVendre);
