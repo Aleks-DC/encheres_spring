@@ -1,6 +1,7 @@
 header {
     background-color: #f0f0f0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 50px;
 }
 
 #nav-title {
@@ -66,6 +67,29 @@ nav a {
 
 nav a:hover {
     background-color: #ddd;
+}
+
+.date-container {
+	border: solid;
+	width: 250px;
+	padding-left: 10px;
+	padding-right: 10px;
+	justify-content: right;
+}
+
+footer {
+  background-color: #ebebeb;
+  color: black;
+  padding: 20px;
+  text-align: center;
+  font-family: sans-serif; 
+  margin-top: auto;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {
