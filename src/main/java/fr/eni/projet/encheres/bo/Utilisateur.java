@@ -1,15 +1,33 @@
 package fr.eni.projet.encheres.bo;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class Utilisateur {
+	
+	@NotNull
+	@Size(min = 3, max = 20)
+	
 	private String pseudo;
+	
+	@NotNull
+	@Size(max = 50)
     private String nom;
+    
+	@NotNull
+	@Size(max = 50)
     private String prenom;
+    
+    @Email
     private String email;
+    
+    @Pattern(regexp = "^(0|\\+33|0033)[1-9][0-9]{8}$")
     private String telephone;
     private String motDePasse;
     private int credit;
     private boolean admin;
-    
     private Adresse adresse;
 
 	public Utilisateur() {

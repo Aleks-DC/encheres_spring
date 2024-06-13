@@ -15,7 +15,7 @@ import fr.eni.projet.encheres.exception.UtilisateurNonTrouveException;
 public class UtilisateurServiceImpl implements UtilisateurService {
 	   private final UtilisateurDAO utilisateurDAO;
 	   
-	   @Autowired
+//	   @Autowired
 	    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	    public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO, BCryptPasswordEncoder bCryptPasswordEncoder) {
@@ -24,13 +24,20 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	    }
 	    
     public Utilisateur findByPseudo(String pseudo) {
-        Optional<Utilisateur> utilisateurOptional = Optional.of(utilisateurDAO.findByPseudo(pseudo));
-        if (utilisateurOptional.isPresent()) {
-            return utilisateurOptional.get();
-        } else {
+    	Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
+        if (utilisateur == null) {
             throw new UtilisateurNonTrouveException("Utilisateur non trouvé avec le pseudo : " + pseudo);
         }
+        return utilisateur;
     }
+   
+//        Optional<Utilisateur> utilisateurOptional = Optional.of(utilisateurDAO.findByPseudo(pseudo));
+//        if (utilisateurOptional.isPresent()) {
+//            return utilisateurOptional.get();
+//        } else {
+//            throw new UtilisateurNonTrouveException("Utilisateur non trouvé avec le pseudo : " + pseudo);
+//        }
+//    } 
 
     public void updateUtilisateur(Utilisateur utilisateur) {
     	Utilisateur utilisateurExistant = findByPseudo(utilisateur.getPseudo()); // Utilisation du pseudo

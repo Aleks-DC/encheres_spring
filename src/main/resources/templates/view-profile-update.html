@@ -14,7 +14,7 @@
     <form action="#" data-th-action="@{/view-profile-update}" method="post">
         <div>
             <label for="pseudo">Pseudo :</label>
-            <span data-th-text="${coachQqch}"></span>
+            <span data-th-value="${utilisateur.pseudo}"></span>
             <label for="nom">Nom(*):</label>
             <input type="text" id="nom" name="nom" required>
         </div>
@@ -40,7 +40,7 @@
         </div>
         <div class="form-group full-width">
             <label for="credit">Mon crédit:</label>
-            <span data-th-text="${nombreDePoints}"></span>
+            <span data-th-value="${nombreDePoints}"></span>
         </div>
         <div class="button-group">
             <button type="submit">Modifier</button>
