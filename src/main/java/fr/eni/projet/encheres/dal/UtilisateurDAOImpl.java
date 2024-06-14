@@ -76,7 +76,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
             utilisateur.setCredit(rs.getInt("credit"));
             utilisateur.setAdmin(rs.getBoolean("administrateur"));
             
-            // On MAP juste l'ID, le reste sera géré en dans la BLL
+            // On MAP juste l'ID, le reste sera géré dans la BLL
             Adresse adresse = new Adresse();
             adresse.setId(rs.getInt("no_adresse"));
             utilisateur.setAdresse(adresse);
