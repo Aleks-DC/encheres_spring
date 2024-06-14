@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main}, ressourcesSupp=~{:: #ressources-css})}">
+
 <head>
     <meta charset="UTF-8">
     <title data-th-text="#{index.title}"></title>
-    <link rel="stylesheet" data-th-href="@{/css/form.css}" />
-    <link rel="stylesheet" data-th-href="@{/css/tp-error.css}" />
+    <th:block id="ressources-css">
+		<link rel="stylesheet" data-th-href="@{/css/login.css}">
+	</th:block>
 </head>
 <body>
+<div class="superParent">
     <main class="center-main">
         <form data-th-action="@{/login}" method="post">
-            <h1>Connexion</h1>
             <ul>
                 <li>
                     <label for="inputUsername">Nom d'utilisateur :</label> 
@@ -23,15 +25,17 @@
                     <button type="submit">Connexion</button>
                 </li>
             </ul>
-        </form>
-         <div>
-            <a data-th-href="@{/forgot-password}">Mot de passe oublié ?</a>
-        </div>
+        </form>        
         <div>
-            <a data-th-href="@{/register}">
-                <button>Créer un compte</button>
+            <a data-th-href="@{/register}" class="div-a">
+                <button class="div-button">Créer un compte</button>
             </a>
         </div>
+         <div>
+            <a data-th-href="@{/forgot-password}" class="div-a">Mot de passe oublié ?</a>
+        </div>
+
     </main>
+    </div>
 </body>
 </html>
