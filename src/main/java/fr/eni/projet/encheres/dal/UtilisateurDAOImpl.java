@@ -38,6 +38,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         namedParameters.addValue("administrateur", utilisateur.isAdmin());
         namedParameters.addValue("noAdresse", utilisateur.getAdresse().getId());
 
+
         // Vérifier si l'utilisateur existe déjà
         String checkUserSql = "SELECT COUNT(*) FROM UTILISATEURS WHERE pseudo = :pseudo";
         int count = jdbcTemplate.queryForObject(checkUserSql, namedParameters, Integer.class);

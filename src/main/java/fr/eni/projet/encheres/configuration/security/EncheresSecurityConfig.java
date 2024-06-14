@@ -43,7 +43,7 @@ public class EncheresSecurityConfig {
 					.requestMatchers("/css/*").permitAll()
 					.requestMatchers("/images/*").permitAll()
 					// Toutes autres url et méthodes ne sont accessibles que si connecté
-					.anyRequest().authenticated();
+					.anyRequest().permitAll();
 		});
 
 		// Autorisation d'accès au formulaire de connexion + redirection vers l'accueil
