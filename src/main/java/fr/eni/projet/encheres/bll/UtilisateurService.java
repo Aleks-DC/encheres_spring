@@ -1,16 +1,19 @@
 package fr.eni.projet.encheres.bll;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 
 import fr.eni.projet.encheres.bo.Utilisateur;
 
-@Service
 public interface UtilisateurService {
 	
-    public Utilisateur findByPseudo(String pseudo);
+	Utilisateur createUtilisateur(Utilisateur utilisateur);
 
-    public void updateUtilisateur(Utilisateur utilisateur);
+	//Pas besoin, géré par notre super copain Spring Security
+	Utilisateur connexion(String pseudo, String motDePasse);
 
-	public void saveUtilisateur(Utilisateur utilisateur);
+	Utilisateur updateUtilisateur(Utilisateur utilisateur);
 
+	List<Utilisateur> consulterUtilisateurs();
+
+	Utilisateur consulterUtilisateur(String pseudo);
 }

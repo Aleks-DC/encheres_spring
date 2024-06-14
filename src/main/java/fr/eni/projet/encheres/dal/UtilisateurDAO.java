@@ -1,11 +1,18 @@
 package fr.eni.projet.encheres.dal;
 
-import fr.eni.projet.encheres.bo.Utilisateur;
+import java.util.List;
 
+import fr.eni.projet.encheres.bo.Utilisateur;
 
 public interface UtilisateurDAO {
 	
-	public Utilisateur findByPseudo (String pseudo);
+	Utilisateur create(Utilisateur utilisateur); // Create
+	
+	Utilisateur findByPseudo(String pseudo); // Read
 
-	public void updateUtilisateur(Utilisateur utilisateur);
+	List<Utilisateur> findAll(); // Read
+
+	Utilisateur update(Utilisateur utilisateur); // Update
+
+	void deleteByPseudo(String pseudo); // Delete
 }
