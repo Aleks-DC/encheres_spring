@@ -10,6 +10,7 @@
 </head>	
 	
 <body>
+	<main>
 	<form data-th-action="@{/profile}" data-th-object="${utilisateur}" method="get">
 	    <h1 data-th-text="${utilisateur.pseudo}"></h1>
 	    <div>
@@ -37,5 +38,6 @@
 	        		en utilisant JavaScript pour revenir à la page précédente dans l'historique du navigateur.  -->
 	    </div>
    </form>
+   </main>
 </body>
 </html>

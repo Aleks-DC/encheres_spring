@@ -51,6 +51,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	    namedParametersUtilisateur.addValue("pseudo", utilisateur.getPseudo());
 	    jdbcTemplate.update(UPDATE_UTILISATEUR, namedParametersUtilisateur);
 
+	    //aDRESSE Doit remonter par l'adresse
 	    if (utilisateur.getAdresse() != null) {
 	        MapSqlParameterSource namedParametersAdresse = new MapSqlParameterSource();
 	        namedParametersAdresse.addValue("rue", utilisateur.getAdresse().getRue());
