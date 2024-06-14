@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" data-th-fragment="layout-enchere(contenuPage)">
+<html xmlns:th="http://www.thymeleaf.org" data-th-fragment="layout-enchere(contenuPage, ressourcesSupp)">
 <head>
 <title>Accueil - ENI-Enchères</title>
 
-<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" data-th-href="@{/css/style.css}">
+<th:block th:replace="${ressourcesSupp}?:~{}"></th:block>
 
 </head>
 <body>
