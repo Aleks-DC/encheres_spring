@@ -1,7 +1,7 @@
-header {
+#nav-title {
     background-color: #f0f0f0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 50px;
+    margin-bottom: 10px;
 }
 
 #nav-title {
@@ -74,7 +74,7 @@ nav a:hover {
 	width: 250px;
 	padding-left: 10px;
 	padding-right: 10px;
-	justify-content: right;
+	margin-left: auto;
 }
 
 footer {
@@ -86,9 +86,22 @@ footer {
   margin-top: auto;
 }
 
+.titreETencadre {
+	display: flex;
+    align-content: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.titreEncadre {
+	display: flex;
+}
+
 body {
   display: flex;
-  min-height: 100vh;
+  height: 98.2vh;
   flex-direction: column;
 }
 
