@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 //Injection de la liste des attributs en session
 class LoginController {
 	// Injection du service ContexteService
-
-	@GetMapping("/login")
-	String login() {
-		return "login";
-	}
+//
+//	@GetMapping("/login")
+//	String login() {
+//		return "login";
+//	}
 
 }
