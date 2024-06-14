@@ -12,8 +12,13 @@ public class ArticleAVendreService {
     @Autowired
     private ArticleAVendreDAO articleAVendreDAO;
 
-    public void creerEnchere(ArticleAVendre articleAVendre) {
-    	articleAVendreDAO.creer(articleAVendre);
+    public ArticleAVendre creer(ArticleAVendre articleAVendre) { 
+        return articleAVendreDAO.creer(articleAVendre); 
     }
-}
 
+    // TODO: Ajouter les autres méthodes pour les actions :
+    // - getById(int id)
+    // - getAll()
+    // - update(ArticleAVendre articleAVendre)
+    // - delete(int id)
+}

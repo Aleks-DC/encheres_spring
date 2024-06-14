@@ -1,33 +1,18 @@
 package fr.eni.projet.encheres.dal;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 
-@Repository
-public class ArticleAVendreDAO {
+public interface ArticleAVendreDAO {
 
-    private final JdbcTemplate jdbcTemplate;
+    ArticleAVendre creer(ArticleAVendre articleAVendre);
 
-    public ArticleAVendreDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    ArticleAVendre getById(int id);
 
-    public ArticleAVendre creer(ArticleAVendre articleAVendre) {
-        String sql = "INSERT INTO ARTICLES_A_VENDRE (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, id_utilisateur, no_categorie, no_adresse_retrait) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    List<ArticleAVendre> getAll();
 
-        jdbcTemplate.update(sql,
-                articleAVendre.getNom(),
-                articleAVendre.getDescription(),
-                articleAVendre.getDateDebutEncheres(),
-                articleAVendre.getDateFinEncheres(),
-                articleAVendre.getPrixInitial(),
-                articleAVendre.getVendeur().getPseudo(),
-                articleAVendre.getCategorie().getId(),
-                articleAVendre.getRetrait().getId());
+    void update(ArticleAVendre articleAVendre);
 
-        return articleAVendre;
-    }
+    void delete(int id);
 }

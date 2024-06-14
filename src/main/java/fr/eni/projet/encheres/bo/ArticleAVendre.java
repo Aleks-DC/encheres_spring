@@ -151,5 +151,15 @@ public class ArticleAVendre {
 	public void setCategorie(Categorie categorie) {
 		this.categorie = categorie;
 	}
+
+	public Object getNoArticle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setNoArticle(int intValue) {
+		// TODO Auto-generated method stub
+		
+	}
         
 }

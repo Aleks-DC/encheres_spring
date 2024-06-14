@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main}, ressourcesSupp=~{:: #ressources-css})}">
+<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main}, ressourcesSupp=~{:: #ressources-css}, titrePage=~{:: title})}">
 
 <head>
     <meta charset="UTF-8">
-    <title data-th-text="#{index.title}"></title>
+    <title>Connexion</title>
     <th:block id="ressources-css">
 		<link rel="stylesheet" data-th-href="@{/css/login.css}">
 	</th:block>

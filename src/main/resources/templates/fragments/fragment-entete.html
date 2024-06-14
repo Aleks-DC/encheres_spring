@@ -33,7 +33,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/springsecurity"
 
 	</section>
 	<div class="titreETencadre">
-		<h1 class="titreEncadre">Titre de la page ici</h1>
+		<h1 data-th-replace="${titrePage}"></h1>
 		<div class="date-container">
 
 			<p th:text="'Date du jour : ' + ${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></p>
