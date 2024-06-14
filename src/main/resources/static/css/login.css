@@ -1,0 +1,86 @@
+.superParent {
+    display: flex; /* Active Flexbox */
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+}
+
+.center-main {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    margin-left: 40%;
+    margin-top: 5%;
+}
+
+form h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form ul {
+    list-style: none;
+    padding: 0;
+}
+
+form li {
+    margin-bottom: 15px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+form button[type="submit"] {
+    background-color: #4CAF50; /* Vert */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Prend toute la largeur du conteneur */
+}
+
+form button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Liens */
+.div-a {
+    display: block;
+    text-align: center;
+    color: #007bff; /* Bleu */
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.div-a:hover {
+    text-decoration: underline;
+}
+
+/* Bouton "Créer un compte" */
+.div-button {
+    background-color: #2196F3; /* Bleu */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.div-button:hover {
+    background-color: #1976d2; 
+}
