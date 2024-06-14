@@ -1,5 +1,7 @@
 package fr.eni.projet.encheres.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,29 +16,34 @@ import fr.eni.projet.encheres.bo.Utilisateur;
 import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/profile")
-public class ProfileController {
+@RequestMapping("/monProfile")
+public class ProfileMyController {
 	
 	private UtilisateurService utilisateurService;
 	
-	public ProfileController(UtilisateurService utilisateurService) {
+	public ProfileMyController(UtilisateurService utilisateurService) {
 		this.utilisateurService = utilisateurService;
 	}
 
 
-	@GetMapping
-	public String afficherProfil(@RequestParam(name = "pseudo") String pseudo,Model model) {
-		Utilisateur utilisateur = utilisateurService.consulterUtilisateur(pseudo);
-		if (utilisateur != null) {
-			model.addAttribute("utilisateur", utilisateur);
-			return "view-profile"; // Vue à afficher
-		} else {
-			// Gérer le cas où aucun utilisateur n'est trouvé avec le pseudo donné
-			return "redirect:/"; // Rediriger vers accueil pour test
-		}
-	}
+	 @GetMapping
+	    public String afficherMonProfil(Model model) {
+	        // Récupérer l'utilisateur actuellement authentifié
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String pseudo = authentication.getName();
+
+	        // Rechercher l'utilisateur par son pseudo
+	        Utilisateur utilisateur = utilisateurService.consulterUtilisateur(pseudo);
+	        if (utilisateur != null) {
+	            model.addAttribute("utilisateur", utilisateur);
+	            return "profile-my"; 
+	        } else {
+	            // Gérer le cas où aucun utilisateur n'est trouvé avec le pseudo donné
+	            return "redirect:/"; 
+	        }
+	    }
 	
-	@PostMapping("/view-profile-update")
+	@PostMapping("/profile-update")
 	public String updateUtilisateur (@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return "view-profile-update";

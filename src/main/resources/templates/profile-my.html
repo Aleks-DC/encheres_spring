@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(
+        titrePage=~{:: title},
+        contenuPage=~{:: main},
+        ressourcesSupp=~{})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon Profil</title>
+    <link rel="stylesheet" data-th-href="@{/css/general.css}" />
+    <link rel="stylesheet" data-th-href="@{/css/mon-profile.css}" />
+</head>
+
+<body>
+<main>
+    <form data-th-action="@{/monProfile}" data-th-object="${utilisateur}" method="get">
+        <h1 data-th-text="${utilisateur.pseudo}"></h1>
+        <div>
+            <label>Prénom :</label>
+            <input type="text" data-th-value="${utilisateur.prenom}" readonly/>
+        </div>
+        <div>
+            <label>Nom :</label>
+            <input type="text" data-th-value="${utilisateur.nom}" readonly/>
+        </div>
+        <div>
+            <label>Email :</label>
+            <input type="text" data-th-value="${utilisateur.email}" readonly/>
+        </div>
+        <div>
+            <label>Téléphone :</label>
+            <input type="text" data-th-value="${utilisateur.telephone}" readonly/>
+        </div>
+        <div>
+            <button data-th-onclick="@{/view-profile-update}">Modifier</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

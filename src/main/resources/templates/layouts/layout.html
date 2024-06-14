@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" data-th-fragment="layout-enchere(contenuPage, ressourcesSupp, titrePage)">
 <head>
+
 <title data-th-replace="${titrePage}" data-th-text="#{nom-application}"></title>
+
 <link rel="stylesheet" data-th-href="@{/css/style.css}">
 <th:block th:replace="${ressourcesSupp}?:~{}"></th:block>
+
 </head>
 <body>
 
