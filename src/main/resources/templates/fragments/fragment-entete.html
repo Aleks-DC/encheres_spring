@@ -1,5 +1,6 @@
 
 <header xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/springsecurity"
 	data-th-fragment="frag-entete">
 	<section id="nav-title">
 		<div class="logoTitre">
@@ -14,20 +15,29 @@
 		<nav>
 			<ul>
 				<li><a href="/">Accueil</a></li>
-				<li><a href="/login">Connexion</a></li>
-				<li><a href="/register">Inscription</a></li>
-				<li><a href="/enchere/creer">Vendre un article</a></li>
-				<li><a href="/profile">Mon profile</a></li>
-				<li><a href="/">Déconnexion</a></li>
+				<li sec:authorize="!isAuthenticated()"><a href="/login">Connexion</a></li>
+				<li sec:authorize="!isAuthenticated()"><a href="/register">Inscription</a></li>
+				<li sec:authorize="isAuthenticated()"><a href="/enchere/creer">Vendre un article</a></li>
+				<li sec:authorize="isAuthenticated()"><a href="/profile">Mon profil</a></li>
+				<li sec:authorize="isAuthenticated()"><a href="/logout">Déconnexion</a></li>
 			</ul>
+
 		</nav>
 
 		<div class="divLanguage">
 			<a href="/" class="aLanguage"><img alt="Français"
-				src="images/france.png" class="language"> </a><a
-				href="/" class="aLanguage"><img alt="English"
-				src="images/anglais.webp" class="language"></a>
+				src="images/france.png" class="language"> </a><a href="/"
+				class="aLanguage"><img alt="English" src="images/anglais.webp"
+				class="language"></a>
 		</div>
 
 	</section>
+	<div class="titreETencadre">
+		<h1 class="titreEncadre">Titre de la page ici</h1>
+		<div class="date-container">
+
+			<p th:text="'Date du jour : ' + ${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></p>
+			<p sec:authorize="isAuthenticated()" th:text="'Participant : ' "></p>
+		</div>
+	</div>
 </header>
