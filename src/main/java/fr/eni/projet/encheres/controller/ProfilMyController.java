@@ -9,19 +9,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.eni.projet.encheres.bll.UtilisateurService;
 import fr.eni.projet.encheres.bo.Utilisateur;
 import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/monProfile")
-public class ProfileMyController {
+@RequestMapping("/monProfil")
+public class ProfilMyController {
 	
 	private UtilisateurService utilisateurService;
 	
-	public ProfileMyController(UtilisateurService utilisateurService) {
+	public ProfilMyController(UtilisateurService utilisateurService) {
 		this.utilisateurService = utilisateurService;
 	}
 
@@ -36,22 +35,40 @@ public class ProfileMyController {
 	        Utilisateur utilisateur = utilisateurService.consulterUtilisateur(pseudo);
 	        if (utilisateur != null) {
 	            model.addAttribute("utilisateur", utilisateur);
-	            return "profile-my"; 
+	            return "profil-my"; 
 	        } else {
 	            // Gérer le cas où aucun utilisateur n'est trouvé avec le pseudo donné
 	            return "redirect:/"; 
 	        }
 	    }
 	
-	@PostMapping("/profile-update")
+	 @GetMapping("/modifier")
+	    public String afficherFormulaireModification(Model model) {
+	        // Récupérer l'utilisateur actuellement authentifié
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String pseudo = authentication.getName();
+	        
+	        // Rechercher l'utilisateur par son pseudo 
+	        Utilisateur utilisateur = utilisateurService.consulterUtilisateur(pseudo);
+	        if (utilisateur != null) {
+	            model.addAttribute("utilisateur", utilisateur);
+	            return "profil-update";
+	        } else {
+	        	
+	        	//TODO récupérer l'adresse => créer Le Service et la DAO Adresse
+	        	
+	            return "redirect:/";
+	        }
+	    }
+	 
+	@PostMapping("/modifier")
 	public String updateUtilisateur (@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
-			return "view-profile-update";
+			return "profil-update";
 		}else {
 			utilisateurService.updateUtilisateur(utilisateur);
-			System.out.println("Le formateur récupéré depuis le formulaire : ");
-			model.addAttribute("message", "Profil mis à jour avec succès");
-			 return "redirect:/profile?pseudo=" + utilisateur.getPseudo();
+			System.out.println("L'utilisateur récupéré depuis le formulaire : "+ utilisateur);
+			 return "redirect:/monProfile";
 		}
 	}
 }
