@@ -29,7 +29,7 @@ public class EnchereController {
             return "creer-article"; 
         }
         
-        articleAVendreService.creer(articleAVendre);
+        articleAVendreService.creer(articleAVendre, null);
         return "redirect:/articles";
     }
 

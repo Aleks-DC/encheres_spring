@@ -4,15 +4,16 @@ import java.util.List;
 
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 
+
 public interface ArticleAVendreDAO {
 
-    ArticleAVendre creer(ArticleAVendre articleAVendre);
+	ArticleAVendre creer(ArticleAVendre articleAVendre);
 
-    ArticleAVendre getById(int id);
+	ArticleAVendre getById(int noArticle); // Changer le nom du paramètre en noArticle
 
     List<ArticleAVendre> getAll();
 
     void update(ArticleAVendre articleAVendre);
 
-    void delete(int id);
+    void delete(int noArticle); // Changer le nom du paramètre en noArticle
 }

@@ -1,10 +1,13 @@
-<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main})}">
+<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main}, ressourcesSupp=~{:: #ressources-css}, titrePage=~{:: title})}">
 <head>
-
+<title>nouvel article</title>
+    <th:block id="ressources-css">
+		<link rel="stylesheet" data-th-href="@{/css/newArticle.css}">
+	</th:block>
 </head>
-
+<div class="SuperParent">
 <main>
-<form th:action="@{/enchere/creer}" method="post" th:object="${articleAVendre}">
+<form th:action="@{/articles/nouveau}" method="post" th:object="${articleAVendre}">
     <label for="nom">Nom de l'article :</label>
     <input type="text" id="nom" th:field="*{nom}">
 
@@ -23,4 +26,5 @@
     <button type="submit">Créer l'enchère</button>
 </form>
 </main>
+</div>
 </html>

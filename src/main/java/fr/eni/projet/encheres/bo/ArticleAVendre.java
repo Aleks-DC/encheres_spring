@@ -161,5 +161,10 @@ public class ArticleAVendre {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public Object getPhoto() {
+		// TODO Auto-generated method stub
+		return null;
+	}
         
 }
