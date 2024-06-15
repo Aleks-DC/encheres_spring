@@ -10,12 +10,12 @@ import fr.eni.projet.encheres.bll.UtilisateurService;
 import fr.eni.projet.encheres.bo.Utilisateur;
 
 @Controller
-@RequestMapping("/profileVendeur")
-public class ProfileVendeurController {
+@RequestMapping("/profilVendeur")
+public class ProfilVendeurController {
 	
 	private UtilisateurService utilisateurService;
 	
-	public ProfileVendeurController(UtilisateurService utilisateurService) {
+	public ProfilVendeurController(UtilisateurService utilisateurService) {
 		this.utilisateurService = utilisateurService;
 	}
 
@@ -25,7 +25,7 @@ public class ProfileVendeurController {
 	        Utilisateur utilisateur = utilisateurService.consulterUtilisateur(pseudo);
 	        if (utilisateur != null) {
 	            model.addAttribute("utilisateur", utilisateur);
-	            return "profile-vendeur"; // Vue à afficher
+	            return "profil-vendeur"; // Vue à afficher
 	        } else {
 	            // Gérer le cas où aucun utilisateur n'est trouvé avec le pseudo donné
 	            return "redirect:/"; // Rediriger vers la page d'accueil

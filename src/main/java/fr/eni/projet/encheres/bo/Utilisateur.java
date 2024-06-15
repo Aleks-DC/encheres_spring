@@ -142,12 +142,12 @@ public class Utilisateur {
 	}
 
 	public Utilisateur orElseThrow(Object object) {
-		// TODO Auto-generated method stub
+		// TODO ???
 		return null;
 	}
 
 	public Utilisateur orElse(Object object) {
-		// TODO Auto-generated method stub
+		// TODO ??? 
 		return null;
 	}
 

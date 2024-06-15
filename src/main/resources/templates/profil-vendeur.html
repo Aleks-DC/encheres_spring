@@ -5,14 +5,15 @@
         ressourcesSupp=~{})}">
 <head>
     <meta charset="UTF-8">
-    <title>Mon Profil</title>
-    <link rel="stylesheet" data-th-href="@{/css/general.css}" />
-    <link rel="stylesheet" data-th-href="@{/css/mon-profile.css}" />
+    <title>Profil Vendeur</title>
+    <th:block id="ressources-css">
+    	<link rel="stylesheet" data-th-href="@{/css/profil.css}" />
+   	</th:block>
 </head>
 
 <body>
 <main>
-    <form data-th-action="@{/monProfile}" data-th-object="${utilisateur}" method="get">
+    <form data-th-action="@{/profilVendeur}" data-th-object="${utilisateur}" method="get">
         <h1 data-th-text="${utilisateur.pseudo}"></h1>
         <div>
             <label>Prénom :</label>
@@ -31,7 +32,7 @@
             <input type="text" data-th-value="${utilisateur.telephone}" readonly/>
         </div>
         <div>
-            <button data-th-onclick="@{/view-profile-update}">Modifier</button>
+            <button type="button" onclick="window.history.back()">Retour</button>
         </div>
     </form>
 </main>

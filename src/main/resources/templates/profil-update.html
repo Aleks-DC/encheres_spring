@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(
+			titrePage=~{:: title}, 
+			contenuPage=~{:: main}, 
+			ressourcesSupp=~{:: #ressources-css})}">
+<head>
+    <meta charset="UTF-8">
+    <title> Profil</title>
+    <th:block id="ressources-css">
+    	<link rel="stylesheet" data-th-href="@{/css/profil-update.css}" />
+    </th:block>
+</head>		
+
+<body>
+	<main>
+	    <h1>Mon Profil</h1>
+	    <form action="#" data-th-action="@{/monProfil/modifier}" method="post">
+	        <div>
+	            <label for="pseudo">Pseudo :</label>
+	            <span data-th-text="${#authentication.principal.username}"></span>
+	            <label for="nom">Nom(*):</label>
+	            <input type="text" id="nom" name="nom" data-th-value="${utilisateur.nom}"required>
+	        </div>
+	        <div>
+	            <label for="prenom">Prénom(*):</label>
+	            <input type="text" id="prenom" name="prenom" data-th-value="${utilisateur.prenom}"required>
+	            <label for="email">Email(*):</label>
+	            <input type="email" id="email" name="email" data-th-value="${utilisateur.email}" required>
+	        </div>
+	        <div class="full-width">
+	            <label for="telephone">Téléphone:</label>
+	            <input type="tel" id="telephone" name="telephone" data-th-value="${utilisateur.telephone}">
+	        </div>
+	        <div class="adresse">
+	            <label for="adresse">Adresse (*):</label>
+	             <input type="text" id="adresse" name="adresse" placeholder= "rue" required>
+	            <input type="text" id="codePostal" name="codePostal" placeholder= "CodePostale" required>
+	            <input type="text" id="ville" name="ville" placeholder= "ville" required>
+	        </div>
+
+	        <div class="full-width">
+	            <label for="credit">Mon crédit:</label>
+	            <span > Mes points [en construction]</span>
+	        </div>
+	        <div class="button-group">
+	        	<!--  type button à passer en submit une fois la validation bien définit -->
+	            <button type="button">Modifier</button>
+	            <a href="@{/changePassword}">Modifier Mot de passe</a> <!--  A faire plus tard  1-->
+	            <a href="@{/monProfil}">Supprimer Compte</a> <!--  A faire plus tard 2-->
+	            <a href="@{/monProfil}">Annuler</a>
+	        </div>
+	    </form>
+    </main>
+</body>
+</html>

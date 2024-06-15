@@ -21,6 +21,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     private final String FIND_BY_PSEUDO = "SELECT pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse FROM UTILISATEURS WHERE pseudo = :pseudo";
     private final String FIND_ALL_USERS = "SELECT pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse FROM UTILISATEURS";
     private final String DELETE_BY_PSEUDO = "DELETE FROM UTILISATEURS WHERE pseudo = :pseudo";
+    
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -35,7 +36,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         namedParameters.addValue("motDePasse", utilisateur.getMotDePasse());
         namedParameters.addValue("credit", utilisateur.getCredit());
         namedParameters.addValue("administrateur", utilisateur.isAdmin());
-        namedParameters.addValue("noAdresse", utilisateur.getAdresse());
+        namedParameters.addValue("noAdresse", utilisateur.getAdresse().getId());
 
 
         // Vérifier si l'utilisateur existe déjà
@@ -54,9 +55,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     @Override
     public Utilisateur findByPseudo(String pseudo) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("pseudo", pseudo);
-        return jdbcTemplate.queryForObject(FIND_BY_PSEUDO, params, new UtilisateurRowMapper());
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("pseudo", pseudo);
+        return jdbcTemplate.queryForObject(FIND_BY_PSEUDO, namedParameters, new UtilisateurRowMapper());
     }
 
     @Override
@@ -77,7 +78,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
             utilisateur.setCredit(rs.getInt("credit"));
             utilisateur.setAdmin(rs.getBoolean("administrateur"));
             
-            // On MAP juste l'ID, le reste sera géré en dans la BLL
+            // On MAP juste l'ID, le reste sera géré dans la BLL
             Adresse adresse = new Adresse();
             adresse.setId(rs.getInt("no_adresse"));
             utilisateur.setAdresse(adresse);
@@ -96,7 +97,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         namedParameters.addValue("motDePasse", utilisateur.getMotDePasse());
         namedParameters.addValue("credit", utilisateur.getCredit());
         namedParameters.addValue("administrateur", utilisateur.isAdmin());
-        namedParameters.addValue("noAdresse", utilisateur.getAdresse());
+        namedParameters.addValue("noAdresse", utilisateur.getAdresse().getId());
 
         // Vérifier si l'utilisateur existe déjà
         String checkUserSql = "SELECT COUNT(*) FROM UTILISATEURS WHERE pseudo = :pseudo";
