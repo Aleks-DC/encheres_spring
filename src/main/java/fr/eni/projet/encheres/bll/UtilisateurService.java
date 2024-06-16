@@ -7,14 +7,14 @@ import fr.eni.projet.encheres.bo.Utilisateur;
 
 public interface UtilisateurService {
 	
-	Utilisateur creerUtilisateur(Utilisateur utilisateur, Adresse adresse);
+	void creerUtilisateur(Utilisateur utilisateur, Adresse adresse);
 
-	Utilisateur modifierUtilisateur(Utilisateur utilisateur);
+	void modifierUtilisateur(Utilisateur utilisateur);
 	
 	Utilisateur consulterUtilisateur(String pseudo);
 
 	List<Utilisateur> consulterUtilisateurs();
 
 	//Pour plus tard
-	Utilisateur modifierMotDePasse(String pseudo, String motDePasse);
+	void modifierMotDePasse(String pseudo, String motDePasse);
 }

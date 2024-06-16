@@ -23,8 +23,8 @@ public class UtilisateurController {
 	private UtilisateurService utilisateurService;
 
 	@PostMapping("/inscription")
-	public Utilisateur inscription(@RequestBody Utilisateur utilisateur, Adresse adresse) {
-		return utilisateurService.creerUtilisateur(utilisateur, adresse);
+	public void inscription(@RequestBody Utilisateur utilisateur, Adresse adresse) {
+		utilisateurService.creerUtilisateur(utilisateur, adresse);
 	}
 
 //	@PostMapping("/connexion")
@@ -33,9 +33,9 @@ public class UtilisateurController {
 //	}
 
 	@PutMapping("/{pseudo}")
-	public Utilisateur modifierUtilisateur(@PathVariable String pseudo, @RequestBody Utilisateur utilisateur) {
+	public void modifierUtilisateur(@PathVariable String pseudo, @RequestBody Utilisateur utilisateur) {
 		utilisateur.setPseudo(pseudo);
-		return utilisateurService.modifierUtilisateur(utilisateur);
+		utilisateurService.modifierUtilisateur(utilisateur);
 	}
 
 	@GetMapping

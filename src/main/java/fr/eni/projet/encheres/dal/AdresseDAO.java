@@ -10,7 +10,7 @@ public interface AdresseDAO {
 	
 	Adresse findById(int noAdresse); // Read
 
-	Adresse update(Adresse Adresse); // Update
+	void update(Adresse Adresse); // Update
 	
 	List<Adresse> findAll(); // Read
 

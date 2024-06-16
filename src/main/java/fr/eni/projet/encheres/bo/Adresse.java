@@ -2,11 +2,18 @@ package fr.eni.projet.encheres.bo;
 
 public class Adresse {
 	private long id;
-    private String rue;
-    private String codePostal;
-    private String ville;
-    
+	private String rue;
+	private String codePostal;
+	private String ville;
+
 	public Adresse() {
+	}
+
+	public Adresse(String rue, String codePostal, String ville) {
+		super();
+		this.rue = rue;
+		this.codePostal = codePostal;
+		this.ville = ville;
 	}
 
 	public Adresse(long id, String rue, String codePostal, String ville) {
@@ -15,21 +22,6 @@ public class Adresse {
 		this.rue = rue;
 		this.codePostal = codePostal;
 		this.ville = ville;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Adresse [id=");
-		builder.append(id);
-		builder.append(", rue=");
-		builder.append(rue);
-		builder.append(", codePostal=");
-		builder.append(codePostal);
-		builder.append(", ville=");
-		builder.append(ville);
-		builder.append("]");
-		return builder.toString();
 	}
 
 	public long getId() {
@@ -63,5 +55,22 @@ public class Adresse {
 	public void setVille(String ville) {
 		this.ville = ville;
 	}
-    
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Adresse [id=");
+		builder.append(id);
+		builder.append(", rue=");
+		builder.append(rue);
+		builder.append(", codePostal=");
+		builder.append(codePostal);
+		builder.append(", ville=");
+		builder.append(ville);
+		builder.append("]");
+		return builder.toString();
+	}
+	
+	
+
 }

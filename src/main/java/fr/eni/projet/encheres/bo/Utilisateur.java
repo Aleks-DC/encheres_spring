@@ -6,35 +6,53 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class Utilisateur {
-	
+
 	@NotNull
 	@Size(min = 3, max = 20)
-	
+
 	private String pseudo;
-	
+
 	@NotNull
 	@Size(max = 50)
-    private String nom;
-    
+	private String nom;
+
 	@NotNull
 	@Size(max = 50)
-    private String prenom;
-    
-    @Email
-    private String email;
-    
-    @Pattern(regexp = "^(0|\\+33|0033)[1-9][0-9]{8}$")
-    private String telephone;
-    private String motDePasse;
-    private int credit;
-    private boolean admin;
-    private Adresse adresse;
+	private String prenom;
+
+	@Email
+	private String email;
+
+	@Pattern(regexp = "^(0|\\+33|0033)[1-9][0-9]{8}$")
+	private String telephone;
+	private String motDePasse;
+	private int credit;
+	private boolean admin;
+	private Adresse adresse;
 
 	public Utilisateur() {
 	}
 
-	public Utilisateur(String pseudo, String nom, String prenom, String email, String telephone, String motDePasse,
-			int credit, boolean admin, Adresse adresse) {
+	public Utilisateur(@NotNull @Size(min = 3, max = 20) String pseudo, @NotNull @Size(max = 50) String nom,
+			@NotNull @Size(max = 50) String prenom, @Email String email,
+			@Pattern(regexp = "^(0|\\+33|0033)[1-9][0-9]{8}$") String telephone, String motDePasse, int credit,
+			boolean admin) {
+		super();
+		this.pseudo = pseudo;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.email = email;
+		this.telephone = telephone;
+		this.motDePasse = motDePasse;
+		this.credit = credit;
+		this.admin = admin;
+	}
+
+	public Utilisateur(@NotNull @Size(min = 3, max = 20) String pseudo, @NotNull @Size(max = 50) String nom,
+			@NotNull @Size(max = 50) String prenom, @Email String email,
+			@Pattern(regexp = "^(0|\\+33|0033)[1-9][0-9]{8}$") String telephone, String motDePasse, int credit,
+			boolean admin, Adresse adresse) {
+		super();
 		this.pseudo = pseudo;
 		this.nom = nom;
 		this.prenom = prenom;
@@ -44,29 +62,6 @@ public class Utilisateur {
 		this.credit = credit;
 		this.admin = admin;
 		this.adresse = adresse;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Utilisateur [pseudo=");
-		builder.append(pseudo);
-		builder.append(", nom=");
-		builder.append(nom);
-		builder.append(", prenom=");
-		builder.append(prenom);
-		builder.append(", email=");
-		builder.append(email);
-		builder.append(", telephone=");
-		builder.append(telephone);
-		builder.append(", motDePasse=");
-		builder.append(motDePasse);
-		builder.append(", credit=");
-		builder.append(credit);
-		builder.append(", admin=");
-		builder.append(admin);
-		builder.append("]");
-		return builder.toString();
 	}
 
 	public String getPseudo() {
@@ -147,9 +142,8 @@ public class Utilisateur {
 	}
 
 	public Utilisateur orElse(Object object) {
-		// TODO ??? 
+		// TODO ???
 		return null;
 	}
 
-    
 }

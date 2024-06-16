@@ -26,7 +26,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
 	@Override
 	@Transactional
-	public Utilisateur creerUtilisateur(Utilisateur utilisateur, Adresse adresse) {
+	public void creerUtilisateur(Utilisateur utilisateur, Adresse adresse) {
 		
 		// Création de l'adresse
 		Adresse a = adresseDAO.create(adresse);
@@ -37,34 +37,45 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
 		
 		// et on crée le tout
-		return utilisateurDAO.create(utilisateur);
+		utilisateurDAO.create(utilisateur);
 		
 	}
 
 	@Override
-	public Utilisateur modifierUtilisateur(Utilisateur utilisateur) {
-		return utilisateurDAO.update(utilisateur);
+	public void modifierUtilisateur(Utilisateur utilisateur) {
+		utilisateurDAO.update(utilisateur);
 	}
 
 	@Override
 	public Utilisateur consulterUtilisateur(String pseudo) {
-		return utilisateurDAO.findByPseudo(pseudo);
-	}
+        Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
+        if (utilisateur != null && utilisateur.getAdresse() != null) {
+            Adresse adresse = adresseDAO.findById((int) utilisateur.getAdresse().getId());
+            utilisateur.setAdresse(adresse);
+        }
+        return utilisateur;
+    }
 
 	@Override
-	public List<Utilisateur> consulterUtilisateurs() {
-		return utilisateurDAO.findAll();
-		
-	}
+    public List<Utilisateur> consulterUtilisateurs() {
+        List<Utilisateur> utilisateurs = utilisateurDAO.findAll();
+        for (Utilisateur utilisateur : utilisateurs) {
+            if (utilisateur.getAdresse() != null) {
+                Adresse adresse = adresseDAO.findById((int) utilisateur.getAdresse().getId());
+                utilisateur.setAdresse(adresse);
+            }
+        }
+        return utilisateurs;
+    }
 
 	// Je garde de côté pour le passwordEncoder.matches ==> future méthode
 	// changeMotDePasse() à compléter
 	// @Override
-	public Utilisateur modifierMotDePasse(String pseudo, String motDePasse) {
+	public void modifierMotDePasse(String pseudo, String motDePasse) {
 //		Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
 //		if (utilisateur != null && passwordEncoder.matches(motDePasse, utilisateur.getMotDePasse())) {
 //			return utilisateur;
 //		}
-		return null;
+		
 	}
 }
