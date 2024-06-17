@@ -99,8 +99,8 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         namedParameters.addValue("noAdresse", utilisateur.getAdresse());
 
         // Vérifier si l'utilisateur existe déjà
-        String checkUserSql = "SELECT COUNT(*) FROM UTILISATEURS WHERE pseudo = :pseudo";
-        int count = jdbcTemplate.queryForObject(checkUserSql, namedParameters, Integer.class);
+        String checkUserExist = "SELECT COUNT(*) FROM UTILISATEURS WHERE pseudo = :pseudo";
+        int count = jdbcTemplate.queryForObject(checkUserExist, namedParameters, Integer.class);
 
         if (count == 0) {
             // Insertion
@@ -109,7 +109,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
             // Mise à jour
             jdbcTemplate.update(UPDATE_USER, namedParameters);
         }
-        return utilisateur;
+		return utilisateur;
     }
 
     @Override

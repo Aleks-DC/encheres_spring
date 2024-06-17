@@ -16,6 +16,7 @@ import fr.eni.projet.encheres.bo.Adresse;
 public class AdresseDAOImpl implements AdresseDAO {
 	
 	 private final String FIND_BY_ID = "SELECT no_adresse, rue, code_postal, ville, adresse_eni FROM ADRESSES WHERE no_adresse = :id";
+	 private final String UPDATE_ADRESSE = "UPDATE Adresses SET rue = :rue, code_postal = :codePostal, ville = :ville WHERE no_adresse = :id";
 	
 	@Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -27,7 +28,7 @@ public class AdresseDAOImpl implements AdresseDAO {
 	}
 
 	@Override
-	public Adresse findById(int noAdresse) {
+	public Adresse findById(long noAdresse) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("noAdresse", noAdresse);
         return jdbcTemplate.queryForObject(FIND_BY_ID, params, new AdresseRowMapper());
@@ -46,9 +47,21 @@ public class AdresseDAOImpl implements AdresseDAO {
 	    }
 	 
 	@Override
-	public Adresse update(Adresse Adresse) {
-		// TODO Auto-generated method stub
-		return null;
+	public Adresse update(Adresse adresse) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+	    params.addValue("rue", adresse.getRue());
+	    params.addValue("codePostal", adresse.getCodePostal());
+	    params.addValue("ville", adresse.getVille());
+	    params.addValue("id", adresse.getId());
+	    
+	    int rowsUpdated = jdbcTemplate.update(UPDATE_ADRESSE, params);
+
+	    if (rowsUpdated > 0) {
+	        return findById(adresse.getId()); // Retourner l'objet Adresse mis à jour
+	    } else {
+	        return null; //  cas où 0 ligne mise à jour
+	    }
+	    
 	}
 
 	@Override

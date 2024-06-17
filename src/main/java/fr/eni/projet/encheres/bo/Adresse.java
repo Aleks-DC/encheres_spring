@@ -1,9 +1,22 @@
 package fr.eni.projet.encheres.bo;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class Adresse {
 	private long id;
+	
+	@NotBlank
+	@Size(max=120)
     private String rue;
+	
+	@NotBlank
+	@Pattern(regexp = "\\d{5}")
     private String codePostal;
+	
+	@NotBlank
+	@Size(max=50)
     private String ville;
     
 	public Adresse() {

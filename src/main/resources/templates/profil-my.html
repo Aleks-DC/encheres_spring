@@ -31,11 +31,12 @@
 	            <label>Téléphone :</label>
 	            <input type="text" data-th-value="${utilisateur.telephone}" readonly/>
 	        </div>
-	         <div>
-	            <label>Mes points :</label>
-	            <span >[en construction]</span>
+	         <div class="credit-container">
+	            <label>Mon crédit :</label>
+	            <input type="text"  data-th-value="${utilisateur.credit}" readonly/>
+	            <span> point(s)</span>
 	        </div>
-	        <div>
+	        <div class="center-div">
 	            <a data-th-href="@{/monProfil/modifier}" class ="button" >Modifier</a>
 	        </div>
 	    </form>

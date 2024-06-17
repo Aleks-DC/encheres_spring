@@ -20,6 +20,7 @@ public class ProfilMyController {
 	
 	private UtilisateurService utilisateurService;
 	
+	
 	public ProfilMyController(UtilisateurService utilisateurService) {
 		this.utilisateurService = utilisateurService;
 	}
@@ -66,9 +67,9 @@ public class ProfilMyController {
 		if (bindingResult.hasErrors()) {
 			return "profil-update";
 		}else {
-			utilisateurService.updateUtilisateur(utilisateur);
 			System.out.println("L'utilisateur récupéré depuis le formulaire : "+ utilisateur);
-			 return "redirect:/monProfile";
+			utilisateurService.modifierUtilisateur(utilisateur);
+			return "redirect:/monProfile";
 		}
 	}
 }
