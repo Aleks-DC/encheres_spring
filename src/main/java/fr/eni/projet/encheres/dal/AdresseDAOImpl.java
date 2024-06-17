@@ -16,11 +16,13 @@ import fr.eni.projet.encheres.bo.Adresse;
 
 @Repository
 public class AdresseDAOImpl implements AdresseDAO {
-
+	
 	private final String INSERT = "INSERT INTO ADRESSES (rue, code_postal, ville, adresse_eni) "
-			+ " VALUES (:rue, :codePostal, :ville, :adresseEni)";
-	private final String FIND_BY_ID = "SELECT no_adresse, rue, code_postal, ville, adresse_eni FROM ADRESSES WHERE no_adresse = :id";
+		+ " VALUES (:rue, :codePostal, :ville, :adresseEni)";
+	private final String FIND_BY_ID = "SELECT no_adresse, rue, code_postal, ville, adresse_eni FROM ADRESSES WHERE no_adresse = :noAdresse";
+	private final String UPDATE_ADRESSE = "UPDATE Adresses SET rue = :rue, code_postal = :codePostal, ville = :ville WHERE no_adresse = :id";
 
+	
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -33,8 +35,7 @@ public class AdresseDAOImpl implements AdresseDAO {
 		namedParameters.addValue("rue", adresse.getRue());
 		namedParameters.addValue("codePostal", adresse.getCodePostal());
 		namedParameters.addValue("ville", adresse.getVille());
-		// TODO Comment gérer ça ...
-//		namedParameters.addValue("adresseEni", adresse.get???());
+		namedParameters.addValue("adresseEni", false);
 
 		jdbcTemplate.update(INSERT, namedParameters, keyHolder);
 
@@ -46,7 +47,7 @@ public class AdresseDAOImpl implements AdresseDAO {
 	}
 
 	@Override
-	public Adresse findById(int noAdresse) {
+	public Adresse findById(long noAdresse) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("noAdresse", noAdresse);
 		return jdbcTemplate.queryForObject(FIND_BY_ID, params, new AdresseRowMapper());
@@ -56,18 +57,23 @@ public class AdresseDAOImpl implements AdresseDAO {
 		@Override
 		public Adresse mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Adresse adresse = new Adresse();
-			adresse.setId(rs.getInt("no_adresse"));
+			adresse.setId(rs.getLong("no_adresse"));
 			adresse.setRue(rs.getString("rue"));
 			adresse.setCodePostal(rs.getString("code_postal"));
-			adresse.setVille(rs.getString("adresse_eni"));
+			adresse.setVille(rs.getString("ville"));
+//			adresse.setVille(rs.getString("adresse_eni"));
 			return adresse;
 		}
 	}
 
 	@Override
-	public Adresse update(Adresse Adresse) {
-		// TODO Auto-generated method stub
-		return null;
+	public void update(Adresse adresse) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+	    params.addValue("rue", adresse.getRue());
+	    params.addValue("codePostal", adresse.getCodePostal());
+	    params.addValue("ville", adresse.getVille());
+	    params.addValue("id", adresse.getId());
+	    jdbcTemplate.update(UPDATE_ADRESSE, params);
 	}
 
 	@Override
@@ -79,7 +85,5 @@ public class AdresseDAOImpl implements AdresseDAO {
 	@Override
 	public void deleteById(int noAdresse) {
 		// TODO Auto-generated method stub
-
 	}
-
 }

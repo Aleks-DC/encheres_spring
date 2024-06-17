@@ -7,14 +7,19 @@ import fr.eni.projet.encheres.bo.Utilisateur;
 
 public interface UtilisateurService {
 	
-	Utilisateur creerUtilisateur(Utilisateur utilisateur, Adresse adresse);
+	void creerUtilisateur(Utilisateur utilisateur, Adresse adresse);
 
-	Utilisateur modifierUtilisateur(Utilisateur utilisateur);
+	//Pas besoin, géré par notre super copain Spring Security
+	Utilisateur connexion(String pseudo, String motDePasse);
+
+	void updateAdresse(Adresse adresse);
+
+	void modifierUtilisateur(Utilisateur utilisateur);
 	
 	Utilisateur consulterUtilisateur(String pseudo);
 
 	List<Utilisateur> consulterUtilisateurs();
 
 	//Pour plus tard
-	Utilisateur modifierMotDePasse(String pseudo, String motDePasse);
+	void modifierMotDePasse(String pseudo, String motDePasse);
 }

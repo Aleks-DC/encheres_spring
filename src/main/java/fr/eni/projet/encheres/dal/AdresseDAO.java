@@ -8,9 +8,9 @@ public interface AdresseDAO {
 	
 	Adresse create(Adresse adresse); // Create
 	
-	Adresse findById(int noAdresse); // Read
+	Adresse findById(long noAdresse); // Read
 
-	Adresse update(Adresse Adresse); // Update
+	void update(Adresse Adresse); // Update
 	
 	List<Adresse> findAll(); // Read
 
