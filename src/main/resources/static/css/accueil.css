@@ -1,0 +1,283 @@
+.container {
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    color: #212529;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.filtres {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.recherche {
+    flex-grow: 1;
+}
+
+.recherche label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.recherche input[type="text"] {
+    width: 150%;
+    padding: 0.8rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.recherche input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.filter-button {
+    background-color: #007bff;
+    color: white;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+}
+
+.filter-button:hover {
+    background-color: #0069d9;
+}
+
+.filter-icon {
+    font-size: 1.2rem;
+}
+
+.submit, .reset {
+	padding: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 10px;
+}
+
+.submit {
+	background-color: #007bff;
+    color: white;
+}
+
+.reset {
+	background-color: grey;
+    color: white;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    overflow: auto;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.modal-content {
+    padding: 2rem;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.modal-content .categories,
+.modal-content .block2 {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.radio1, .radio2 {
+	display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    align-content: center;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+#categorie {
+	padding: 8px;
+	border-radius: 10px;
+}
+
+.modal-content input[type="radio"] + label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background-color: #fff;
+    border: 2px solid #e9ecef;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    user-select: none;
+}
+
+.modal-content input[type="radio"]:checked + label {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+#achats:checked ~ #choixAchats,
+#ventes:checked ~ #choixVentes {
+    display: block;
+}
+
+.modal-content button[type="submit"],
+.modal-content button[type="reset"] {
+    background-color: #007bff;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover,
+.modal-content button[type="reset"]:hover {
+    background-color: #0069d9;
+}
+
+.selectOption select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.selectOption select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.close-button {
+	font-size: 15px;
+}
+
+i {
+	font-style: normal;
+}
+
+.liste-encheres {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f5f5f5; 
+    border-radius: 10px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.liste-encheres h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.enchere-item {
+    background-color: #fff; 
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden; 
+    transition: transform 0.3s ease; 
+}
+
+.enchere-item:hover {
+    transform: translateY(-5px); 
+}
+
+.enchere-image {
+    display: block;
+}
+
+.enchere-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.enchere-details {
+    padding: 15px;
+}
+
+.enchere-details h4 {
+    margin-bottom: 5px;
+}
+
+.enchere-prix,
+.enchere-fin,
+.enchere-vendeur {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.btn-details {
+    display: block;
+    text-align: center;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease; 
+}
+
+.btn-details:hover {
+    background-color: #0056b3; 
+}
+
