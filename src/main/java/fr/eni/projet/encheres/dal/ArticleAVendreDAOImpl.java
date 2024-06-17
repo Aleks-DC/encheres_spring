@@ -2,16 +2,21 @@ package fr.eni.projet.encheres.dal;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import fr.eni.projet.encheres.bo.ArticleAVendre;
+import fr.eni.projet.encheres.bo.Categorie;
+import fr.eni.projet.encheres.bo.Utilisateur;
 
 @Repository
 public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
@@ -38,7 +43,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
             ps.setInt(6, articleAVendre.getPrixInitial());
             ps.setString(7, articleAVendre.getVendeur().getNom());
             ps.setLong(8, articleAVendre.getCategorie().getId());
-            ps.setLong(9, articleAVendre.getRetrait().getId());
+            ps.setLong(9, articleAVendre.getRetrait().getId()); 
             return ps;
         }, keyHolder);
 
@@ -79,4 +84,27 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
         String sql = "DELETE FROM ARTICLES_A_VENDRE WHERE no_article = ?";
         jdbcTemplate.update(sql, noArticle);
     }
+    
+    class ArticleRowMapper implements RowMapper<ArticleAVendre> {
+        @Override
+        public ArticleAVendre mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ArticleAVendre article = new ArticleAVendre();
+            article.setId(rs.getLong("no_article"));
+            article.setNom(rs.getString("nom_article"));
+            article.setDescription(rs.getString("description"));
+            article.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
+            article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+            article.setPrixInitial(rs.getInt("prix_initial"));
+            article.setPrixVente(rs.getInt("prix_vente"));
+            Utilisateur vendeur = new Utilisateur();
+            article.setVendeur(vendeur);
+            Categorie categorie = new Categorie();
+            categorie.setId(rs.getLong("no_categorie"));
+            article.setCategorie(categorie);
+
+
+            return article;
+        }
+    }
+    
 }

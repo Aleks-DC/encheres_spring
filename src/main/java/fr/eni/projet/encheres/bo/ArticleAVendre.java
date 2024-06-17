@@ -10,7 +10,7 @@ public class ArticleAVendre {
     private LocalDate dateFinEncheres;
     private int statut;
     private int prixInitial;
-    private int prixVente;
+    private Integer prixVente;
     private Categorie categorie;
     
     private Utilisateur vendeur;
@@ -120,11 +120,11 @@ public class ArticleAVendre {
 		this.prixInitial = prixInitial;
 	}
 
-	public int getPrixVente() {
+	public Integer getPrixVente() {
 		return prixVente;
 	}
 
-	public void setPrixVente(int prixVente) {
+	public void setPrixVente(Integer prixVente) {
 		this.prixVente = prixVente;
 	}
 

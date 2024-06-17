@@ -1,75 +1,144 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity" data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main}, ressourcesSupp=~{}, titrePage=~{:: title})}">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/springsecurity"
+	data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main}, ressourcesSupp=~{:: #ressources-css}, titrePage=~{:: title})}">
 <head>
-    <title>Accueil - ENI-Enchères</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+<title>Accueil - ENI-Enchères</title>
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<th:block id="ressources-css">
+	<link rel="stylesheet" data-th-href="@{/css/accueil.css}">
+</th:block>
 </head>
 
 <body>
 
-    <main>
-        <div class="container">
-            <div class="filtres">
-                <h3>Filtres :</h3>
-                <form th:action="@{/recherche}" method="get">
-                    <div>
-                        <label for="motCle">Le nom de l'article contient :</label>
-                        <input type="text" id="motCle" name="motCle" th:value="${param.motCle}">
-                    </div>
-                    <div>
-                        <label for="categorie">Catégorie :</label>
-                        <select id="categorie" name="categorie">
-                            <option value="">Toutes</option>
-                            <option th:each="categorie : ${categories}"
-                                    th:value="${categorie.id}"
-                                    th:text="${categorie.nom}"
-                                    th:selected="${categorie.id == param.categorie}"></option>
-                        </select>
-                    </div>
+	<main>
+		<div class="container">
+			<div class="filtres">
+				<button id="openFilterModal" class="filter-button">
+					<i class="icon-filtre">⚙️ Filtrer</i>
+				</button>
+				<form th:action="@{/recherche}" method="get">
+					<div class="recherche">
+						<label for="motCle">Le nom de l'article contient :</label> <input
+							type="text" id="motCle" name="motCle" th:value="${param.motCle}">
+					</div>
 
-                    <div sec:authorize="isAuthenticated()">
-                        <input type="radio" id="achats" name="affichage" value="achats" checked>
-                        <label for="achats">Achats</label><br>
-                        <input type="radio" id="ventes" name="affichage" value="ventes">
-                        <label for="ventes">Mes ventes</label><br>
-                    </div>
-                    <div class="selectOption" sec:authorize="isAuthenticated()" id="choixAchats"> 
-                        <select>
-                            <option value="ouvertes">Enchères ouvertes</option>
-                            <option value="remportees">Mes enchères remportées</option>
-                            <option value="enCours">Mes enchères en cours</option>
-                        </select>
-                    </div>
-                    <div class="selectOption" sec:authorize="isAuthenticated()" id="choixVentes" >
-                        <select>
-                            <option value="enCours">Mes ventes en cours</option>
-                            <option value="nonDebutees">Mes ventes non débutées</option>
-                            <option value="terminees">Mes ventes terminées</option>
-                        </select>
-                    </div>
-                    <button type="submit">Rechercher</button>
-                    <button type="reset">Annuler</button> 
-                </form>
-            </div>
+					<div id="filterModal" class="modal">
+						<div class="modal-content">
+							<span class="close-button">❌</span>
+							<div class="categories">
+								<label for="categorie">Catégorie :</label> <select
+									id="categorie" name="categorie">
+									<option value="">Toutes</option>
+									<option th:each="categorie : ${categories}"
+										th:value="${categorie.id}" th:text="${categorie.nom}"
+										th:selected="${categorie.id == param.categorie}"></option>
+								</select>
+							</div>
+							<div class="block2">
+								<div sec:authorize="isAuthenticated()" class="AchatsVentes">
+									<div class="radio1">
+										<input type="radio" id="achats" name="affichage"
+											value="achats" checked> <label for="achats">Achats</label>
+										<div class="selectOption" sec:authorize="isAuthenticated()"
+											id="choixAchats">
+											<select>
+												<option value="ouvertes">Enchères ouvertes</option>
+												<option value="remportees">Mes enchères remportées</option>
+												<option value="enCours">Mes enchères en cours</option>
+											</select>
+										</div>
+									</div>
+									<div class="radio2">
+										<input type="radio" id="ventes" name="affichage"
+											value="ventes"> <label for="ventes">Mes
+											ventes</label>
+										<div class="selectOption" sec:authorize="isAuthenticated()"
+											id="choixVentes">
+											<select>
+												<option value="enCours">Mes ventes en cours</option>
+												<option value="nonDebutees">Mes ventes non débutées</option>
+												<option value="terminees">Mes ventes terminées</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-            <div class="liste-encheres">
-                <h3>Liste des enchères</h3>
-                <div class="grid">
-                    <div th:each="articleAVendre : ${articlesAVendre}" class="enchere"> 
-                        <div class="image-container">
-                            <img th:if="${articleAVendre.photo != null}" th:src="@{${'/images/' + articleAVendre.photo}}" alt="Image de l'article">
-                            <img th:unless="${articleAVendre.photo != null}" th:src="@{/images/default.jpg}" alt="Image par défaut">
-                        </div>
-                        <div class="enchere-details">
-                            <h4 th:text="${articleAVendre.nom}"></h4> 
-                            <p th:text="'Prix : ' + ${articleAVendre.prixVente} + ' €'"></p> 
-                            <p th:text="'Fin de l\'enchère : ' + ${#dates.format(articleAVendre.dateFinEncheres, 'dd/MM/yyyy')}"></p>
-                            <p th:text="'Vendeur : ' + ${articleAVendre.vendeur.pseudo}"></p> 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+					<button type="submit" class="submit">Rechercher</button>
+					<button type="reset" class="reset">Annuler</button>
+				</form>
+			</div>
+
+
+
+
+
+			<div class="liste-encheres">
+				<h3>Liste des enchères</h3>
+
+				<div th:if="${articlesAVendre.isEmpty()}">
+					<p>Aucune enchère disponible pour le moment.</p>
+				</div>
+
+				<div class="grid" th:unless="${articlesAVendre.isEmpty()}">
+					<article th:each="article : ${articlesAVendre}"
+						class="enchere-item">
+
+						<a class="enchere-image"
+							th:href="@{/articles/{id}(id=${article.id})}"> <img
+							th:if="${article.photo != null}"
+							th:src="@{${'/images/' + article.photo}}"
+							alt="Image de l'article"> <img
+							th:if="${article.photo == null}" th:src="@{/images/default.jpg}"
+							alt="Image par défaut">
+						</a>
+
+						<div class="enchere-details">
+							<h4 th:text="${article.nom}">Nom de l'article</h4>
+
+							<p class="enchere-prix">
+								Prix : <span th:text="${article.prixInitial} + ' Pts'">Prix
+									de l'enchère</span>
+							</p>
+							<p class="enchere-fin">
+								Fin de l'enchère : <span th:text="${article.dateFinEncheres}">Date
+									de fin</span>
+							</p>
+							<p class="enchere-vendeur">
+								Vendeur : <span>Pseudo du vendeur</span>
+							</p>
+						</div>
+
+						<a class="btn-details"
+							th:href="@{/articles/{id}(id=${article.id})}">Détails</a>
+					</article>
+				</div>
+			</div>
+
+		</div>
+		<script>
+		const openFilterModalButton = document.getElementById('openFilterModal');
+		const filterModal = document.getElementById('filterModal');
+		const closeButton = document.querySelector('.close-button');
+
+		openFilterModalButton.addEventListener('click', () => {
+		    filterModal.style.display = 'block';
+		});
+
+		closeButton.addEventListener('click', () => {
+		    filterModal.style.display = 'none';
+		});
+
+		window.addEventListener('click', (event) => {
+		    if (event.target === filterModal) {
+		        filterModal.style.display = 'none';
+		    }
+		});
+		</script>
+	</main>
 </body>
 </html>

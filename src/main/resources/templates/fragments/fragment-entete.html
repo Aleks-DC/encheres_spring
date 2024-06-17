@@ -1,6 +1,6 @@
 
 <header xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/extras/springsecurity"
+	xmlns:sec="http://www.thymeleaf.org/extras/springsecurity"
 	data-th-fragment="frag-entete">
 	<section id="nav-title">
 		<div class="logoTitre">
@@ -17,9 +17,10 @@ xmlns:sec="http://www.thymeleaf.org/extras/springsecurity"
 				<li><a href="/">Accueil</a></li>
 				<li sec:authorize="!isAuthenticated()"><a href="/login">Connexion</a></li>
 				<li sec:authorize="!isAuthenticated()"><a href="/register">Inscription</a></li>
-				<li sec:authorize="isAuthenticated()"><a href="/articles/nouveau">Vendre un article</a></li>
-				<li sec:authorize="isAuthenticated()"><a href="/profile">Mon profil</a></li>
-
+				<li sec:authorize="isAuthenticated()"><a
+					href="/articles/nouveau">Vendre un article</a></li>
+				<li sec:authorize="isAuthenticated()"><a href="/profile">Mon
+						profil</a></li>
 				<li sec:authorize="isAuthenticated()"><a href="/logout">Déconnexion</a></li>
 			</ul>
 
@@ -37,8 +38,10 @@ xmlns:sec="http://www.thymeleaf.org/extras/springsecurity"
 		<h1 data-th-replace="${titrePage}"></h1>
 		<div class="date-container">
 
-			<p th:text="'Date du jour : ' + ${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></p>
-			<p sec:authorize="isAuthenticated()" th:text="'Participant : ' "></p>
+			<p
+				th:text="'Date du jour : ' + ${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></p>
+			<p sec:authorize="isAuthenticated()"
+				th:text="'Participant : ' + ${#authentication.principal.username}"></p>
 		</div>
 	</div>
 </header>

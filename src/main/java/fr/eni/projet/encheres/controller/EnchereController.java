@@ -1,42 +1,56 @@
 package fr.eni.projet.encheres.controller;
 
+import java.security.Principal;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.projet.encheres.bll.ArticleAVendreService;
 import fr.eni.projet.encheres.bo.ArticleAVendre;
+import fr.eni.projet.encheres.bo.Utilisateur;
+import fr.eni.projet.encheres.dal.UtilisateurDAO;
 import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/articles")
-public class EnchereController { 
+public class EnchereController {
 
     @Autowired
     private ArticleAVendreService articleAVendreService;
 
-    @GetMapping("/nouveau")
+    @GetMapping("/") 
+    public String afficherAccueil(Model model) {
+        List<ArticleAVendre> articlesAVendre = articleAVendreService.getAll();
+        model.addAttribute("articlesAVendre", articlesAVendre);
+        return "index"; 
+    }
+
+    @GetMapping("/articles/nouveau")
     public String afficherFormulaireCreation(Model model) {
         model.addAttribute("articleAVendre", new ArticleAVendre());
         return "creer-article";
     }
 
-    @PostMapping("/nouveau")
-    public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, BindingResult result, Model model) {
+    @PostMapping("/articles/nouveau")
+    public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, 
+                               BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "creer-article"; 
         }
-        
-        articleAVendreService.creer(articleAVendre, null);
-        return "redirect:/articles";
-    }
 
-    // Ajoutez les autres méthodes pour les actions :
-    // - @GetMapping("/{id}") pour afficher les détails d'un article
-    // - @GetMapping("/modifier/{id}") pour afficher le formulaire de modification
-    // - @PostMapping("/modifier/{id}") pour traiter la modification
-    // - @PostMapping("/supprimer/{id}") pour traiter la suppression
+        try {
+            articleAVendreService.creer(articleAVendre);
+            redirectAttributes.addFlashAttribute("successMessage", "Article créé avec succès !");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Erreur lors de la création de l'article : " + e.getMessage());
+        }
+
+        return "redirect:/";
+    }
 }
-	
