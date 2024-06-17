@@ -19,13 +19,20 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     private final String INSERT_USER = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse) VALUES (:pseudo, :nom, :prenom, :email, :telephone, :motDePasse, :credit, :administrateur, :noAdresse)";
     private final String UPDATE_USER = "UPDATE UTILISATEURS SET nom=:nom, prenom=:prenom, email=:email, telephone=:telephone, mot_de_passe=:motDePasse, credit=:credit, administrateur=:administrateur, no_adresse=:noAdresse WHERE pseudo=:pseudo";
     private final String FIND_BY_PSEUDO = "SELECT pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse FROM UTILISATEURS WHERE pseudo = :pseudo";
+//    private final String FIND_BY_PSEUDO = 
+//    	    "SELECT u.pseudo, u.nom, u.prenom, u.email, u.telephone, u.mot_de_passe, u.credit, u.administrateur, " +
+//    	    "a.no_adresse, a.rue, a.code_postal, a.ville " +
+//    	    "FROM UTILISATEURS u " +
+//    	    "LEFT JOIN ADRESSES a ON u.no_adresse = a.no_adresse " +
+//    	    "WHERE u.pseudo = :pseudo";
     private final String FIND_ALL_USERS = "SELECT pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse FROM UTILISATEURS";
     private final String DELETE_BY_PSEUDO = "DELETE FROM UTILISATEURS WHERE pseudo = :pseudo";
+    
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
-    public Utilisateur create(Utilisateur utilisateur) {
+    public void create(Utilisateur utilisateur) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("pseudo", utilisateur.getPseudo());
         namedParameters.addValue("nom", utilisateur.getNom());
@@ -35,28 +42,17 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         namedParameters.addValue("motDePasse", utilisateur.getMotDePasse());
         namedParameters.addValue("credit", utilisateur.getCredit());
         namedParameters.addValue("administrateur", utilisateur.isAdmin());
-        namedParameters.addValue("noAdresse", utilisateur.getAdresse());
-
-
-        // Vérifier si l'utilisateur existe déjà
-        String checkUserSql = "SELECT COUNT(*) FROM UTILISATEURS WHERE pseudo = :pseudo";
-        int count = jdbcTemplate.queryForObject(checkUserSql, namedParameters, Integer.class);
-
-        if (count == 0) {
-            // Insertion
-            jdbcTemplate.update(INSERT_USER, namedParameters);
-        } else {
-            // Mise à jour
-            jdbcTemplate.update(UPDATE_USER, namedParameters);
-        }
-        return utilisateur;
+        namedParameters.addValue("noAdresse", utilisateur.getAdresse().getId());
+        
+        jdbcTemplate.update(INSERT_USER, namedParameters);
+       
     }
 
     @Override
     public Utilisateur findByPseudo(String pseudo) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("pseudo", pseudo);
-        return jdbcTemplate.queryForObject(FIND_BY_PSEUDO, params, new UtilisateurRowMapper());
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("pseudo", pseudo);
+        return jdbcTemplate.queryForObject(FIND_BY_PSEUDO, namedParameters, new UtilisateurRowMapper());
     }
 
     @Override
@@ -77,16 +73,19 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
             utilisateur.setCredit(rs.getInt("credit"));
             utilisateur.setAdmin(rs.getBoolean("administrateur"));
             
-            // On MAP juste l'ID, le reste sera géré en dans la BLL
+            // On MAP juste l'ID, le reste sera géré dans la BLL
             Adresse adresse = new Adresse();
-            adresse.setId(rs.getInt("no_adresse"));
+            adresse.setId(rs.getLong("no_adresse"));
+//            adresse.setRue(rs.getString("rue"));
+//            adresse.setCodePostal(rs.getString("code_postal"));
+//            adresse.setVille(rs.getString("ville"));
             utilisateur.setAdresse(adresse);
             return utilisateur;
         }
     }
     
     @Override
-    public Utilisateur update(Utilisateur utilisateur) {
+    public void update(Utilisateur utilisateur) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("pseudo", utilisateur.getPseudo());
         namedParameters.addValue("nom", utilisateur.getNom());
@@ -96,20 +95,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         namedParameters.addValue("motDePasse", utilisateur.getMotDePasse());
         namedParameters.addValue("credit", utilisateur.getCredit());
         namedParameters.addValue("administrateur", utilisateur.isAdmin());
-        namedParameters.addValue("noAdresse", utilisateur.getAdresse());
+        namedParameters.addValue("noAdresse", utilisateur.getAdresse().getId());
 
-        // Vérifier si l'utilisateur existe déjà
-        String checkUserExist = "SELECT COUNT(*) FROM UTILISATEURS WHERE pseudo = :pseudo";
-        int count = jdbcTemplate.queryForObject(checkUserExist, namedParameters, Integer.class);
-
-        if (count == 0) {
-            // Insertion
-            jdbcTemplate.update(INSERT_USER, namedParameters);
-        } else {
-            // Mise à jour
-            jdbcTemplate.update(UPDATE_USER, namedParameters);
-        }
-		return utilisateur;
+        jdbcTemplate.update(UPDATE_USER, namedParameters);
     }
 
     @Override

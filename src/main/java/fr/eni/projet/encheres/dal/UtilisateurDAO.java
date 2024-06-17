@@ -6,13 +6,13 @@ import fr.eni.projet.encheres.bo.Utilisateur;
 
 public interface UtilisateurDAO {
 	
-	Utilisateur create(Utilisateur utilisateur); // Create
+	void create(Utilisateur utilisateur); // Create
 	
 	Utilisateur findByPseudo(String pseudo); // Read
 
 	List<Utilisateur> findAll(); // Read
 
-	Utilisateur update(Utilisateur utilisateur); // Update
+	void update(Utilisateur utilisateur); // Update
 
 	void deleteByPseudo(String pseudo); // Delete
 }

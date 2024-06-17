@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.eni.projet.encheres.bll.UtilisateurService;
+import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.Utilisateur;
 
 @RestController
@@ -23,19 +23,19 @@ public class UtilisateurController {
 	private UtilisateurService utilisateurService;
 
 	@PostMapping("/inscription")
-	public Utilisateur inscription(@RequestBody Utilisateur utilisateur) {
-		return utilisateurService.createUtilisateur(utilisateur);
+	public void inscription(@RequestBody Utilisateur utilisateur, Adresse adresse) {
+		utilisateurService.creerUtilisateur(utilisateur, adresse);
 	}
 
-	@PostMapping("/connexion")
-	public Utilisateur connexion(@RequestParam String pseudo, @RequestParam String motDePasse) {
-		return utilisateurService.connexion(pseudo, motDePasse);
-	}
+//	@PostMapping("/connexion")
+//	public Utilisateur connexion(@RequestParam String pseudo, @RequestParam String motDePasse) {
+//		return utilisateurService.(pseudo, motDePasse);
+//	}
 
 	@PutMapping("/{pseudo}")
-	public Utilisateur modifierUtilisateur(@PathVariable String pseudo, @RequestBody Utilisateur utilisateur) {
+	public void modifierUtilisateur(@PathVariable String pseudo, @RequestBody Utilisateur utilisateur) {
 		utilisateur.setPseudo(pseudo);
-		return utilisateurService.updateUtilisateur(utilisateur);
+		utilisateurService.modifierUtilisateur(utilisateur);
 	}
 
 	@GetMapping

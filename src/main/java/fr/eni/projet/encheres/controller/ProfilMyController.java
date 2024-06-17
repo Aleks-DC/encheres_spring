@@ -67,6 +67,10 @@ public class ProfilMyController {
 		if (bindingResult.hasErrors()) {
 			return "profil-update";
 		}else {
+<<<<<<< HEAD
+=======
+			utilisateurService.modifierUtilisateur(utilisateur);
+>>>>>>> 6dc86e23ae88fc5901755a1e93db3fd0375cb11b
 			System.out.println("L'utilisateur récupéré depuis le formulaire : "+ utilisateur);
 			utilisateurService.modifierUtilisateur(utilisateur);
 			return "redirect:/monProfile";
