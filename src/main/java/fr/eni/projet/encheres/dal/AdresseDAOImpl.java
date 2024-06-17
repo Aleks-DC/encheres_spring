@@ -16,11 +16,13 @@ import fr.eni.projet.encheres.bo.Adresse;
 
 @Repository
 public class AdresseDAOImpl implements AdresseDAO {
-
+	
 	private final String INSERT = "INSERT INTO ADRESSES (rue, code_postal, ville, adresse_eni) "
-			+ " VALUES (:rue, :codePostal, :ville, :adresseEni)";
+		+ " VALUES (:rue, :codePostal, :ville, :adresseEni)";
 	private final String FIND_BY_ID = "SELECT no_adresse, rue, code_postal, ville, adresse_eni FROM ADRESSES WHERE no_adresse = :noAdresse";
+	private final String UPDATE_ADRESSE = "UPDATE Adresses SET rue = :rue, code_postal = :codePostal, ville = :ville WHERE no_adresse = :id";
 
+	
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -45,7 +47,7 @@ public class AdresseDAOImpl implements AdresseDAO {
 	}
 
 	@Override
-	public Adresse findById(int noAdresse) {
+	public Adresse findById(long noAdresse) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("noAdresse", noAdresse);
 		return jdbcTemplate.queryForObject(FIND_BY_ID, params, new AdresseRowMapper());
@@ -65,8 +67,13 @@ public class AdresseDAOImpl implements AdresseDAO {
 	}
 
 	@Override
-	public void update(Adresse Adresse) {
-		// TODO Auto-generated method stub
+	public void update(Adresse adresse) {
+		MapSqlParameterSource params = new MapSqlParameterSource();
+	    params.addValue("rue", adresse.getRue());
+	    params.addValue("codePostal", adresse.getCodePostal());
+	    params.addValue("ville", adresse.getVille());
+	    params.addValue("id", adresse.getId());
+	    jdbcTemplate.update(UPDATE_ADRESSE, params);
 	}
 
 	@Override
@@ -78,7 +85,5 @@ public class AdresseDAOImpl implements AdresseDAO {
 	@Override
 	public void deleteById(int noAdresse) {
 		// TODO Auto-generated method stub
-
 	}
-
 }

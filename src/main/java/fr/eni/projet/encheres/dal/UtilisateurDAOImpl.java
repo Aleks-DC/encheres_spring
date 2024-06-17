@@ -98,7 +98,6 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         namedParameters.addValue("noAdresse", utilisateur.getAdresse().getId());
 
         jdbcTemplate.update(UPDATE_USER, namedParameters);
-        
     }
 
     @Override
