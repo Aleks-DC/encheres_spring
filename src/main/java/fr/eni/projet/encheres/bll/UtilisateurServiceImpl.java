@@ -18,7 +18,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	private UtilisateurDAO utilisateurDAO;
 	private AdresseDAO adresseDAO;
 
-	
 	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO, AdresseDAO adresseDAO) {
 		super();
 		this.utilisateurDAO = utilisateurDAO;
@@ -30,27 +29,17 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	public void creerUtilisateur(Utilisateur utilisateur, Adresse adresse) {
 		
 		// Création de l'adresse
-		Adresse a = adresseDAO.create(adresse);
-		utilisateur.setAdresse(a);
+		adresseDAO.create(adresse);
+		utilisateur.setAdresse(adresse);
 		
 		// Création du mot de passe
 		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
+		
+		// et on crée le tout
+		utilisateurDAO.create(utilisateur);
+		
 	}
-	
-	// Pas besoin, mais je garde de côté pour le passwordEncoder.matches ==> future méthode changeMotDePasse()
-	@Override
-	public Utilisateur connexion(String pseudo, String motDePasse) {
-//		Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
-//		if (utilisateur != null && passwordEncoder.matches(motDePasse, utilisateur.getMotDePasse())) {
-//			return utilisateur;
-//		}
-		return null;
-	}
-
-    public void updateAdresse(Adresse adresse) {
-        adresseDAO.update(adresse);
-    }
 
 	@Override
 	public void modifierUtilisateur(Utilisateur utilisateur) {
@@ -89,5 +78,4 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 //		}
 		
 	}
-	
 }
