@@ -48,12 +48,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		return null;
 	}
 
-    public void updateAdresse(Adresse adresse) {
-        adresseDAO.update(adresse);
-    }
-
 	@Override
 	public void modifierUtilisateur(Utilisateur utilisateur) {
+		adresseDAO.update(utilisateur.getAdresse());
 		utilisateurDAO.update(utilisateur);
 	}
 
@@ -89,5 +86,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 //		}
 		
 	}
+
 	
 }
