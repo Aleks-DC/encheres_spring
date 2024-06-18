@@ -1,49 +1,58 @@
 package fr.eni.projet.encheres.controller;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import fr.eni.projet.encheres.bll.UtilisateurService;
 import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.Utilisateur;
 
 @Controller
-@RequestMapping("/utilisateurs")
 public class UtilisateurController {
 
-	
-	private UtilisateurService utilisateurService;
+	private final UtilisateurService utilisateurService;
 
-	@PostMapping("/inscription")
-	public void inscription(@RequestBody Utilisateur utilisateur, Adresse adresse) {
+	public UtilisateurController(UtilisateurService utilisateurService) {
+		this.utilisateurService = utilisateurService;
+	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "login"; // nom de la page Thymeleaf sans l'extension .html
+	}
+
+	@GetMapping("/logout")
+	public String logout() {
+		return "index"; // nom de la page Thymeleaf sans l'extension .html
+	}
+
+	@GetMapping("/register")
+	public String register(Model model) {
+		Utilisateur utilisateur = new Utilisateur();
+		utilisateur.setAdresse(new Adresse()); // Assurez-vous que l'adresse est initialisée
+		model.addAttribute("utilisateur", utilisateur);
+		return "register"; // nom de la page Thymeleaf sans l'extension .html
+	}
+
+	@PostMapping("/register/new")
+	public String soumettreFormulaire(@ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult result,
+			Model model) {
+		if (result.hasErrors()) {
+			return "register";
+		}
+
+		Adresse adresse = utilisateur.getAdresse();
 		utilisateurService.creerUtilisateur(utilisateur, adresse);
+
+		return "redirect:/login"; // Rediriger vers une page de succès ou autre
 	}
 
-//	@PostMapping("/connexion")
-//	public Utilisateur connexion(@RequestParam String pseudo, @RequestParam String motDePasse) {
-//		return utilisateurService.(pseudo, motDePasse);
-//	}
-
-	@PutMapping("/{pseudo}")
-	public void modifierUtilisateur(@PathVariable String pseudo, @RequestBody Utilisateur utilisateur) {
-		utilisateur.setPseudo(pseudo);
-		utilisateurService.modifierUtilisateur(utilisateur);
-	}
-
-	@GetMapping
-	public List<Utilisateur> consulterUtilisateurs() {
-		return utilisateurService.consulterUtilisateurs();
-	}
-
-	@GetMapping("/{pseudo}")
-	public Utilisateur consulterUtilisateur(@PathVariable String pseudo) {
-		return utilisateurService.consulterUtilisateur(pseudo);
+	@GetMapping("/cancel")
+	public String cancel() {
+		return "redirect:/index"; // Rediriger vers la page d'accueil
 	}
 }

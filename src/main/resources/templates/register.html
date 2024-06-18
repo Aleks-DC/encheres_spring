@@ -1,54 +1,85 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	data-th-replace="~{layouts/layout :: layout-enchere(
-			titrePage=~{:: title}, 
-			contenuPage=~{:: main}, 
-			ressourcesSupp=~{:: #ressources-css})}">
+              titrePage=~{:: title}, 
+              contenuPage=~{:: main}, 
+              ressourcesSupp=~{:: #ressources-css})}">
 <head>
 <meta charset="UTF-8">
 <title>S'enregistrer</title>
 <th:block id="ressources-css">
-	<link rel="stylesheet" data-th-href="@{/css/profil-update.css}" />
+	<link rel="stylesheet" th:href="@{/css/profil-update.css}" />
 </th:block>
+<script>
+	function validateForm() {
+		var email = document.getElementById("email").value;
+		var verifyEmail = document.getElementById("verifyEmail").value;
+		var motDePasse = document.getElementById("motDePasse").value;
+		var verifyMotDePasse = document.getElementById("verifyMotDePasse").value;
+
+		// Vérification des emails
+		if (email !== verifyEmail) {
+			alert("Les adresses email ne correspondent pas.");
+			return false;
+		}
+
+		// Vérification des mots de passe
+		if (motDePasse !== verifyMotDePasse) {
+			alert("Les mots de passe ne correspondent pas.");
+			return false;
+		}
+
+		// Vérification du pattern de l'email
+		var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+		if (!emailPattern.test(email)) {
+			alert("L'adresse email n'est pas valide.");
+			return false;
+		}
+
+		return true;
+	}
+</script>
 </head>
 <body>
-	<main>0
-			<h1>Nouveau Profil</h1>
-			<form th:action="@{/register}" method="post">
-				<label for="pseudo">Pseudo (*):</label>
-				<input type="text" id="pseudo" name="pseudo" required />
+	<main>
+		<h1>Nouveau Profil</h1>
+		<form th:action="@{/register/new}" method="post" th:object="${utilisateur}" onsubmit="return validateForm()">
+			<label for="pseudo">Pseudo (*):</label>
+			<input type="text" id="pseudo" th:field="*{pseudo}" required />
 
-				<label for="nom">Nom (*):</label>
-				<input type="text" id="nom" name="nom" required />
+			<label for="nom">Nom (*):</label>
+			<input type="text" id="nom" th:field="*{nom}" required />
 
-				<label for="prenom">Prénom (*):</label>
-				<input type="text" id="prenom" name="prenom" required />
+			<label for="prenom">Prénom (*):</label>
+			<input type="text" id="prenom" th:field="*{prenom}" required />
 
-				<label for="email">Email (*):</label>
-				<input type="email" id="email" name="email" required />
+			<label for="email">Email (*):</label>
+			<input type="email" id="email" th:field="*{email}" required />
 
-				<label for="telephone">Téléphone:</label>
-				<input type="text" id="telephone" name="telephone" />
+			<label for="verifyEmail">Vérifier Email (*):</label>
+			<input type="email" id="verifyEmail" required />
 
-				<label for="adresse">Adresse (*):</label>
-				<div>
-					<input type="text" id="rue" name="rue" placeholder="Rue" required />
-					<input type="text" id="codePostal" name="codePostal" placeholder="Code Postal" required />
-					<input type="text" id="ville" name="ville" placeholder="Ville" required />
-				</div>
+			<label for="telephone">Téléphone:</label>
+			<input type="text" id="telephone" th:field="*{telephone}" />
 
-				<label for="motDePasse">Mot de passe (*):</label>
-				<input type="password" id="motDePasse" name="motDePasse" required />
+			<label for="adresse">Adresse (*):</label>
+			<div>
+				<input type="text" id="rue" th:field="*{adresse.rue}" placeholder="Rue" required />
+				<input type="text" id="codePostal" th:field="*{adresse.codePostal}" placeholder="Code Postal" required />
+				<input type="text" id="ville" th:field="*{adresse.ville}" placeholder="Ville" required />
+			</div>
 
-				<label for="confirmation">Confirmation (*):</label>
-				<input type="password" id="confirmation" name="confirmation" required />
+			<label for="motDePasse">Mot de passe (*):</label>
+			<input type="password" id="motDePasse" th:field="*{motDePasse}" required />
 
-				<div class="button-group">
-					<button type="submit">Créer</button>
-					<button type="button">Annuler</button>
-				</div>
-			</form>
+			<label for="verifyMotDePasse">Vérifier Mot de passe (*):</label>
+			<input type="password" id="verifyMotDePasse" required />
+
+			<div class="button-group">
+				<button type="submit">Créer</button>
+				<a th:href="@{/}" class="button">Annuler</a>
+			</div>
+		</form>
 	</main>
-
 </body>
 </html>
