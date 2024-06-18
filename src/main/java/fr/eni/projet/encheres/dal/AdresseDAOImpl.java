@@ -27,7 +27,7 @@ public class AdresseDAOImpl implements AdresseDAO {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	@Override
-	public Adresse create(Adresse adresse) {
+	public void create(Adresse adresse) {
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -43,7 +43,7 @@ public class AdresseDAOImpl implements AdresseDAO {
 			// Mise à jour de l'identifiant de l'adresse auto-généré par la base
 			adresse.setId(keyHolder.getKey().longValue());
 		}
-		return adresse;
+		
 	}
 
 	@Override

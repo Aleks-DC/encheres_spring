@@ -6,7 +6,7 @@ import fr.eni.projet.encheres.bo.Adresse;
 
 public interface AdresseDAO {
 	
-	Adresse create(Adresse adresse); // Create
+	void create(Adresse adresse); // Create
 	
 	Adresse findById(long noAdresse); // Read
 
