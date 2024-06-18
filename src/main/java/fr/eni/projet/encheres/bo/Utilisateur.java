@@ -28,6 +28,7 @@ public class Utilisateur {
     @Pattern(regexp = "^(0|\\+33|0033)[1-9][0-9]{8}$", message = "Le numéro de téléphone doit être au format français valide.")
     private String telephone;
 	
+    //Valider formulaire modif avant d'attaquer mdp
     private String motDePasse;
     private int credit;
     private boolean admin;

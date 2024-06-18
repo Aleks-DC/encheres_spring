@@ -17,12 +17,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
 	private UtilisateurDAO utilisateurDAO;
 	private AdresseDAO adresseDAO;
-
+	private final PasswordEncoder passwordEncoder;
 	
-	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO, AdresseDAO adresseDAO) {
-		super();
+
+	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO, AdresseDAO adresseDAO,
+			PasswordEncoder passwordEncoder) {
 		this.utilisateurDAO = utilisateurDAO;
 		this.adresseDAO = adresseDAO;
+		this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();;
 	}
 
 	@Override
@@ -34,7 +36,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		utilisateur.setAdresse(a);
 		
 		// Création du mot de passe
-		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
 	}
 	
@@ -50,8 +51,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
 	@Override
 	public void modifierUtilisateur(Utilisateur utilisateur) {
-		adresseDAO.update(utilisateur.getAdresse());
 		utilisateurDAO.update(utilisateur);
+		adresseDAO.update(utilisateur.getAdresse());
 	}
 
 	@Override
@@ -76,16 +77,16 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return utilisateurs;
     }
 
-	// Je garde de côté pour le passwordEncoder.matches ==> future méthode
-	// changeMotDePasse() à compléter
-	// @Override
-	public void modifierMotDePasse(String pseudo, String motDePasse) {
-//		Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
-//		if (utilisateur != null && passwordEncoder.matches(motDePasse, utilisateur.getMotDePasse())) {
-//			return utilisateur;
-//		}
-		
+	
+	@Transactional
+    public void modifierMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse) {
+        Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
+        if (utilisateur != null && passwordEncoder.matches(ancienMotDePasse, utilisateur.getMotDePasse())) {
+            utilisateur.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
+            utilisateurDAO.update(utilisateur);
+        } else {
+            throw new IllegalArgumentException("Ancien mot de passe incorrect");
+        }
 	}
-
 	
 }

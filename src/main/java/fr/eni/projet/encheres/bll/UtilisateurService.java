@@ -19,5 +19,5 @@ public interface UtilisateurService {
 	List<Utilisateur> consulterUtilisateurs();
 
 	//Pour plus tard
-	void modifierMotDePasse(String pseudo, String motDePasse);
+	void modifierMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse);
 }
