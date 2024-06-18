@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import fr.eni.projet.encheres.bll.UtilisateurService;
+import fr.eni.projet.encheres.bo.PasswordChangeForm;
 import fr.eni.projet.encheres.bo.Utilisateur;
 import jakarta.validation.Valid;
 
@@ -55,9 +56,6 @@ public class ProfilMyController {
 	            model.addAttribute("utilisateur", utilisateur);
 	            return "profil-update";
 	        } else {
-	        	
-	        	//TODO récupérer l'adresse => créer Le Service et la DAO Adresse
-	        	
 	            return "redirect:/";
 	        }
 	    }
@@ -69,7 +67,30 @@ public class ProfilMyController {
 		}else {
 			System.out.println("L'utilisateur récupéré depuis le formulaire : "+ utilisateur);
 			utilisateurService.modifierUtilisateur(utilisateur);
-			return "redirect:/monProfile";
+			return "redirect:/monProfil";
 		}
 	}
+	
+	@GetMapping("/modifier/changeMdp")
+    public String afficherFormulaireMotDePasse(Model model) {
+        model.addAttribute("passwordChangeForm", new PasswordChangeForm());
+        return "change-password";
+    }
+
+    @PostMapping("/modifier/changeMdp")
+    public String changerMotDePasse(@Valid @ModelAttribute("passwordChangeForm") PasswordChangeForm form, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "profil-update-pwd";
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String pseudo = authentication.getName();
+        try {
+            utilisateurService.modifierMotDePasse(pseudo, form.getOldPassword(), form.getNewPassword());
+            return "redirect:/monProfil";
+        } catch (IllegalArgumentException e) {
+            bindingResult.rejectValue("oldPassword", "error.oldPassword", e.getMessage());
+            return "profil-update-pwd";
+        }
+    }
+	
 }
