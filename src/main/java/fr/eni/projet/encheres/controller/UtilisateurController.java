@@ -55,4 +55,5 @@ public class UtilisateurController {
 	public String cancel() {
 		return "redirect:/index"; // Rediriger vers la page d'accueil
 	}
+	
 }
