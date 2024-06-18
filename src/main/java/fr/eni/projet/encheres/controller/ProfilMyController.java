@@ -71,13 +71,13 @@ public class ProfilMyController {
 		}
 	}
 	
-	@GetMapping("/changeMdp")
+	@GetMapping("/modifier/changeMdp")
     public String afficherFormulaireMotDePasse(Model model) {
         model.addAttribute("passwordChangeForm", new PasswordChangeForm());
         return "change-password";
     }
 
-    @PostMapping("/changeMdp")
+    @PostMapping("/modifier/changeMdp")
     public String changerMotDePasse(@Valid @ModelAttribute("passwordChangeForm") PasswordChangeForm form, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "profil-update-pwd";

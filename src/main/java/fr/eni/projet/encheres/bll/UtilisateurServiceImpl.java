@@ -17,14 +17,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
 	private UtilisateurDAO utilisateurDAO;
 	private AdresseDAO adresseDAO;
-	private final PasswordEncoder passwordEncoder;
-	
 
-	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO, AdresseDAO adresseDAO,
-			PasswordEncoder passwordEncoder) {
+	
+	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO, AdresseDAO adresseDAO) {
 		this.utilisateurDAO = utilisateurDAO;
 		this.adresseDAO = adresseDAO;
-		this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();;
 	}
 
 	@Override
@@ -36,6 +33,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		utilisateur.setAdresse(a);
 		
 		// Création du mot de passe
+		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
 	}
 	
@@ -77,16 +75,17 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return utilisateurs;
     }
 
-	
-	@Transactional
-    public void modifierMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse) {
-        Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
-        if (utilisateur != null && passwordEncoder.matches(ancienMotDePasse, utilisateur.getMotDePasse())) {
-            utilisateur.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
-            utilisateurDAO.update(utilisateur);
-        } else {
-            throw new IllegalArgumentException("Ancien mot de passe incorrect");
-        }
+
+		@Transactional
+	    public void changerMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse) {
+	        Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
+	        if (utilisateur != null && passwordEncoder.matches(ancienMotDePasse, utilisateur.getMotDePasse())) {
+	            utilisateur.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
+	            utilisateurDAO.update(utilisateur);
+	        } else {
+	            throw new IllegalArgumentException("Ancien mot de passe incorrect");
+	        }
 	}
+
 	
 }
