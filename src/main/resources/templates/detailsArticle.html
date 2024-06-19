@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/springsecurity"
+	data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main}, ressourcesSupp=~{:: #ressources-css}, titrePage=~{:: title})}">
+<head>
+<title>Accueil - ENI-Enchères</title>
+<th:block id="ressources-css">
+	<link rel="stylesheet" data-th-href="@{/css/detailsArticle.css}">
+</th:block>
+</head>
+<body>
+	<main class="article-detail-container">
+		<article class="article-details" th:object="${article}">
+			<div class="article-image">
+				<img th:if="${article.photo != null}"
+					th:src="@{${'/images/' + article.photo}}" alt="Image de l'article">
+				<img th:if="${article.photo == null}"
+					th:src="@{/images/default.jpg}" alt="Image par défaut">
+			</div>
+			<div class="article-info">
+				<h2 th:text="*{nom}">Nom de l'article</h2>
+				<p class="description" th:text="*{description}">Description de
+					l'article</p>
+				<hr class="dotted">
+				<div class="details">
+					<p>
+						Catégorie : <span th:text="*{categorie.libelle}">Nom de la
+							catégorie</span>
+					</p>
+					<p>
+						Meilleure offre : <span th:text="*{prixVente} + ' €'">Prix
+							de l'enchère</span>
+					</p>
+					<p>
+						Mise à prix : <span th:text="*{prixInitial} + ' €'">Prix
+							initial</span>
+					</p>
+					<p>
+						Fin de l'enchère : <span
+							th:text="*{#temporals.format(dateFinEncheres, 'dd/MM/yyyy')}">Date
+							de fin</span>
+					</p>
+					<p>
+						Vendeur : <span th:text="${article.nomVendeur}">Pseudo du
+							vendeur</span>
+					</p>
+					<p>
+						Retrait : <span
+							th:text="*{retrait.rue} + ', ' + *{retrait.codePostal} + ' ' + *{retrait.ville}">Adresse
+							de retrait</span>
+					</p>
+				</div>
+				<a class="btn-retour" th:href="@{/}">RETOUR</a>
+			</div>
+		</article>
+	</main>
+
+</body>
+</html>
