@@ -72,18 +72,18 @@ public class ProfilMyController {
 //		}
 //	}
 	
-	@PostMapping("/modifier")
-	public String soumettreFormulaire(@ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult result,
-			Model model) {
-		if (result.hasErrors()) {
-			return "/monProfil/modifier";
-		}
+	 @PostMapping("/modifier")
+	    public String soumettreFormulaire(@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult result, Model model) {
+	        if (result.hasErrors()) {
+	            return "profil-update";
+	        }
 
-		Adresse adresse = utilisateur.getAdresse();
-		utilisateurService.modifierUtilisateur(utilisateur, adresse);
+	        Adresse adresse = utilisateur.getAdresse();
+	        // Vérification et modification de l'utilisateur et de son adresse
+	        utilisateurService.modifierUtilisateur(utilisateur, adresse);
 
-		return "redirect:/monProfil"; // Rediriger vers une page de succès ou autre
-	}
+	        return "redirect:/monProfil";
+	    }
 	
 	@GetMapping("/modifier/changeMdp")
     public String afficherFormulaireMotDePasse(Model model) {

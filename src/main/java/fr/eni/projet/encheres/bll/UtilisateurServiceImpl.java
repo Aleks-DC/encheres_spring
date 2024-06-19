@@ -43,45 +43,20 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
 	}
 	
-//	@Override
-//	@Transactional
-//	public void modifierUtilisateur(Utilisateur utilisateur, Adresse adresse) {
-//
-//		// Update de l'adresse
-//		adresseDAO.update(adresse);
-//		utilisateur.setAdresse(adresse);
-//
-//		// et on update le tout
-//		utilisateurDAO.update(utilisateur);
-//
-//	}
 	@Override
-    @Transactional
-    public void modifierUtilisateur(Utilisateur utilisateur, Adresse adresse) {
-        // Récupérer l'utilisateur existant
-        Utilisateur utilisateurExistant = utilisateurDAO.findByPseudo(utilisateur.getPseudo());
+	@Transactional
+	public void modifierUtilisateur(Utilisateur utilisateur, Adresse adresse) {
+	    // Mise à jour de l'adresse
+	    if (adresse.getId() != 0) {
+	        adresseDAO.update(adresse);
+	    } else {
+	        adresseDAO.create(adresse);
+	        utilisateur.setAdresse(adresse);
+	    }
 
-        // Mise à jour des champs modifiables
-        utilisateurExistant.setNom(utilisateur.getNom());
-        utilisateurExistant.setPrenom(utilisateur.getPrenom());
-        utilisateurExistant.setEmail(utilisateur.getEmail());
-        utilisateurExistant.setTelephone(utilisateur.getTelephone());
-
-        // Mise à jour de l'adresse
-        if (utilisateurExistant.getAdresse() != null && utilisateurExistant.getAdresse().getId() != 0) {
-            adresse.setId(utilisateurExistant.getAdresse().getId());
-            adresseDAO.update(adresse);
-        } else {
-            adresseDAO.create(adresse);
-            utilisateurExistant.setAdresse(adresse);
-        }
-
-        // Mise à jour de l'utilisateur
-        utilisateurDAO.update(utilisateurExistant);
-    }
-	
-
-
+	    // Mise à jour de l'utilisateur
+	    utilisateurDAO.update(utilisateur);
+	}
 
 	@Override
 	public Utilisateur consulterUtilisateur(String pseudo) {
