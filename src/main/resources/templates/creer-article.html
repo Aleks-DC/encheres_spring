@@ -12,13 +12,6 @@
 		<main>
 			<form th:action="@{/articles/nouveau}" method="post"
 				th:object="${articleAVendre}">
-				<div th:if="${#fields.hasErrors('*')}" class="error-summary">
-					Veuillez corriger les erreurs suivantes :
-					<ul>
-						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-					</ul>
-				</div>
-
 				<div>
 					<label for="nom">Nom de l'article :</label> <input type="text"
 						id="nom" th:field="*{nom}"> <span
@@ -58,12 +51,11 @@
 				<div>
 					<label for="categorie">Catégorie :</label> <select id="categorie"
 						th:field="*{categorie}">
+						<option value="">Sélectionnez une catégorie</option>
+						<option th:each="cat : ${categories}" th:value="${cat}"
+							th:text="${cat.libelle}"></option>
 					</select> <span th:if="${#fields.hasErrors('categorie')}"
 						th:errors="*{categorie}" class="error"></span>
-				</div>
-
-				<div>
-					<label for="retrait">Adresse de retrait :</label>
 				</div>
 
 				<button type="submit">Créer l'article</button>

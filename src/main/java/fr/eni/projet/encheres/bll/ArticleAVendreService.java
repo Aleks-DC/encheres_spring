@@ -2,52 +2,21 @@ package fr.eni.projet.encheres.bll;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-
 import fr.eni.projet.encheres.bo.ArticleAVendre;
-import fr.eni.projet.encheres.dal.ArticleAVendreDAO;
+import fr.eni.projet.encheres.bo.Categorie;
 import fr.eni.projet.encheres.exception.BusinessException;
-import jakarta.validation.Valid;
-import jakarta.validation.Validator;
 
-@Service
-@Validated
-public class ArticleAVendreService {
+public interface ArticleAVendreService {
 
-    @Autowired
-    private ArticleAVendreDAO articleAVendreDAO;
-    
-    @Autowired
-    private Validator validator;
+    ArticleAVendre getById(long noArticle);
 
-    public ArticleAVendre creer(@Valid ArticleAVendre articleAVendre) throws BusinessException {
-        var violations = validator.validate(articleAVendre);
-        if (!violations.isEmpty()) {
-            throw new BusinessException(violations.toString());
-        }
+    List<ArticleAVendre> getAll();
 
-        return articleAVendreDAO.creer(articleAVendre);
-    }
+    void update(ArticleAVendre articleAVendre) throws BusinessException;
 
-    public ArticleAVendre getById(long noArticle) {
-        return articleAVendreDAO.getById(noArticle);
-    }
+    void delete(int noArticle);
 
-    public List<ArticleAVendre> getAll() {
-        return articleAVendreDAO.getAll();
-    }
+    void creer(ArticleAVendre articleAVendre) throws BusinessException;
 
-    public void update(@Valid ArticleAVendre articleAVendre) throws BusinessException { // Validation avant update
-        var violations = validator.validate(articleAVendre);
-        if (!violations.isEmpty()) {
-            throw new BusinessException(violations.toString());
-        }
-        articleAVendreDAO.update(articleAVendre);
-    }
-
-    public void delete(int noArticle) {
-        articleAVendreDAO.delete(noArticle);
-    }
+	List<Categorie> getAllCategories();
 }

@@ -1,17 +1,18 @@
 package fr.eni.projet.encheres.dal;
 
-import java.sql.Date;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import fr.eni.projet.encheres.bo.Adresse;
@@ -27,29 +28,42 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	@Override
-	public ArticleAVendre creer(ArticleAVendre articleAVendre) {
-		KeyHolder keyHolder = new GeneratedKeyHolder();
+	    @Autowired
+	    private DataSource dataSource;
 
-		jdbcTemplate.update(connection -> {
-			PreparedStatement ps = connection.prepareStatement(
-					"INSERT INTO ARTICLES_A_VENDRE (nom_article, description, photo, date_debut_encheres, date_fin_encheres, prix_initial, id_utilisateur, no_categorie, no_adresse_retrait) "
-							+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-					Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, articleAVendre.getNom());
-			ps.setString(2, articleAVendre.getDescription());
-			ps.setDate(4, Date.valueOf(articleAVendre.getDateDebutEncheres()));
-			ps.setDate(5, Date.valueOf(articleAVendre.getDateFinEncheres()));
-			ps.setInt(6, articleAVendre.getPrixInitial());
-			ps.setString(7, articleAVendre.getVendeur().getNom());
-			ps.setLong(8, articleAVendre.getCategorie().getId());
-			ps.setLong(9, articleAVendre.getRetrait().getId());
-			return ps;
-		}, keyHolder);
+	    public void creer(ArticleAVendre article) {
+	        String sql = "INSERT INTO ARTICLES_A_VENDRE (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, id_utilisateur, no_categorie, photo) " +
+	                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-		articleAVendre.setId(keyHolder.getKey().longValue()); // Attention, l'ID dans ArticleAVendre est un long
-		return articleAVendre;
-	}
+	        try (Connection connection = dataSource.getConnection();
+	             PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+	            pstmt.setString(1, article.getNom());
+	            pstmt.setString(2, article.getDescription());
+	            pstmt.setDate(3, java.sql.Date.valueOf(article.getDateDebutEncheres()));
+	            pstmt.setDate(4, java.sql.Date.valueOf(article.getDateFinEncheres()));
+	            pstmt.setInt(5, article.getPrixInitial());
+	            pstmt.setString(6, article.getNomVendeur());
+	            pstmt.setLong(7, article.getCategorie().getId());
+	            pstmt.setString(8, article.getPhoto());
+
+	            int affectedRows = pstmt.executeUpdate();
+
+	            if (affectedRows == 0) {
+	                throw new SQLException("La création de l'article a échoué, aucune ligne ajoutée.");
+	            }
+	            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+	                if (generatedKeys.next()) {
+	                    article.setId(generatedKeys.getLong(1)); 
+	                } else {
+	                    throw new SQLException("La création de l'article a réussi, mais aucun ID n'a été obtenu.");
+	                }
+	            }
+	        } catch (SQLException e) {
+	            throw new RuntimeException("Erreur lors de la création de l'article : " + e.getMessage(), e);
+	        }
+	    }
+
 
 	@Override
 	public ArticleAVendre getById(long noArticle) {
@@ -66,6 +80,12 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	        return null; 
 	    }
 	}
+	
+	@Override
+    public List<Categorie> getAllCategories() {
+        String sql = "SELECT * FROM CATEGORIES";
+        return jdbcTemplate.query(sql, new CategorieRowMapper());
+    }
 
 	@Override
 	public List<ArticleAVendre> getAll() {
@@ -132,6 +152,17 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
             article.setCategorie(categorie);
 
             return article;
+        }
+	}
+	
+	class CategorieRowMapper implements RowMapper<Categorie> {
+        @Override
+        public Categorie mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Categorie categorie = new Categorie();
+            categorie.setId(rs.getLong("no_categorie"));
+            categorie.setLibelle(rs.getString("libelle"));
+
+            return categorie;
         }
 	}
 
