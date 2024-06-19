@@ -43,7 +43,7 @@ public class ProfilMyController {
 	            return "redirect:/"; 
 	        }
 	    }
-	
+	 
 	 @GetMapping("/modifier")
 	    public String afficherFormulaireModification(Model model) {
 	        // Récupérer l'utilisateur actuellement authentifié
@@ -61,20 +61,27 @@ public class ProfilMyController {
 	    }
 	 
 	@PostMapping("/modifier")
-	public String updateUtilisateur (@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Model model) {
-		if (bindingResult.hasErrors()) {
+	public String updateUtilisateur ( @ModelAttribute("utilisateur") Utilisateur utilisateur, Model model) {
+	    
+		/*if (bindingResult.hasErrors()) {
+			System.out.println(bindingResult);
 			return "profil-update";
-		}else {
-			System.out.println("L'utilisateur récupéré depuis le formulaire : "+ utilisateur);
-			utilisateurService.modifierUtilisateur(utilisateur);
-			return "redirect:/monProfil";
-		}
+		}else */
+			try {
+				System.out.println("L'utilisateur récupéré depuis le formulaire : "+ utilisateur);
+				utilisateurService.modifierUtilisateur(utilisateur);
+				return "redirect:/monProfil";
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		
+		return "profil-update";
 	}
 	
 	@GetMapping("/modifier/changeMdp")
     public String afficherFormulaireMotDePasse(Model model) {
         model.addAttribute("passwordChangeForm", new PasswordChangeForm());
-        return "change-password";
+        return "profil-update-pwd";
     }
 
     @PostMapping("/modifier/changeMdp")
@@ -85,7 +92,7 @@ public class ProfilMyController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String pseudo = authentication.getName();
         try {
-            utilisateurService.modifierMotDePasse(pseudo, form.getOldPassword(), form.getNewPassword());
+            utilisateurService.modifierMotDePasse(pseudo, form.getOldPassword(), form.getNewPassword(), form.getConfirmPassword());
             return "redirect:/monProfil";
         } catch (IllegalArgumentException e) {
             bindingResult.rejectValue("oldPassword", "error.oldPassword", e.getMessage());

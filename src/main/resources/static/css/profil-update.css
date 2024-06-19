@@ -28,7 +28,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* Styles pour les champs de formulaire */
+/* Styles champs formulaire */
 form div {
     display: flex;
     flex-wrap: wrap;
@@ -51,7 +51,7 @@ form div input {
     width: calc(100% - 160px); 
 }
 
-/* Styles pour la section full-width */
+/* Styles  full-width */
 .full-width {
     display: flex;
     align-items: center;
@@ -92,11 +92,31 @@ form div input {
     margin-right: 10px;
 }
 
-.adresse input:last-child {
-    margin-right: 0;
+/*credit-container de profil.css*/
+.credit-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
-/* Styles pour le groupe de boutons */
+.credit-container input {
+    max-width: 3ch; 
+    text-align: center;
+    padding: 8px 2px 8px 8px;
+    border: none;
+}
+
+.credit-container span {
+    margin-left: 1px;
+}
+
+.center-div {
+	justify-content: center;
+} 
+
+
+/* Styles  boutons */
 .button-group {
     display: flex;
     justify-content: space-between;

@@ -19,16 +19,16 @@
             <div data-th-replace="~{fragments/errors/fragment-errors :: frag-errors}"></div> 
         </th:block> 
         
-        <form action="#" data-th-action="@{/changeMdp}" method="post">
+        <form action="#" data-th-action="@{/monProfil/modifier/changeMdp}"  th:object="${passwordChangeForm}" method="post">
             <div>
                 <label for="oldPassword">Ancien mot de passe :</label>
-                <input type="password" id="oldPassword" name="oldPassword" required>
+                <input type="password" id="oldPassword" data-th-field="*{oldPassword}" required>
                 <div data-th-replace="~{fragments/errors/fragment-error :: frag-error('oldPassword')}"></div> 
             </div>
             
             <div>
                 <label for="newPassword">Nouveau mot de passe :</label>
-                <input type="password" id="newPassword" name="newPassword" required>
+                <input type="password" id="newPassword" data-th-field="*{newPassword}" required>
                 <div data-th-replace="~{fragments/errors/fragment-error :: frag-error('newPassword')}"></div> 
             </div>
             
@@ -40,7 +40,7 @@
             
             <div class="button-group">
                 <button type="submit">Modifier</button>
-                <a href="@{/monProfil}">Annuler</a>
+                <a data-th-href="@{/monProfil}">Annuler</a>
             </div>
         </form>
     </main>

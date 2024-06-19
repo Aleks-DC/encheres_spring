@@ -41,10 +41,22 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	}
 
 	@Override
-	public void modifierUtilisateur(Utilisateur utilisateur) {
-		utilisateurDAO.update(utilisateur);
-		adresseDAO.update(utilisateur.getAdresse());
-	}
+    @Transactional
+    public void modifierUtilisateur(Utilisateur utilisateur) {
+        // Vérifie que l'utilisateur et son adresse ne sont pas null
+        if (utilisateur == null || utilisateur.getAdresse() == null) {
+            throw new IllegalArgumentException("Utilisateur ou adresse ne peut pas être nul");
+        }
+
+        try {
+            utilisateurDAO.update(utilisateur);
+            adresseDAO.update(utilisateur.getAdresse());
+        } catch (Exception e) {
+            // Log l'exception
+            e.printStackTrace();
+            throw new RuntimeException("Erreur lors de la mise à jour de l'utilisateur et de l'adresse", e);
+        }
+    }
 
 	@Override
 	public Utilisateur consulterUtilisateur(String pseudo) {
@@ -68,19 +80,25 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return utilisateurs;
     }
 
+	@Override
+	@Transactional
+    public void modifierMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse, String confirmationMotDePasse) {
+        Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
+        
+        // vérification : oldPassword correspond à au mdp en bdd
+		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	    if (!passwordEncoder.matches(ancienMotDePasse, utilisateur.getMotDePasse())) {
+	        throw new IllegalArgumentException("Ancien mot de passe incorrect");
+	    }
+	    
+	    //Vérification : Nouveau Mdp correspond à confirmation
+	    if (!nouveauMotDePasse.equals(confirmationMotDePasse)) {
+	        throw new IllegalArgumentException("La confirmation du nouveau mot de passe ne correspond pas");
+	    }
+	    //mise à jour du mot de passe
+        utilisateur.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
+        utilisateurDAO.update(utilisateur);
 
-		@Transactional
-	    public void modifierMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse) {
-			
-	        Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
-			PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-			utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
-	        if (utilisateur != null && passwordEncoder.matches(ancienMotDePasse, utilisateur.getMotDePasse())) {
-	            utilisateur.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
-	            utilisateurDAO.update(utilisateur);
-	        } else {
-	            throw new IllegalArgumentException("Ancien mot de passe incorrect");
-	        }
 	}
-
+	
 }

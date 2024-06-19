@@ -24,8 +24,7 @@ public class Utilisateur {
     @Email(message = "Veuillez saisir une adresse email valide.")
     private String email;
     
-    @NotBlank(message = "Le numéro de téléphone ne peut pas être vide.")
-    @Pattern(regexp = "^(0|\\+33|0033)[1-9][0-9]{8}$", message = "Le numéro de téléphone doit être au format français valide.")
+ // @Pattern(regexp = "^(0|\\+33|0033)[1-9][0-9]{8}$", message = "Le numéro de téléphone doit être au format valide.")
     private String telephone;
 	
     //Valider formulaire modif avant d'attaquer mdp
