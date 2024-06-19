@@ -3,6 +3,7 @@ package fr.eni.projet.encheres.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.projet.encheres.bll.ArticleAVendreService;
 import fr.eni.projet.encheres.bo.ArticleAVendre;
+import fr.eni.projet.encheres.bo.Categorie;
+import fr.eni.projet.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
 
 @Controller
@@ -21,6 +24,8 @@ public class EnchereController {
 
     @Autowired
     private ArticleAVendreService articleAVendreService;
+    
+    
 
     @GetMapping("/") 
     public String afficherAccueil(Model model) {
@@ -31,15 +36,18 @@ public class EnchereController {
 
     @GetMapping("/articles/nouveau")
     public String afficherFormulaireCreation(Model model) {
+        List<Categorie> categories = articleAVendreService.getAllCategories();
+        model.addAttribute("categories", categories);
         model.addAttribute("articleAVendre", new ArticleAVendre());
         return "creer-article";
     }
-
+    
     @PostMapping("/articles/nouveau")
-    public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, 
-                               BindingResult result, RedirectAttributes redirectAttributes) {
+    public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre,
+                              BindingResult result, RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
-            return "creer-article"; 
+        	model.addAttribute("categories", articleAVendreService.getAllCategories());
+            return "creer-article";
         }
 
         try {
@@ -51,6 +59,8 @@ public class EnchereController {
 
         return "redirect:/";
     }
+
+
     
     @GetMapping("/articles/{id}")
     public String afficherDetailArticle(@PathVariable("id") long id, Model model) {

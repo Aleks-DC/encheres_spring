@@ -8,27 +8,25 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class ArticleAVendre {
-	// TODO: faire la validation ici
     @NotNull(message = "L'identifiant de l'article est obligatoire.")
 	private long id;
-    @NotBlank(message = "Le nom de l'article est obligatoire.")
+    @NotBlank(message = "Le nom est obligatoire.")
     private String nom;
-    @NotBlank(message = "La description de l'article est obligatoire.")
+    @NotBlank(message = "La description est obligatoire.")
     private String description;
+    @NotNull(message = "Veuillez saisir une date de début.")
     @FutureOrPresent(message = "La date de début des enchères doit être aujourd'hui ou dans le futur.")
     private LocalDate dateDebutEncheres;
+    @NotNull(message = "Veuillez saisir une date de fin.")
     @Future(message = "La date de fin des enchères doit être après la date de début.")
     private LocalDate dateFinEncheres;
     private int statut;
     private int prixInitial;
     private Integer prixVente;
-    @NotNull(message = "Une catégorie est requise pour l'article.")
+    @NotNull(message = "Une catégorie est requise.")
     private Categorie categorie;
-    @NotNull(message = "Un vendeur est requis pour l'article.")
     private Utilisateur vendeur;
-    @NotNull(message = "Une adresse de retrait est requise pour l'article.")
     private Adresse retrait;
-    @NotNull(message = "Le nom du vendeur est obligatoire.")
     private String nomVendeur;
     private String photo;
     
