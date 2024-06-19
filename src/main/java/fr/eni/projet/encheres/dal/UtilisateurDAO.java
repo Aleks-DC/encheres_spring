@@ -9,6 +9,8 @@ public interface UtilisateurDAO {
 	void create(Utilisateur utilisateur); // Create
 	
 	Utilisateur findByPseudo(String pseudo); // Read
+	
+	Utilisateur findByEmail(String email); // Read
 
 	List<Utilisateur> findAll(); // Read
 

@@ -25,62 +25,72 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
 	@Override
 	@Transactional
-	public void creerUtilisateur(Utilisateur utilisateur, Adresse adresse) {
-		
+	public void creerUtilisateur(Utilisateur utilisateur) {
+
 		// Création de l'adresse
+		Adresse adresse = utilisateur.getAdresse();
 		adresseDAO.create(adresse);
-		utilisateur.setAdresse(adresse);
-		
+
 		// Création du mot de passe
 		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
-		
+
+		// Initialiser les crédits à 10
+		utilisateur.setCredit(10);
+
 		// et on crée le tout
 		utilisateurDAO.create(utilisateur);
-		
+
 	}
 
 	@Override
+	@Transactional
 	public void modifierUtilisateur(Utilisateur utilisateur) {
+		// Mise à jour de l'adresse
+		Adresse adresse = utilisateur.getAdresse();
+		if (adresse.getId() != 0) {
+			adresseDAO.update(adresse);
+		} else {
+			adresseDAO.create(adresse);
+		}
+		// Mise à jour de l'utilisateur
 		utilisateurDAO.update(utilisateur);
-		adresseDAO.update(utilisateur.getAdresse());
 	}
 
 	@Override
 	public Utilisateur consulterUtilisateur(String pseudo) {
-        Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
-        if (utilisateur != null && utilisateur.getAdresse() != null) {
-            Adresse adresse = adresseDAO.findById((int) utilisateur.getAdresse().getId());
-            utilisateur.setAdresse(adresse);
-        }
-        return utilisateur;
-    }
+		Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
+		if (utilisateur != null && utilisateur.getAdresse() != null) {
+			Adresse adresse = adresseDAO.findById((int) utilisateur.getAdresse().getId());
+			utilisateur.setAdresse(adresse);
+		}
+		return utilisateur;
+	}
 
 	@Override
-    public List<Utilisateur> consulterUtilisateurs() {
-        List<Utilisateur> utilisateurs = utilisateurDAO.findAll();
-        for (Utilisateur utilisateur : utilisateurs) {
-            if (utilisateur.getAdresse() != null) {
-                Adresse adresse = adresseDAO.findById((int) utilisateur.getAdresse().getId());
-                utilisateur.setAdresse(adresse);
-            }
-        }
-        return utilisateurs;
-    }
+	public List<Utilisateur> consulterUtilisateurs() {
+		List<Utilisateur> utilisateurs = utilisateurDAO.findAll();
+		for (Utilisateur utilisateur : utilisateurs) {
+			if (utilisateur.getAdresse() != null) {
+				Adresse adresse = adresseDAO.findById((int) utilisateur.getAdresse().getId());
+				utilisateur.setAdresse(adresse);
+			}
+		}
+		return utilisateurs;
+	}
 
+	@Transactional
+	public void modifierMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse) {
 
-		@Transactional
-	    public void modifierMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse) {
-			
-	        Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
-			PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-			utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
-	        if (utilisateur != null && passwordEncoder.matches(ancienMotDePasse, utilisateur.getMotDePasse())) {
-	            utilisateur.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
-	            utilisateurDAO.update(utilisateur);
-	        } else {
-	            throw new IllegalArgumentException("Ancien mot de passe incorrect");
-	        }
+		Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
+		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
+		if (utilisateur != null && passwordEncoder.matches(ancienMotDePasse, utilisateur.getMotDePasse())) {
+			utilisateur.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
+			utilisateurDAO.update(utilisateur);
+		} else {
+			throw new IllegalArgumentException("Ancien mot de passe incorrect");
+		}
 	}
 
 }
