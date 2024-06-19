@@ -2,19 +2,35 @@ package fr.eni.projet.encheres.bo;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class ArticleAVendre {
+	// TODO: faire la validation ici
+    @NotNull(message = "L'identifiant de l'article est obligatoire.")
 	private long id;
+    @NotBlank(message = "Le nom de l'article est obligatoire.")
     private String nom;
+    @NotBlank(message = "La description de l'article est obligatoire.")
     private String description;
+    @FutureOrPresent(message = "La date de début des enchères doit être aujourd'hui ou dans le futur.")
     private LocalDate dateDebutEncheres;
+    @Future(message = "La date de fin des enchères doit être après la date de début.")
     private LocalDate dateFinEncheres;
     private int statut;
     private int prixInitial;
     private Integer prixVente;
+    @NotNull(message = "Une catégorie est requise pour l'article.")
     private Categorie categorie;
-    
+    @NotNull(message = "Un vendeur est requis pour l'article.")
     private Utilisateur vendeur;
+    @NotNull(message = "Une adresse de retrait est requise pour l'article.")
     private Adresse retrait;
+    @NotNull(message = "Le nom du vendeur est obligatoire.")
+    private String nomVendeur;
+    private String photo;
     
 	public ArticleAVendre() {
 	}
@@ -162,9 +178,21 @@ public class ArticleAVendre {
 		
 	}
 
-	public Object getPhoto() {
+	public String getPhoto() {
 		// TODO Auto-generated method stub
-		return null;
+		return photo;
+	}
+
+	public String getNomVendeur() {
+		return nomVendeur;
+	}
+
+	public void setNomVendeur(String nomVendeur) {
+		this.nomVendeur = nomVendeur;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
         
 }

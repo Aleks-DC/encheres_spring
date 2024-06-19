@@ -10,6 +10,7 @@ import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.dal.ArticleAVendreDAO;
 import fr.eni.projet.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 
 @Service
 @Validated
@@ -17,13 +18,20 @@ public class ArticleAVendreService {
 
     @Autowired
     private ArticleAVendreDAO articleAVendreDAO;
+    
+    @Autowired
+    private Validator validator;
 
     public ArticleAVendre creer(@Valid ArticleAVendre articleAVendre) throws BusinessException {
-        validerPrixVente(articleAVendre); // Validation spécifique au prix de vente
-        return articleAVendreDAO.creer(articleAVendre); 
+        var violations = validator.validate(articleAVendre);
+        if (!violations.isEmpty()) {
+            throw new BusinessException(violations.toString());
+        }
+
+        return articleAVendreDAO.creer(articleAVendre);
     }
 
-    public ArticleAVendre getById(int noArticle) {
+    public ArticleAVendre getById(long noArticle) {
         return articleAVendreDAO.getById(noArticle);
     }
 
@@ -31,17 +39,15 @@ public class ArticleAVendreService {
         return articleAVendreDAO.getAll();
     }
 
-    public void update(ArticleAVendre articleAVendre) {
+    public void update(@Valid ArticleAVendre articleAVendre) throws BusinessException { // Validation avant update
+        var violations = validator.validate(articleAVendre);
+        if (!violations.isEmpty()) {
+            throw new BusinessException(violations.toString());
+        }
         articleAVendreDAO.update(articleAVendre);
     }
 
     public void delete(int noArticle) {
         articleAVendreDAO.delete(noArticle);
-    }
-    
-    private void validerPrixVente(ArticleAVendre article) throws BusinessException {
-        if (article.getPrixVente() == null || article.getPrixVente() <= 0) {
-            throw new BusinessException("Le prix de vente doit être supérieur à zéro.");
-        }
     }
 }

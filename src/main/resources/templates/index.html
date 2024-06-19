@@ -87,7 +87,6 @@
 				<div class="grid" th:unless="${articlesAVendre.isEmpty()}">
 					<article th:each="article : ${articlesAVendre}"
 						class="enchere-item">
-
 						<a class="enchere-image"
 							th:href="@{/articles/{id}(id=${article.id})}"> <img
 							th:if="${article.photo != null}"
@@ -101,15 +100,16 @@
 							<h4 th:text="${article.nom}">Nom de l'article</h4>
 
 							<p class="enchere-prix">
-								Prix : <span th:text="${article.prixInitial} + ' Pts'">Prix
-									de l'enchère</span>
+								Prix : <span th:text="${article.prixInitial} + ' €'">Prix
+									de départ</span>
 							</p>
 							<p class="enchere-fin">
-								Fin de l'enchère : <span th:text="${article.dateFinEncheres}">Date
+								Fin de l'enchère : <span
+									th:text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}">Date
 									de fin</span>
 							</p>
 							<p class="enchere-vendeur">
-								Vendeur : <span>Pseudo du vendeur</span>
+								Vendeur : <span th:text="${article.nomVendeur}"></span>
 							</p>
 						</div>
 
@@ -118,6 +118,7 @@
 					</article>
 				</div>
 			</div>
+
 
 		</div>
 		<script>
