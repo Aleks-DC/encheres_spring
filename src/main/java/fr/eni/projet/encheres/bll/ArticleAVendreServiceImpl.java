@@ -32,7 +32,7 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
     
     @Override
     public List<Categorie> getAllCategories() {
-        return articleAVendreDAO.getAllCategories();
+        return articleAVendreDAO.getAllCategories(); 
     }
 
     @Override
@@ -55,6 +55,8 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
     public void delete(int noArticle) {
         articleAVendreDAO.delete(noArticle);
     }
+    
+    //TODO: supprimer les @Valid et validation date à faire
 
     @Override
     @Transactional

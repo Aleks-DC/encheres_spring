@@ -19,4 +19,6 @@ public interface ArticleAVendreDAO {
     void update(ArticleAVendre articleAVendre);
 
     void delete(int noArticle); // Changer le nom du paramètre en noArticle
+
+	Categorie getCategorieByLibelle(String libelle);
 }

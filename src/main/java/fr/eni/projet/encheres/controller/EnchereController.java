@@ -3,7 +3,6 @@ package fr.eni.projet.encheres.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,31 +35,35 @@ public class EnchereController {
 
     @GetMapping("/articles/nouveau")
     public String afficherFormulaireCreation(Model model) {
-        List<Categorie> categories = articleAVendreService.getAllCategories();
-        model.addAttribute("categories", categories);
+        model.addAttribute("categories", articleAVendreService.getAllCategories()); 
         model.addAttribute("articleAVendre", new ArticleAVendre());
         return "creer-article";
     }
-    
+
     @PostMapping("/articles/nouveau")
-    public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre,
-                              BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+    public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, 
+                               BindingResult result, RedirectAttributes redirectAttributes, Model model) {
         if (result.hasErrors()) {
-        	model.addAttribute("categories", articleAVendreService.getAllCategories());
+            model.addAttribute("categories", articleAVendreService.getAllCategories());
+            return "creer-article";
+        }
+
+        if (articleAVendre.getCategorie() == null) {
+            result.rejectValue("categorie", "NotNull", "Veuillez sélectionner une catégorie.");
+            model.addAttribute("categories", articleAVendreService.getAllCategories());
             return "creer-article";
         }
 
         try {
             articleAVendreService.creer(articleAVendre);
             redirectAttributes.addFlashAttribute("successMessage", "Article créé avec succès !");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Erreur lors de la création de l'article : " + e.getMessage());
+            return "redirect:/";
+        } catch (BusinessException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("categories", articleAVendreService.getAllCategories());
+            return "creer-article"; 
         }
-
-        return "redirect:/";
     }
-
-
     
     @GetMapping("/articles/{id}")
     public String afficherDetailArticle(@PathVariable("id") long id, Model model) {

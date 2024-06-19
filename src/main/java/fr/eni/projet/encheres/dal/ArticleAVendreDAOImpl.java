@@ -82,10 +82,17 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	}
 	
 	@Override
-    public List<Categorie> getAllCategories() {
-        String sql = "SELECT * FROM CATEGORIES";
-        return jdbcTemplate.query(sql, new CategorieRowMapper());
-    }
+	public Categorie getCategorieByLibelle(String libelle) {
+	    String sql = "SELECT * FROM CATEGORIES WHERE libelle = ?";
+	    return jdbcTemplate.queryForObject(sql, new CategorieRowMapper(), libelle);
+	}
+
+	
+	@Override
+	public List<Categorie> getAllCategories() {
+	    String sql = "SELECT * FROM CATEGORIES";
+	    return jdbcTemplate.query(sql, new CategorieRowMapper()); 
+	}
 
 	@Override
 	public List<ArticleAVendre> getAll() {
@@ -155,15 +162,14 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
         }
 	}
 	
-	class CategorieRowMapper implements RowMapper<Categorie> {
-        @Override
-        public Categorie mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Categorie categorie = new Categorie();
-            categorie.setId(rs.getLong("no_categorie"));
-            categorie.setLibelle(rs.getString("libelle"));
-
-            return categorie;
-        }
+	static class CategorieRowMapper implements RowMapper<Categorie> { // Classe interne statique
+	    @Override
+	    public Categorie mapRow(ResultSet rs, int rowNum) throws SQLException {
+	        Categorie categorie = new Categorie();
+	        categorie.setId(rs.getLong("no_categorie"));
+	        categorie.setLibelle(rs.getString("libelle"));
+	        return categorie;
+	    }
 	}
 
 }
