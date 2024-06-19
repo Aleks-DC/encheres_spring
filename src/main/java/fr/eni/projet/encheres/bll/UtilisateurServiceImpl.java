@@ -18,9 +18,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	private UtilisateurDAO utilisateurDAO;
 	private AdresseDAO adresseDAO;
 
-	
 	public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO, AdresseDAO adresseDAO) {
-		super();
 		this.utilisateurDAO = utilisateurDAO;
 		this.adresseDAO = adresseDAO;
 	}
@@ -30,31 +28,22 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	public void creerUtilisateur(Utilisateur utilisateur, Adresse adresse) {
 		
 		// Création de l'adresse
-		Adresse a = adresseDAO.create(adresse);
-		utilisateur.setAdresse(a);
+		adresseDAO.create(adresse);
+		utilisateur.setAdresse(adresse);
 		
 		// Création du mot de passe
 		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
+		
+		// et on crée le tout
+		utilisateurDAO.create(utilisateur);
+		
 	}
-	
-	// Pas besoin, mais je garde de côté pour le passwordEncoder.matches ==> future méthode changeMotDePasse()
-	@Override
-	public Utilisateur connexion(String pseudo, String motDePasse) {
-//		Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
-//		if (utilisateur != null && passwordEncoder.matches(motDePasse, utilisateur.getMotDePasse())) {
-//			return utilisateur;
-//		}
-		return null;
-	}
-
-    public void updateAdresse(Adresse adresse) {
-        adresseDAO.update(adresse);
-    }
 
 	@Override
 	public void modifierUtilisateur(Utilisateur utilisateur) {
 		utilisateurDAO.update(utilisateur);
+		adresseDAO.update(utilisateur.getAdresse());
 	}
 
 	@Override
@@ -79,15 +68,19 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return utilisateurs;
     }
 
-	// Je garde de côté pour le passwordEncoder.matches ==> future méthode
-	// changeMotDePasse() à compléter
-	// @Override
-	public void modifierMotDePasse(String pseudo, String motDePasse) {
-//		Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
-//		if (utilisateur != null && passwordEncoder.matches(motDePasse, utilisateur.getMotDePasse())) {
-//			return utilisateur;
-//		}
-		
+
+		@Transactional
+	    public void modifierMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse) {
+			
+	        Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
+			PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+			utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
+	        if (utilisateur != null && passwordEncoder.matches(ancienMotDePasse, utilisateur.getMotDePasse())) {
+	            utilisateur.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
+	            utilisateurDAO.update(utilisateur);
+	        } else {
+	            throw new IllegalArgumentException("Ancien mot de passe incorrect");
+	        }
 	}
-	
+
 }

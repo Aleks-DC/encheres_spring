@@ -25,7 +25,7 @@
 	            	<span data-th-text="${#authentication.principal.username}"></span>
 	            	
 	            <label id="inputName" for="nom">Nom(*):</label>
-	           	<input id="inputName" type="text" id="nom" name="nom" data-th-field="*{nom}"required>
+	           	<input id="inputName" type="text" name="nom" data-th-field="*{nom}"required>
 					<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('nom')}"></div> 
 
 	        </div>
@@ -33,26 +33,26 @@
 	        
 	        <div>
 	            <label id="inputForname" for="prenom">Prénom(*):</label>
-	            <input id="inputForname" type="text" id="prenom" name="prenom" data-th-field="*{prenom}"required>
+	            <input id="inputForname" type="text" name="prenom" data-th-field="*{prenom}"required>
 				<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('prenom')}"></div> 
 
 	            
 	            <label id="inputMail" for="email">Email(*):</label>
-	            <input id="inputMail" type="email" id="email" name="email" data-th-field="*{email}" required>
+	            <input id="inputMail" type="email"  name="email" data-th-field="*{email}" required>
 				<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('email')}"></div> 
 	        </div>
 	        
 	        
 	        <div class="full-width">
 	            <label id="inputPhone" for="telephone">Téléphone:</label>
-	            <input id="inputPhone" type="tel" id="telephone" name="telephone" data-th-field="*{telephone}">
+	            <input id="inputPhone" type="tel" name="telephone" data-th-field="*{telephone}">
 				<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('telephone')}"></div> 
 	        </div>
 	        
 	        
 	        <div class="adresse">
 	            <label id="inputAdress" for="adresse">Adresse (*):</label>
-	            <input id="inputAdress" type="text" id="adresse" name="adresse" data-th-field="*{adresse.rue}" required>
+	            <input id="inputAdress" type="text" name="adresse" data-th-field="*{adresse.rue}" required>
 	            <div data-th-replace="~{fragments/errors/fragment-error :: frag-error('adresse.rue')}"></div>
 	            
 	            <input type="text" id="codePostal" name="codePostal" data-th-field="*{adresse.codePostal}" required>
@@ -72,7 +72,7 @@
 	        <div class="button-group">
 	        	<!--  type button à passer en submit une fois la validation bien définit -->
 	            <button type="submit">Modifier</button>
-	            <a href="@{/changePassword}">Modifier Mot de passe</a> <!--  A faire plus tard  1-->
+	            <a href="@{/monProfil/modifier/changeMdp}">Modifier Mot de passe</a> <!--  A faire plus tard  1-->
 	            <a href="@{/monProfil}">Supprimer Compte</a> <!--  A faire plus tard 2-->
 	            <a href="@{/monProfil}">Annuler</a>
 	        </div>

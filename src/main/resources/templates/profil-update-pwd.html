@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(
+            titrePage=~{:: title}, 
+            contenuPage=~{:: main}, 
+            ressourcesSupp=~{:: #ressources-css})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier le Mot de Passe</title>
+    <th:block id="ressources-css">
+        <link rel="stylesheet" data-th-href="@{/css/profil-update.css}" />
+        <link rel="stylesheet" data-th-href="@{/css/tp-error.css}" />
+    </th:block>
+</head>     
+
+<body>
+    <main>
+        <h1>Modifier le Mot de Passe</h1>
+        <th:block data-th-if="${!#strings.isEmpty(action)}"> 
+            <div data-th-replace="~{fragments/errors/fragment-errors :: frag-errors}"></div> 
+        </th:block> 
+        
+        <form action="#" data-th-action="@{/changeMdp}" method="post">
+            <div>
+                <label for="oldPassword">Ancien mot de passe :</label>
+                <input type="password" id="oldPassword" name="oldPassword" required>
+                <div data-th-replace="~{fragments/errors/fragment-error :: frag-error('oldPassword')}"></div> 
+            </div>
+            
+            <div>
+                <label for="newPassword">Nouveau mot de passe :</label>
+                <input type="password" id="newPassword" name="newPassword" required>
+                <div data-th-replace="~{fragments/errors/fragment-error :: frag-error('newPassword')}"></div> 
+            </div>
+            
+            <div>
+                <label for="confirmPassword">Confirmer le nouveau mot de passe :</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div data-th-replace="~{fragments/errors/fragment-error :: frag-error('confirmPassword')}"></div> 
+            </div>
+            
+            <div class="button-group">
+                <button type="submit">Modifier</button>
+                <a href="@{/monProfil}">Annuler</a>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

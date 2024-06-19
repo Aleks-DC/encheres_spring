@@ -9,11 +9,6 @@ public interface UtilisateurService {
 	
 	void creerUtilisateur(Utilisateur utilisateur, Adresse adresse);
 
-	//Pas besoin, géré par notre super copain Spring Security
-	Utilisateur connexion(String pseudo, String motDePasse);
-
-	void updateAdresse(Adresse adresse);
-
 	void modifierUtilisateur(Utilisateur utilisateur);
 	
 	Utilisateur consulterUtilisateur(String pseudo);
@@ -21,5 +16,5 @@ public interface UtilisateurService {
 	List<Utilisateur> consulterUtilisateurs();
 
 	//Pour plus tard
-	void modifierMotDePasse(String pseudo, String motDePasse);
+	void modifierMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse);
 }
