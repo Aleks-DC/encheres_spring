@@ -25,11 +25,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
 	@Override
 	@Transactional
-	public void creerUtilisateur(Utilisateur utilisateur, Adresse adresse) {
+	public void creerUtilisateur(Utilisateur utilisateur) {
 
 		// Création de l'adresse
+		Adresse adresse = utilisateur.getAdresse();
 		adresseDAO.create(adresse);
-		utilisateur.setAdresse(adresse);
 
 		// Création du mot de passe
 		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -42,20 +42,19 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		utilisateurDAO.create(utilisateur);
 
 	}
-	
+
 	@Override
 	@Transactional
-	public void modifierUtilisateur(Utilisateur utilisateur, Adresse adresse) {
-	    // Mise à jour de l'adresse
-	    if (adresse.getId() != 0) {
-	        adresseDAO.update(adresse);
-	    } else {
-	        adresseDAO.create(adresse);
-	        utilisateur.setAdresse(adresse);
-	    }
-
-	    // Mise à jour de l'utilisateur
-	    utilisateurDAO.update(utilisateur);
+	public void modifierUtilisateur(Utilisateur utilisateur) {
+		// Mise à jour de l'adresse
+		Adresse adresse = utilisateur.getAdresse();
+		if (adresse.getId() != 0) {
+			adresseDAO.update(adresse);
+		} else {
+			adresseDAO.create(adresse);
+		}
+		// Mise à jour de l'utilisateur
+		utilisateurDAO.update(utilisateur);
 	}
 
 	@Override

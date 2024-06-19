@@ -23,7 +23,8 @@
 	        <div>
 	            <label for="pseudo">Pseudo :</label>
 	            	<span data-th-text="${#authentication.principal.username}"></span>
-	            	
+	            	<input data-th-value="${utilisateur.pseudo}" name="pseudo" hidden="true">
+	         
 	            <label id="inputName" for="nom">Nom(*):</label>
 	           	<input id="inputName" type="text" name="nom" data-th-field="*{nom}"required>
 					<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('nom')}"></div> 

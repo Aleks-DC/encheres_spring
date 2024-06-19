@@ -7,9 +7,9 @@ import fr.eni.projet.encheres.bo.Utilisateur;
 
 public interface UtilisateurService {
 	
-	void creerUtilisateur(Utilisateur utilisateur, Adresse adresse);
+	void creerUtilisateur(Utilisateur utilisateur);
 
-	void modifierUtilisateur(Utilisateur utilisateur, Adresse adresse);
+	void modifierUtilisateur(Utilisateur utilisateur);
 	
 	Utilisateur consulterUtilisateur(String pseudo);
 

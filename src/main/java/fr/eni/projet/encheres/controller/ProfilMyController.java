@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import fr.eni.projet.encheres.bll.UtilisateurService;
-import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.PasswordChangeForm;
 import fr.eni.projet.encheres.bo.Utilisateur;
 import jakarta.validation.Valid;
@@ -61,29 +60,16 @@ public class ProfilMyController {
 	        }
 	    }
 	 
-//	@PostMapping("/modifier")
-//	public String updateUtilisateur (@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Model model) {
-//		if (bindingResult.hasErrors()) {
-//			return "profil-update";
-//		}else {
-//			System.out.println("L'utilisateur récupéré depuis le formulaire : "+ utilisateur);
-//			utilisateurService.modifierUtilisateur(utilisateur);
-//			return "redirect:/monProfil";
-//		}
-//	}
-	
-	 @PostMapping("/modifier")
-	    public String soumettreFormulaire(@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult result, Model model) {
-	        if (result.hasErrors()) {
-	            return "profil-update";
-	        }
-
-	        Adresse adresse = utilisateur.getAdresse();
-	        // Vérification et modification de l'utilisateur et de son adresse
-	        utilisateurService.modifierUtilisateur(utilisateur, adresse);
-
-	        return "redirect:/monProfil";
-	    }
+	@PostMapping("/modifier")
+	public String updateUtilisateur (@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			return "profil-update";
+		}else {
+			System.out.println("L'utilisateur récupéré depuis le formulaire : "+ utilisateur);
+			utilisateurService.modifierUtilisateur(utilisateur);
+			return "redirect:/monProfil";
+		}
+	}
 	
 	@GetMapping("/modifier/changeMdp")
     public String afficherFormulaireMotDePasse(Model model) {

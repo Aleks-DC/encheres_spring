@@ -45,8 +45,7 @@ public class UtilisateurController {
 			return "register";
 		}
 
-		Adresse adresse = utilisateur.getAdresse();
-		utilisateurService.creerUtilisateur(utilisateur, adresse);
+		utilisateurService.creerUtilisateur(utilisateur);
 
 		return "redirect:/login"; // Rediriger vers une page de succès ou autre
 	}
