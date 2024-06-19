@@ -10,68 +10,87 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.projet.encheres.bll.ArticleAVendreService;
 import fr.eni.projet.encheres.bo.ArticleAVendre;
-import fr.eni.projet.encheres.bo.Categorie;
 import fr.eni.projet.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
 
 @Controller
 public class EnchereController {
 
-    @Autowired
-    private ArticleAVendreService articleAVendreService;
-    
-    
+	@Autowired
+	private ArticleAVendreService articleAVendreService;
 
-    @GetMapping("/") 
-    public String afficherAccueil(Model model) {
-        List<ArticleAVendre> articlesAVendre = articleAVendreService.getAll();
-        model.addAttribute("articlesAVendre", articlesAVendre);
-        return "index"; 
-    }
+//    @GetMapping("/") 
+//    public String afficherAccueil(Model model) {
+//        List<ArticleAVendre> articlesAVendre = articleAVendreService.getAll();
+//        model.addAttribute("articlesAVendre", articlesAVendre);
+//        return "index"; 
+//    }
+	
+	// TODO @Alexis Controller filtrage des articles
+	@GetMapping("/")
+	public String afficherAccueil(@RequestParam(name = "motCle", required = false) String motCle,
+	                              @RequestParam(name = "categorie", required = false) Long categorieId, Model model) {
+	    List<ArticleAVendre> articlesAVendre;
+	    // Vérifie si les deux filtres sont utilisés
+	    if (categorieId != null && motCle != null) {
+	        articlesAVendre = articleAVendreService.findByCategorieAndMotCle(categorieId, motCle);
+	    } else if (categorieId != null) {
+	        articlesAVendre = articleAVendreService.getByCategorie(categorieId);
+	    } else if (motCle != null) {
+	        articlesAVendre = articleAVendreService.searchByMotCle(motCle);
+	    } else {
+	        articlesAVendre = articleAVendreService.getAll();
+	    }
+	    model.addAttribute("articlesAVendre", articlesAVendre);
+	    model.addAttribute("categories", articleAVendreService.getAllCategories());
+	    return "index";
+	}
 
-    @GetMapping("/articles/nouveau")
-    public String afficherFormulaireCreation(Model model) {
-        model.addAttribute("categories", articleAVendreService.getAllCategories()); 
-        model.addAttribute("articleAVendre", new ArticleAVendre());
-        return "creer-article";
-    }
 
-    @PostMapping("/articles/nouveau")
-    public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, 
-                               BindingResult result, RedirectAttributes redirectAttributes, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("categories", articleAVendreService.getAllCategories());
-            return "creer-article";
-        }
+	@GetMapping("/articles/nouveau")
+	public String afficherFormulaireCreation(Model model) {
+		model.addAttribute("categories", articleAVendreService.getAllCategories());
+		model.addAttribute("articleAVendre", new ArticleAVendre());
+		return "creer-article";
+	}
 
-        if (articleAVendre.getCategorie() == null) {
-            result.rejectValue("categorie", "NotNull", "Veuillez sélectionner une catégorie.");
-            model.addAttribute("categories", articleAVendreService.getAllCategories());
-            return "creer-article";
-        }
+	@PostMapping("/articles/nouveau")
+	public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre,
+			BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("categories", articleAVendreService.getAllCategories());
+			return "creer-article";
+		}
 
-        try {
-            articleAVendreService.creer(articleAVendre);
-            redirectAttributes.addFlashAttribute("successMessage", "Article créé avec succès !");
-            return "redirect:/";
-        } catch (BusinessException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("categories", articleAVendreService.getAllCategories());
-            return "creer-article"; 
-        }
-    }
-    
-    @GetMapping("/articles/{id}")
-    public String afficherDetailArticle(@PathVariable("id") long id, Model model) {
-        ArticleAVendre article = articleAVendreService.getById(id);
-        if (article == null) {
-            return "redirect:/";
-        }
-        model.addAttribute("article", article);
-        return "detailsArticle";
-    }
+		if (articleAVendre.getCategorie() == null) {
+			result.rejectValue("categorie", "NotNull", "Veuillez sélectionner une catégorie.");
+			model.addAttribute("categories", articleAVendreService.getAllCategories());
+			return "creer-article";
+		}
+
+		try {
+			articleAVendreService.creer(articleAVendre);
+			redirectAttributes.addFlashAttribute("successMessage", "Article créé avec succès !");
+			return "redirect:/";
+		} catch (BusinessException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			model.addAttribute("categories", articleAVendreService.getAllCategories());
+			return "creer-article";
+		}
+	}
+
+	@GetMapping("/articles/{id}")
+	public String afficherDetailArticle(@PathVariable("id") long id, Model model) {
+		ArticleAVendre article = articleAVendreService.getById(id);
+		if (article == null) {
+			return "redirect:/";
+		}
+		model.addAttribute("article", article);
+		return "detailsArticle";
+	}
 }

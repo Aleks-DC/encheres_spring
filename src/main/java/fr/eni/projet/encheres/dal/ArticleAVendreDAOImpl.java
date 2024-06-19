@@ -171,5 +171,24 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	        return categorie;
 	    }
 	}
+	
+	// TODO @Alexis DAO filtrage des articles
+	@Override
+    public List<ArticleAVendre> getByCategorie(long categorieId) {
+        String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_categorie = ?";
+        return jdbcTemplate.query(sql, new ArticleRowMapper(), categorieId);
+    }
+
+    @Override
+    public List<ArticleAVendre> searchByMotCle(String motCle) {
+        String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE nom_article LIKE ?";
+        return jdbcTemplate.query(sql, new ArticleRowMapper(), "%" + motCle + "%");
+    }
+
+    @Override
+    public List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle) {
+        String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_categorie = ? AND nom_article LIKE ?";
+        return jdbcTemplate.query(sql, new ArticleRowMapper(), categorieId, "%" + motCle + "%");
+    }
 
 }

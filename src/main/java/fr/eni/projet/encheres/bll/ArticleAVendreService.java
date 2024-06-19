@@ -19,4 +19,11 @@ public interface ArticleAVendreService {
     void creer(ArticleAVendre articleAVendre) throws BusinessException;
 
 	List<Categorie> getAllCategories();
+	
+	List<ArticleAVendre> getByCategorie(long categorieId);
+
+	List<ArticleAVendre> searchByMotCle(String motCle);
+
+	List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle);
+
 }
