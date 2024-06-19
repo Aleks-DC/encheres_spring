@@ -9,7 +9,7 @@ public interface ArticleAVendreDAO {
 
 	ArticleAVendre creer(ArticleAVendre articleAVendre);
 
-	ArticleAVendre getById(int noArticle); // Changer le nom du paramètre en noArticle
+	ArticleAVendre getById(long noArticle); // Changer le nom du paramètre en noArticle
 
     List<ArticleAVendre> getAll();
 

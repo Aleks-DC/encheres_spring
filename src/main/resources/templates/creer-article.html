@@ -1,30 +1,74 @@
-<html xmlns:th="http://www.thymeleaf.org" data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main}, ressourcesSupp=~{:: #ressources-css}, titrePage=~{:: title})}">
+<html xmlns:th="http://www.thymeleaf.org"
+	data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main}, ressourcesSupp=~{:: #ressources-css}, titrePage=~{:: title})}">
 <head>
-<title>nouvel article</title>
-    <th:block id="ressources-css">
-		<link rel="stylesheet" data-th-href="@{/css/newArticle.css}">
-	</th:block>
+<title>Nouvel Article</title>
+<th:block id="ressources-css">
+	<link rel="stylesheet" data-th-href="@{/css/newArticle.css}">
+</th:block>
 </head>
-<div class="SuperParent">
-<main>
-<form th:action="@{/articles/nouveau}" method="post" th:object="${articleAVendre}">
-    <label for="nom">Nom de l'article :</label>
-    <input type="text" id="nom" th:field="*{nom}">
 
-    <label for="description">Description :</label>
-    <textarea id="description" th:field="*{description}"></textarea>
+<body>
+	<div class="SuperParent">
+		<main>
+			<form th:action="@{/articles/nouveau}" method="post"
+				th:object="${articleAVendre}">
+				<div th:if="${#fields.hasErrors('*')}" class="error-summary">
+					Veuillez corriger les erreurs suivantes :
+					<ul>
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
 
-    <label for="dateDebutEncheres">Date de début des enchères :</label>
-    <input type="date" id="dateDebutEncheres" th:field="*{dateDebutEncheres}">
+				<div>
+					<label for="nom">Nom de l'article :</label> <input type="text"
+						id="nom" th:field="*{nom}"> <span
+						th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"
+						class="error"></span>
+				</div>
 
-    <label for="dateFinEncheres">Date de fin des enchères :</label>
-    <input type="date" id="dateFinEncheres" th:field="*{dateFinEncheres}">
+				<div>
+					<label for="description">Description :</label>
+					<textarea id="description" th:field="*{description}"></textarea>
+					<span th:if="${#fields.hasErrors('description')}"
+						th:errors="*{description}" class="error"></span>
+				</div>
 
-    <label for="prixInitial">Prix initial :</label>
-    <input type="number" id="prixInitial" th:field="*{prixInitial}">
+				<div>
+					<label for="dateDebutEncheres">Date de début des enchères :</label>
+					<input type="date" id="dateDebutEncheres"
+						th:field="*{dateDebutEncheres}"> <span
+						th:if="${#fields.hasErrors('dateDebutEncheres')}"
+						th:errors="*{dateDebutEncheres}" class="error"></span>
+				</div>
 
-    <button type="submit">Créer l'enchère</button>
-</form>
-</main>
-</div>
+				<div>
+					<label for="dateFinEncheres">Date de fin des enchères :</label> <input
+						type="date" id="dateFinEncheres" th:field="*{dateFinEncheres}">
+					<span th:if="${#fields.hasErrors('dateFinEncheres')}"
+						th:errors="*{dateFinEncheres}" class="error"></span>
+				</div>
+
+				<div>
+					<label for="prixInitial">Prix initial :</label> <input
+						type="number" id="prixInitial" th:field="*{prixInitial}">
+					<span th:if="${#fields.hasErrors('prixInitial')}"
+						th:errors="*{prixInitial}" class="error"></span>
+				</div>
+
+				<div>
+					<label for="categorie">Catégorie :</label> <select id="categorie"
+						th:field="*{categorie}">
+					</select> <span th:if="${#fields.hasErrors('categorie')}"
+						th:errors="*{categorie}" class="error"></span>
+				</div>
+
+				<div>
+					<label for="retrait">Adresse de retrait :</label>
+				</div>
+
+				<button type="submit">Créer l'article</button>
+			</form>
+		</main>
+	</div>
+</body>
 </html>

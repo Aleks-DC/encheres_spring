@@ -1,20 +1,21 @@
-/* Style général */
-.SuperParent {
-    display: flex;
-    align-items:center;
+.container {
+    max-width: 960px;
+    margin: 0 auto;
 }
 
+/* Styles du formulaire */
 main {
     background-color: #fff;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 500px;
+    max-width: 600px; /* Légèrement plus large pour mieux s'adapter aux popups */
     margin: 15px auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    color: #333; /* Couleur du texte pour le contraste sur fond blanc */
 }
 
 form {
@@ -30,12 +31,14 @@ label {
 input[type="text"],
 input[type="date"],
 input[type="number"],
-textarea {
+textarea,
+select {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
     margin-top: 5px;
+    width: 100%; /* Pour que les champs occupent toute la largeur du formulaire */
 }
 
 textarea {
@@ -44,7 +47,7 @@ textarea {
 }
 
 button[type="submit"] {
-    background-color: #4CAF50;
+    background-color: #007bff; /* Couleur bleue pour le bouton */
     color: #fff;
     padding: 12px 20px;
     border: none;
@@ -52,22 +55,32 @@ button[type="submit"] {
     cursor: pointer;
     margin-top: 20px;
     font-size: 16px;
+    transition: background-color 0.3s ease; /* Ajout d'une transition pour un effet de hover plus doux */
 }
 
 button[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #0069d9; /* Couleur bleue plus foncée au hover */
 }
 
-@media (max-width: 480px) {
-    main {
-        width: 100%;
-    }
-    
-    input[type="text"],
-    input[type="date"],
-    input[type="number"],
-    textarea,
-    button[type="submit"] {
-        width: 100%;
-    }
+/* Styles des messages d'erreur */
+.error-summary {
+    color: #dc3545; /* Rouge plus vif pour les erreurs */
+    margin-bottom: 20px;
+}
+
+.form-group.has-error .form-control {
+    border-color: #dc3545;
+}
+
+div {
+	padding-bottom: 15px;
+}
+
+/* Styles pour les popups d'erreur */
+.alert {
+    position: fixed; /* Pour que les popups s'affichent par-dessus le formulaire */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* Pour s'assurer que les popups sont au-dessus des autres éléments */
 }

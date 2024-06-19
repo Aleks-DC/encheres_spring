@@ -1,6 +1,5 @@
 package fr.eni.projet.encheres.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.projet.encheres.bll.ArticleAVendreService;
 import fr.eni.projet.encheres.bo.ArticleAVendre;
-import fr.eni.projet.encheres.bo.Utilisateur;
-import fr.eni.projet.encheres.dal.UtilisateurDAO;
 import jakarta.validation.Valid;
 
 @Controller
@@ -52,5 +50,15 @@ public class EnchereController {
         }
 
         return "redirect:/";
+    }
+    
+    @GetMapping("/articles/{id}")
+    public String afficherDetailArticle(@PathVariable("id") long id, Model model) {
+        ArticleAVendre article = articleAVendreService.getById(id);
+        if (article == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("article", article);
+        return "detailsArticle";
     }
 }
