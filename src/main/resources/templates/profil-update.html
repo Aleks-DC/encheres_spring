@@ -22,6 +22,7 @@
 	    <form action="#" data-th-action="@{/monProfil/modifier}" method="post" data-th-object ="${utilisateur}">
 	        <div>
 	            <label for="pseudo">Pseudo :</label>
+	            <!--  Input caché -->
 	            	<span data-th-text="${#authentication.principal.username}"></span>
 	            	
 	            <label id="inputName" for="nom">Nom(*):</label>

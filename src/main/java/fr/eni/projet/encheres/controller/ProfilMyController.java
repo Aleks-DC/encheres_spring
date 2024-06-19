@@ -1,5 +1,7 @@
 package fr.eni.projet.encheres.controller;
 
+import java.security.Principal;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -61,13 +63,15 @@ public class ProfilMyController {
 	    }
 	 
 	@PostMapping("/modifier")
-	public String updateUtilisateur ( @ModelAttribute("utilisateur") Utilisateur utilisateur, Model model) {
+	public String updateUtilisateur (/*@Valid*/ @ModelAttribute("utilisateur") Utilisateur utilisateur, /*BindingResult bindingResult,*/ Model model, 
+			Principal p) {
 	    
 		/*if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult);
 			return "profil-update";
 		}else */
 			try {
+				utilisateur.setPseudo(p.getName());
 				System.out.println("L'utilisateur récupéré depuis le formulaire : "+ utilisateur);
 				utilisateurService.modifierUtilisateur(utilisateur);
 				return "redirect:/monProfil";

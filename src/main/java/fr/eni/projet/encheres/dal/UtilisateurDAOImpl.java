@@ -17,7 +17,7 @@ import fr.eni.projet.encheres.bo.Utilisateur;
 public class UtilisateurDAOImpl implements UtilisateurDAO {
 
 	private final String INSERT_USER = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse) VALUES (:pseudo, :nom, :prenom, :email, :telephone, :motDePasse, :credit, :administrateur, :noAdresse)";
-	private final String UPDATE_USER = "UPDATE UTILISATEURS SET nom=:nom, prenom=:prenom, email=:email, telephone=:telephone, administrateur=:administrateur, no_adresse=:noAdresse, adresse=:adresse WHERE pseudo=:pseudo";
+//	private final String UPDATE_USER = "UPDATE UTILISATEURS SET nom=:nom, prenom=:prenom, email=:email, telephone=:telephone, administrateur=:administrateur, no_adresse=:noAdresse, adresse=:adresse WHERE pseudo=:pseudo";
 	private final String FIND_BY_PSEUDO = "SELECT pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse FROM UTILISATEURS WHERE pseudo = :pseudo";
 //    private final String FIND_BY_PSEUDO = 
 //    	    "SELECT u.pseudo, u.nom, u.prenom, u.email, u.telephone, u.mot_de_passe, u.credit, u.administrateur, " +
@@ -86,7 +86,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
 	@Override
     public void update(Utilisateur utilisateur) {
-		
+		String UPDATE_USER = "UPDATE UTILISATEURS SET nom=:nom, prenom=:prenom, email=:email, telephone=:telephone, administrateur=:administrateur, no_adresse=:noAdresse, adresse=:adresse WHERE pseudo=:pseudo";
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("nom", utilisateur.getNom());
         namedParameters.addValue("prenom", utilisateur.getPrenom());

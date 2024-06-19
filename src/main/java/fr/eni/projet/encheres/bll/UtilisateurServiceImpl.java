@@ -56,6 +56,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             e.printStackTrace();
             throw new RuntimeException("Erreur lors de la mise à jour de l'utilisateur et de l'adresse", e);
         }
+        //Validation EmailUnique  / PseudoUnique 
     }
 
 	@Override
