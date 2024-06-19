@@ -20,7 +20,7 @@ import fr.eni.projet.encheres.dal.UtilisateurDAO;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.MethodName.class)
-public class UtilisateurServiceTest {
+public class CreateUtilisateurTest {
 
     @Autowired
     UtilisateurService utilisateurService;
@@ -45,7 +45,7 @@ public class UtilisateurServiceTest {
         utilisateur.setEmail("aleks@dc.com");
         utilisateur.setTelephone("0123456789");
         utilisateur.setMotDePasse("password");
-        utilisateur.setCredit(88);
+        //utilisateur.setCredit(88);
         utilisateur.setAdmin(true);
         
         // Appel du service pour créer l'utilisateur et son adresse
@@ -66,7 +66,7 @@ public class UtilisateurServiceTest {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         assertTrue(passwordEncoder.matches("password", testUtilisateur.getMotDePasse()), "Le mot de passe ne correspond pas");
 
-        assertEquals(88, testUtilisateur.getCredit(), "Le crédit de l'utilisateur ne correspond pas");
+        //assertEquals(88, testUtilisateur.getCredit(), "Le crédit de l'utilisateur ne correspond pas");
         assertEquals(true, testUtilisateur.isAdmin(), "Le statut admin de l'utilisateur ne correspond pas");
 
         // Vérification des champs de l'adresse

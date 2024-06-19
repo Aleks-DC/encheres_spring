@@ -1,6 +1,5 @@
 package fr.eni.projet.encheres.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.projet.encheres.bll.ArticleAVendreService;
 import fr.eni.projet.encheres.bo.ArticleAVendre;
-import fr.eni.projet.encheres.bo.Utilisateur;
-import fr.eni.projet.encheres.dal.UtilisateurDAO;
 import jakarta.validation.Valid;
 
 @Controller

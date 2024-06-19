@@ -9,7 +9,7 @@ public interface UtilisateurService {
 	
 	void creerUtilisateur(Utilisateur utilisateur, Adresse adresse);
 
-	void modifierUtilisateur(Utilisateur utilisateur);
+	void modifierUtilisateur(Utilisateur utilisateur, Adresse adresse);
 	
 	Utilisateur consulterUtilisateur(String pseudo);
 
