@@ -27,4 +27,6 @@ public interface ArticleAVendreDAO {
 	List<ArticleAVendre> searchByMotCle(String motCle);
 
 	List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle);
+	
+    void encherir(long articleId, String pseudoUtilisateur, int montantEnchere);
 }

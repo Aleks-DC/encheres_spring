@@ -1,5 +1,6 @@
 package fr.eni.projet.encheres.bll;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -10,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.bo.Categorie;
-import fr.eni.projet.encheres.bo.Utilisateur;
 import fr.eni.projet.encheres.dal.ArticleAVendreDAO;
 import fr.eni.projet.encheres.exception.BusinessException;
 import jakarta.validation.ConstraintViolation;
@@ -56,6 +56,33 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 	public void delete(int noArticle) {
 		articleAVendreDAO.delete(noArticle);
 }
+	
+    @Override
+    @Transactional
+    public void encherir(long articleId, String pseudoUtilisateur, int montantEnchere) throws BusinessException {
+        ArticleAVendre article = articleAVendreDAO.getById(articleId);
+        Utilisateur utilisateur = utilisateurService.getUtilisateurByPseudo(pseudoUtilisateur);
+
+        // Vérifications métier
+        if (article.getDateFinEncheres().isBefore(LocalDate.now())) {
+            throw new BusinessException("Les enchères sont terminées pour cet article.");
+        }
+
+        if (utilisateur.getCredit() < montantEnchere) {
+            throw new BusinessException("Vous n'avez pas assez de crédits pour enchérir.");
+        }
+
+        // Logique d'enchère
+        article.setPrixVente(montantEnchere);
+        articleAVendreDAO.update(article);
+
+        // Déduire les crédits de l'utilisateur
+        utilisateur.setCredit(utilisateur.getCredit() - montantEnchere);
+        utilisateurService.updateUtilisateur(utilisateur); // Assurez-vous d'avoir cette méthode dans votre UtilisateurService
+
+        // Enregistrement de l'enchère
+        articleAVendreDAO.encherir(articleId, pseudoUtilisateur, montantEnchere);
+    }
 
 	@Override
 	@Transactional

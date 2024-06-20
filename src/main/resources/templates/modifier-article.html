@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	data-th-replace="~{layouts/layout :: layout-enchere(contenuPage=~{:: main}, ressourcesSupp=~{:: #ressources-css}, titrePage=~{:: title})}">
+<head>
+<title>Modifier Article</title>
+<th:block id="ressources-css">
+	<link rel="stylesheet" data-th-href="@{/css/newArticle.css}">
+</th:block>
+</head>
+
+<body>
+	<div class="SuperParent">
+		<main>
+			<form th:action="@{/articles/{id}/modifier(id=*{id})}" method="post"
+				th:object="${articleAVendre}" enctype="multipart/form-data">
+				<div>
+					<label for="nom">Nom de l'article :</label> <input type="text"
+						id="nom" th:field="*{nom}" required> <span
+						th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"
+						class="error"></span>
+				</div>
+
+				<div>
+					<label for="description">Description :</label>
+					<textarea id="description" th:field="*{description}" required></textarea>
+					<span th:if="${#fields.hasErrors('description')}"
+						th:errors="*{description}" class="error"></span>
+				</div>
+
+				<div>
+					<label for="categorie">Catégorie :</label> <select id="categorie"
+						th:field="*{categorie.id}">
+						<option value="0">Aucune catégorie</option>
+						<option th:each="cat : ${categories}" th:value="${cat.id}"
+							th:text="${cat.libelle}"></option>
+					</select> <span th:if="${#fields.hasErrors('categorie')}"
+						th:errors="*{categorie}" class="error"></span>
+				</div>
+
+				<div>
+					<label for="prixInitial">Prix initial :</label> <input
+						type="number" id="prixInitial" th:field="*{prixInitial}" required
+						min="1"> <span th:if="${#fields.hasErrors('prixInitial')}"
+						th:errors="*{prixInitial}" class="error"></span>
+				</div>
+
+				<div>
+					<label for="dateDebutEncheres">Date de début des enchères :</label>
+					<input type="date" id="dateDebutEncheres"
+						th:field="*{dateDebutEncheres}" required> <span
+						th:if="${#fields.hasErrors('dateDebutEncheres')}"
+						th:errors="*{dateDebutEncheres}" class="error"></span>
+				</div>
+
+				<div>
+					<label for="dateFinEncheres">Date de fin des enchères :</label> <input
+						type="date" id="dateFinEncheres" th:field="*{dateFinEncheres}"
+						required> <span
+						th:if="${#fields.hasErrors('dateFinEncheres')}"
+						th:errors="*{dateFinEncheres}" class="error"></span>
+				</div>
+				<div class="button-container">
+					<button type="submit">Enregistrer les modifications</button>
+					<a th:href="@{/articles/{id}(id=*{id})}" class="btn-retour">Annuler</a>
+				</div>
+				<div th:if="${errorMessage != null}" class="error-message"
+					th:text="${errorMessage}"></div>
+
+			</form>
+		</main>
+	</div>
+</body>
+</html>

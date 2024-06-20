@@ -15,7 +15,7 @@ public interface ArticleAVendreService {
 
     void update(ArticleAVendre articleAVendre) throws BusinessException;
 
-    void delete(int noArticle);
+    void delete(int id);
 
     void creer(ArticleAVendre articleAVendre) throws BusinessException;
 
@@ -26,5 +26,7 @@ public interface ArticleAVendreService {
 	List<ArticleAVendre> searchByMotCle(String motCle);
 
 	List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle);
+
+	void encherir(long articleId, String pseudoUtilisateur, int montantEnchere) throws BusinessException;
 
 }
