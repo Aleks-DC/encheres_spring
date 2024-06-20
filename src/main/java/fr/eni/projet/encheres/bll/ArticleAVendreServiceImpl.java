@@ -82,4 +82,23 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
     public List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle) {
         return articleAVendreDAO.findByCategorieAndMotCle(categorieId, motCle);
     }
+    @Override
+    public List<ArticleAVendre> getToutesMesVentes(String pseudoVendeur) {
+    	return articleAVendreDAO.getToutesMesVentes(pseudoVendeur);
+    }
+    
+    @Override
+    public List<ArticleAVendre> getMesVentesNonDebutees(String pseudoVendeur) {
+    	return articleAVendreDAO.getMesVentesNonDebutees(pseudoVendeur);
+    }
+
+    @Override
+    public List<ArticleAVendre> getMesVentesEnCours(String pseudoVendeur) {
+    	return articleAVendreDAO.getMesVentesEnCours(pseudoVendeur);
+    }
+
+    @Override
+    public List<ArticleAVendre> getMesVentesTerminees(String pseudoVendeur) {
+    	return articleAVendreDAO.getMesVentesTerminees(pseudoVendeur);
+    }
 }
