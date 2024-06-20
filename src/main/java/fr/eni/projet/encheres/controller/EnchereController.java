@@ -31,22 +31,39 @@ public class EnchereController {
 	// TODO @Alexis Controller filtrage des articles
 	@GetMapping("/")
 	public String afficherAccueil(@RequestParam(name = "motCle", required = false) String motCle,
-	                              @RequestParam(name = "categorie", required = false) Long categorieId, Model model) {
-	    List<ArticleAVendre> articlesAVendre;
-	    // Vérifie si les deux filtres sont utilisés
-	    if (categorieId != null && motCle != null) {
-	        articlesAVendre = articleAVendreService.findByCategorieAndMotCle(categorieId, motCle);
-	    } else if (categorieId != null) {
-	        articlesAVendre = articleAVendreService.getByCategorie(categorieId);
-	    } else if (motCle != null) {
-	        articlesAVendre = articleAVendreService.searchByMotCle(motCle);
+	                              @RequestParam(name = "categorie", required = false) Long categorieId,
+	                              @RequestParam(name = "affichage", required = false) String affichage,
+	                              @RequestParam(name = "typeFiltre", required = false) String typeFiltre,
+	                              Model model, Principal principal) {
+	    List<ArticleAVendre> articlesAVendre = null;
+
+	    if ("ventes".equals(affichage) && principal != null) {
+	        if ("enCours".equals(typeFiltre)) {
+	            articlesAVendre = articleAVendreService.getMesVentesEnCours(principal.getName());
+	        } else if ("nonDebutees".equals(typeFiltre)) {
+	            articlesAVendre = articleAVendreService.getMesVentesNonDebutees(principal.getName());
+	        } else if ("terminees".equals(typeFiltre)) {
+	            articlesAVendre = articleAVendreService.getMesVentesTerminees(principal.getName());
+	        } else {
+	            articlesAVendre = articleAVendreService.getToutesMesVentes(principal.getName());
+	        }
 	    } else {
-	        articlesAVendre = articleAVendreService.getAll();
+	        if (categorieId != null && motCle != null) {
+	            articlesAVendre = articleAVendreService.findByCategorieAndMotCle(categorieId, motCle);
+	        } else if (categorieId != null) {
+	            articlesAVendre = articleAVendreService.getByCategorie(categorieId);
+	        } else if (motCle != null) {
+	            articlesAVendre = articleAVendreService.searchByMotCle(motCle);
+	        } else {
+	            articlesAVendre = articleAVendreService.getAll();
+	        }
 	    }
+
 	    model.addAttribute("articlesAVendre", articlesAVendre);
 	    model.addAttribute("categories", articleAVendreService.getAllCategories());
 	    return "index";
 	}
+
 
 	@GetMapping("/articles/nouveau")
 	public String afficherFormulaireCreation(Model model) {

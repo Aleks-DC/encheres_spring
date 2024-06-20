@@ -14,7 +14,6 @@ public interface ArticleAVendreService {
 
 	void update(ArticleAVendre articleAVendre) throws BusinessException;
 
-
     void delete(int id);
 
 	void creer(ArticleAVendre articleAVendre) throws BusinessException;
