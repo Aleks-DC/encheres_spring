@@ -26,9 +26,6 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 	@Autowired
 	private Validator validator;
 
-	@Autowired
-	private UtilisateurService utilisateurService;
-
 	@Override
 	public ArticleAVendre getById(long noArticle) {
 		return articleAVendreDAO.getById(noArticle);
@@ -71,6 +68,7 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
                 .map(v -> v.getPropertyPath() + ": " + v.getMessage())
                 .collect(Collectors.joining("\n"));
     }
+    
     // TODO @Alexis BLL filtrage des articles
     public List<ArticleAVendre> getByCategorie(long categorieId){
     	return articleAVendreDAO.getByCategorie(categorieId);

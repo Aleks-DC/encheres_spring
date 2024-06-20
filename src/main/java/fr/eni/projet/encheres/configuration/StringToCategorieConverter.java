@@ -18,18 +18,19 @@ public class StringToCategorieConverter implements Converter<String, Categorie> 
     }
 
     @Override
-    public Categorie convert(String idString) { // On attend maintenant un ID (String)
+    public Categorie convert(String idString) {
         if (idString == null || idString.isEmpty()) {
-            return null; // Gérer le cas où aucune catégorie n'est sélectionnée
-        }	
+            return null;
+        }
 
         try {
             Long id = Long.parseLong(idString);
-            return articleAVendreDAO.getCategorieById(id); // Récupérer la catégorie par son ID
+            return articleAVendreDAO.getCategorieById(id);
         } catch (NumberFormatException e) {
-            // Gérer le cas où la chaîne n'est pas un nombre valide (ne devrait pas arriver)
-            return null;
+            throw new IllegalArgumentException("ID de catégorie invalide : " + idString);
         }
     }
+
+
 }
 

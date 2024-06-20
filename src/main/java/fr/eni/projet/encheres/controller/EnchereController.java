@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.projet.encheres.bll.ArticleAVendreService;
-import fr.eni.projet.encheres.bll.UtilisateurService;
 import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.bo.Utilisateur;
@@ -55,6 +54,12 @@ public class EnchereController {
 	    return "index";
 	}
 
+	@GetMapping("/articles/nouveau")
+	public String afficherFormulaireCreation(Model model) {
+		model.addAttribute("categories", articleAVendreService.getAllCategories());
+		model.addAttribute("articleAVendre", new ArticleAVendre());
+		return "creer-article";
+	}
 
     @PostMapping("/articles/nouveau")
     public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, 

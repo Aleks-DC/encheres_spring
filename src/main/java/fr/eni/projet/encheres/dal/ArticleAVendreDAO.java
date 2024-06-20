@@ -10,7 +10,7 @@ public interface ArticleAVendreDAO {
 
 	void creer(ArticleAVendre articleAVendre);
 
-	ArticleAVendre getById(long noArticle); // Changer le nom du paramètre en noArticle
+	ArticleAVendre getById(long noArticle);
 
     List<ArticleAVendre> getAll();
     
@@ -18,12 +18,12 @@ public interface ArticleAVendreDAO {
 
     void update(ArticleAVendre articleAVendre);
 
-    void delete(int noArticle); // Changer le nom du paramètre en noArticle
-
-	Categorie getCategorieByLibelle(String libelle);
+    void delete(int noArticle);
+    
+    Categorie getCategorieById(Long id);
 	
 	List<ArticleAVendre> getByCategorie(long categorieId);
-
+	
 	List<ArticleAVendre> searchByMotCle(String motCle);
 
 	List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle);
