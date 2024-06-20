@@ -14,7 +14,8 @@ public interface ArticleAVendreService {
 
 	void update(ArticleAVendre articleAVendre) throws BusinessException;
 
-	void delete(int noArticle);
+
+    void delete(int id);
 
 	void creer(ArticleAVendre articleAVendre) throws BusinessException;
 
@@ -33,5 +34,7 @@ public interface ArticleAVendreService {
 	List<ArticleAVendre> getMesVentesEnCours(String pseudoVendeur);
 
 	List<ArticleAVendre> getMesVentesTerminees(String pseudoVendeur);
+
+	
 
 }

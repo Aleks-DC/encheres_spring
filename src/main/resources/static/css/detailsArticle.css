@@ -49,7 +49,7 @@
     font-weight: bold;
 }
 
-.btn-retour {
+.btn-retour, .btn-supprimer, .btn-modifier, .btn-encherir {
     display: inline-block;
     padding: 10px 20px;
     background-color: #007bff;
@@ -60,6 +60,15 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 40px;
+    margin-right: 15px;
+}
+
+.btn-supprimer {
+	background-color: red;
+}
+
+.btn-encherir {
+	background-color: green;
 }
 
 .btn-retour:hover {
@@ -70,6 +79,10 @@
 	display: flex;
     flex-direction: row;
     align-items: flex-start;
+}
+
+.SuperParentBouton {
+	display: flex;
 }
 
 hr.dotted {

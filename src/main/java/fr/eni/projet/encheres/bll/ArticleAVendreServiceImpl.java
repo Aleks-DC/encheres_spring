@@ -52,8 +52,8 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 
 	@Override
 	@Transactional
-	public void delete(int noArticle) {
-		articleAVendreDAO.delete(noArticle);
+	public void delete(int id) {
+		articleAVendreDAO.delete(id);
 }
 
 	@Override
@@ -82,11 +82,12 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
     public List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle) {
         return articleAVendreDAO.findByCategorieAndMotCle(categorieId, motCle);
     }
+    
+    
     @Override
     public List<ArticleAVendre> getToutesMesVentes(String pseudoVendeur) {
     	return articleAVendreDAO.getToutesMesVentes(pseudoVendeur);
     }
-    
     @Override
     public List<ArticleAVendre> getMesVentesNonDebutees(String pseudoVendeur) {
     	return articleAVendreDAO.getMesVentesNonDebutees(pseudoVendeur);

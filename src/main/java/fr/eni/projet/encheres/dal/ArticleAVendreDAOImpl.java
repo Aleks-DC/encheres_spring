@@ -116,13 +116,28 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 
 	@Override
 	public void update(ArticleAVendre articleAVendre) {
-		String sql = "UPDATE ARTICLES_A_VENDRE SET nom_article = ?, description = ?, photo = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, id_utilisateur = ?, no_categorie = ?, no_adresse_retrait = ? WHERE no_article = ?";
-		jdbcTemplate.update(sql, articleAVendre.getNom(), articleAVendre.getDescription(),
-				java.sql.Date.valueOf(articleAVendre.getDateDebutEncheres()),
-				java.sql.Date.valueOf(articleAVendre.getDateFinEncheres()), articleAVendre.getPrixInitial(),
-				articleAVendre.getVendeur(), articleAVendre.getCategorie(), articleAVendre.getRetrait(),
-				articleAVendre.getNoArticle());
+	    String sql = "UPDATE ARTICLES_A_VENDRE SET nom_article = ?, description = ?, date_debut_encheres = ?, date_fin_encheres = ?, prix_initial = ?, no_categorie = ? WHERE no_article = ?";
+	    jdbcTemplate.update(sql, 
+	        articleAVendre.getNom(), 
+	        articleAVendre.getDescription(),
+	        java.sql.Date.valueOf(articleAVendre.getDateDebutEncheres()),
+	        java.sql.Date.valueOf(articleAVendre.getDateFinEncheres()), 
+	        articleAVendre.getPrixInitial(),
+	        articleAVendre.getCategorie() != null ? articleAVendre.getCategorie().getId() : null,
+	        articleAVendre.getId()
+	    );
 	}
+	
+	@Override
+	public void encherir(long articleId, String pseudoUtilisateur, int montantEnchere) {
+	    String sqlUpdateArticle = "UPDATE ARTICLES_A_VENDRE SET prix_vente = ? WHERE no_article = ?";
+	    jdbcTemplate.update(sqlUpdateArticle, montantEnchere, articleId);
+
+	    String sqlInsertEnchere = "INSERT INTO ENCHERES (no_article, id_utilisateur, date_enchere, montant_enchere) VALUES (?, ?, ?, ?)";
+	    jdbcTemplate.update(sqlInsertEnchere, articleId, pseudoUtilisateur, new java.util.Date(System.currentTimeMillis()), montantEnchere);
+	}
+
+
 
 	@Override
 	public void delete(int noArticle) {
@@ -136,7 +151,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		try {
 			return jdbcTemplate.queryForObject(sql, new CategorieRowMapper(), id);
 		} catch (EmptyResultDataAccessException e) {
-			throw new IllegalArgumentException("Catégorie non trouvée pour l'ID : " + id); // Lever une exception
+			throw new IllegalArgumentException("Catégorie non trouvée pour l'ID : " + id);
 		}
 	}
 
