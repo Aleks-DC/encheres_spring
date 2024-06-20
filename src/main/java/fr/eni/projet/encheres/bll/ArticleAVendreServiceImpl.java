@@ -32,7 +32,7 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
     
     @Override
     public List<Categorie> getAllCategories() {
-        return articleAVendreDAO.getAllCategories();
+        return articleAVendreDAO.getAllCategories(); 
     }
 
     @Override
@@ -55,6 +55,8 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
     public void delete(int noArticle) {
         articleAVendreDAO.delete(noArticle);
     }
+    
+    //TODO: supprimer les @Valid et validation date à faire
 
     @Override
     @Transactional
@@ -71,4 +73,19 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
                 .map(v -> v.getPropertyPath() + ": " + v.getMessage())
                 .collect(Collectors.joining("\n"));
     }
+    // TODO @Alexis BLL filtrage des articles
+    public List<ArticleAVendre> getByCategorie(long categorieId){
+    	return articleAVendreDAO.getByCategorie(categorieId);
+    }
+
+    @Override
+    public List<ArticleAVendre> searchByMotCle(String motCle) {
+        return articleAVendreDAO.searchByMotCle(motCle);
+    }
+
+    @Override
+    public List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle) {
+        return articleAVendreDAO.findByCategorieAndMotCle(categorieId, motCle);
+    }
+
 }

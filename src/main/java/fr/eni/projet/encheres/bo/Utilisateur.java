@@ -7,15 +7,15 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class Utilisateur {
-	
+
 	@NotBlank(message = "Le pseudo ne peut pas être vide.")
-    @Size(min = 3, max = 20, message = "Le pseudo doit contenir entre {min} et {max} caractères.")
+	@Size(min = 3, max = 20, message = "Le pseudo doit contenir entre {min} et {max} caractères.")
 	private String pseudo;
-	
+
 	@NotBlank(message = "Le nom ne peut pas être vide.")
 	@Size(max = 50, message = "Le nom ne peut pas dépasser {max} caractères.")
-    private String nom;
-    
+	private String nom;
+
 	@NotBlank(message = "Le prénom ne peut pas être vide.")
 	@Size(max = 50, message = "Le prénom ne peut pas dépasser {max} caractères.")
     private String prenom;
@@ -32,6 +32,7 @@ public class Utilisateur {
     private int credit;
     private boolean admin;
     private Adresse adresse;
+
 
 	public Utilisateur() {
 	}
@@ -137,16 +138,6 @@ public class Utilisateur {
 
 	public void setAdresse(Adresse adresse) {
 		this.adresse = adresse;
-	}
-
-	public Utilisateur orElseThrow(Object object) {
-		// TODO ???
-		return null;
-	}
-
-	public Utilisateur orElse(Object object) {
-		// TODO ???
-		return null;
 	}
 
 }

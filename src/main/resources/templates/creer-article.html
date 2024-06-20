@@ -50,14 +50,13 @@
 
 				<div>
 					<label for="categorie">Catégorie :</label> <select id="categorie"
-						th:field="*{categorie}">
+						th:field="*{categorie.id}">
 						<option value="">Sélectionnez une catégorie</option>
-						<option th:each="cat : ${categories}" th:value="${cat}"
+						<option th:each="cat : ${categories}" th:value="${cat.id}"
 							th:text="${cat.libelle}"></option>
 					</select> <span th:if="${#fields.hasErrors('categorie')}"
 						th:errors="*{categorie}" class="error"></span>
 				</div>
-
 				<button type="submit">Créer l'article</button>
 			</form>
 		</main>

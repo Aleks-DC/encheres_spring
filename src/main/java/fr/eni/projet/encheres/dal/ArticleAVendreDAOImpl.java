@@ -82,10 +82,17 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	}
 	
 	@Override
-    public List<Categorie> getAllCategories() {
-        String sql = "SELECT * FROM CATEGORIES";
-        return jdbcTemplate.query(sql, new CategorieRowMapper());
-    }
+	public Categorie getCategorieByLibelle(String libelle) {
+	    String sql = "SELECT * FROM CATEGORIES WHERE libelle = ?";
+	    return jdbcTemplate.queryForObject(sql, new CategorieRowMapper(), libelle);
+	}
+
+	
+	@Override
+	public List<Categorie> getAllCategories() {
+	    String sql = "SELECT * FROM CATEGORIES";
+	    return jdbcTemplate.query(sql, new CategorieRowMapper()); 
+	}
 
 	@Override
 	public List<ArticleAVendre> getAll() {
@@ -155,15 +162,33 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
         }
 	}
 	
-	class CategorieRowMapper implements RowMapper<Categorie> {
-        @Override
-        public Categorie mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Categorie categorie = new Categorie();
-            categorie.setId(rs.getLong("no_categorie"));
-            categorie.setLibelle(rs.getString("libelle"));
-
-            return categorie;
-        }
+	static class CategorieRowMapper implements RowMapper<Categorie> { // Classe interne statique
+	    @Override
+	    public Categorie mapRow(ResultSet rs, int rowNum) throws SQLException {
+	        Categorie categorie = new Categorie();
+	        categorie.setId(rs.getLong("no_categorie"));
+	        categorie.setLibelle(rs.getString("libelle"));
+	        return categorie;
+	    }
 	}
+	
+	// TODO @Alexis DAO filtrage des articles
+	@Override
+    public List<ArticleAVendre> getByCategorie(long categorieId) {
+        String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_categorie = ?";
+        return jdbcTemplate.query(sql, new ArticleRowMapper(), categorieId);
+    }
+
+    @Override
+    public List<ArticleAVendre> searchByMotCle(String motCle) {
+        String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE nom_article LIKE ?";
+        return jdbcTemplate.query(sql, new ArticleRowMapper(), "%" + motCle + "%");
+    }
+
+    @Override
+    public List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle) {
+        String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_categorie = ? AND nom_article LIKE ?";
+        return jdbcTemplate.query(sql, new ArticleRowMapper(), categorieId, "%" + motCle + "%");
+    }
 
 }
