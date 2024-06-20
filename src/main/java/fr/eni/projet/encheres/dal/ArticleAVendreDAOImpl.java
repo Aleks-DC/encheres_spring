@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -36,15 +37,20 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 	        try (Connection connection = dataSource.getConnection();
-	             PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+	                PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-	            pstmt.setString(1, article.getNom());
-	            pstmt.setString(2, article.getDescription());
-	            pstmt.setDate(3, java.sql.Date.valueOf(article.getDateDebutEncheres()));
-	            pstmt.setDate(4, java.sql.Date.valueOf(article.getDateFinEncheres()));
-	            pstmt.setInt(5, article.getPrixInitial());
-	            pstmt.setString(6, article.getNomVendeur());
-	            pstmt.setLong(7, article.getCategorie().getId());
+	               pstmt.setString(1, article.getNom());
+	               pstmt.setString(2, article.getDescription());
+	               pstmt.setDate(3, java.sql.Date.valueOf(article.getDateDebutEncheres()));
+	               pstmt.setDate(4, java.sql.Date.valueOf(article.getDateFinEncheres()));
+	               pstmt.setInt(5, article.getPrixInitial());
+	               pstmt.setString(6, article.getNomVendeur());
+
+	               if (article.getCategorie() != null) {
+	                   pstmt.setLong(7, article.getCategorie().getId());
+	               } else {
+	                   pstmt.setNull(7, Types.BIGINT);
+	               }
 	            pstmt.setString(8, article.getPhoto());
 
 	            int affectedRows = pstmt.executeUpdate();
@@ -115,6 +121,15 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		String sql = "DELETE FROM ARTICLES_A_VENDRE WHERE no_article = ?";
 		jdbcTemplate.update(sql, noArticle);
 	}
+	
+    public Categorie getCategorieById(Long id) {
+        String sql = "SELECT * FROM CATEGORIES WHERE no_categorie = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new CategorieRowMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 	
 	class ArticleRowMapper implements RowMapper<ArticleAVendre> {
 		@Override

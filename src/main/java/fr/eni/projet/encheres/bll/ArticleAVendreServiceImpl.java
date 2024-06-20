@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.bo.Categorie;
+import fr.eni.projet.encheres.bo.Utilisateur;
 import fr.eni.projet.encheres.dal.ArticleAVendreDAO;
 import fr.eni.projet.encheres.exception.BusinessException;
 import jakarta.validation.ConstraintViolation;
@@ -19,54 +20,51 @@ import jakarta.validation.Validator;
 @Service
 public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 
-    @Autowired
-    private ArticleAVendreDAO articleAVendreDAO;
+	@Autowired
+	private ArticleAVendreDAO articleAVendreDAO;
 
-    @Autowired
-    private Validator validator;
+	@Autowired
+	private Validator validator;
 
-    @Override
-    public ArticleAVendre getById(long noArticle) {
-        return articleAVendreDAO.getById(noArticle);
-    }
-    
-    @Override
-    public List<Categorie> getAllCategories() {
-        return articleAVendreDAO.getAllCategories(); 
-    }
+	@Autowired
+	private UtilisateurService utilisateurService;
 
-    @Override
-    public List<ArticleAVendre> getAll() {
-        return articleAVendreDAO.getAll();
-    }
+	@Override
+	public ArticleAVendre getById(long noArticle) {
+		return articleAVendreDAO.getById(noArticle);
+	}
 
-    @Override
-    @Transactional
-    public void update(@Valid ArticleAVendre articleAVendre) throws BusinessException {
-        var violations = validator.validate(articleAVendre);
-        if (!violations.isEmpty()) {
-            throw new BusinessException(buildErrorMessage(violations));
-        }
-        articleAVendreDAO.update(articleAVendre);
-    }
+	@Override
+	public List<Categorie> getAllCategories() {
+		return articleAVendreDAO.getAllCategories();
+	}
 
-    @Override
-    @Transactional
-    public void delete(int noArticle) {
-        articleAVendreDAO.delete(noArticle);
-    }
-    
-    //TODO: supprimer les @Valid et validation date à faire
+	@Override
+	public List<ArticleAVendre> getAll() {
+		return articleAVendreDAO.getAll();
+	}
 
-    @Override
-    @Transactional
-    public void creer(@Valid ArticleAVendre articleAVendre) throws BusinessException {
-        var violations = validator.validate(articleAVendre);
-        if (!violations.isEmpty()) {
-            throw new BusinessException(buildErrorMessage(violations));
-        }
-        articleAVendreDAO.creer(articleAVendre);
-    }
+	@Override
+	@Transactional
+	public void update(@Valid ArticleAVendre articleAVendre) throws BusinessException {
+		var violations = validator.validate(articleAVendre);
+		if (!violations.isEmpty()) {
+			throw new BusinessException(buildErrorMessage(violations));
+		}
+		articleAVendreDAO.update(articleAVendre);
+	}
+
+	@Override
+	@Transactional
+	public void delete(int noArticle) {
+		articleAVendreDAO.delete(noArticle);
+}
+
+	@Override
+	@Transactional
+	public void creer(ArticleAVendre articleAVendre) throws BusinessException {
+		articleAVendreDAO.creer(articleAVendre);
+	}
 
     private String buildErrorMessage(Set<ConstraintViolation<ArticleAVendre>> violations) {
         return violations.stream()
@@ -87,5 +85,4 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
     public List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle) {
         return articleAVendreDAO.findByCategorieAndMotCle(categorieId, motCle);
     }
-
 }

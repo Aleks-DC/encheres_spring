@@ -1,5 +1,6 @@
 package fr.eni.projet.encheres.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.projet.encheres.bll.ArticleAVendreService;
+import fr.eni.projet.encheres.bll.UtilisateurService;
+import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.ArticleAVendre;
+import fr.eni.projet.encheres.bo.Utilisateur;
 import fr.eni.projet.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
 
@@ -52,20 +56,41 @@ public class EnchereController {
 	}
 
 
-	@GetMapping("/articles/nouveau")
-	public String afficherFormulaireCreation(Model model) {
-		model.addAttribute("categories", articleAVendreService.getAllCategories());
-		model.addAttribute("articleAVendre", new ArticleAVendre());
-		return "creer-article";
-	}
+    @PostMapping("/articles/nouveau")
+    public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, 
+                               BindingResult result, RedirectAttributes redirectAttributes, Model model,
+                               Principal principal) throws BusinessException {
+        
+    	if (articleAVendre.getCategorie().getId() == 0) {
+    	    articleAVendre.setCategorie(null); 
+    	}
 
-	@PostMapping("/articles/nouveau")
-	public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre,
-			BindingResult result, RedirectAttributes redirectAttributes, Model model) {
-		if (result.hasErrors()) {
-			model.addAttribute("categories", articleAVendreService.getAllCategories());
-			return "creer-article";
-		}
+        if (result.hasErrors()) {
+            model.addAttribute("categories", articleAVendreService.getAllCategories());
+            return "creer-article";
+        }
+
+        if (articleAVendre.getCategorie() == null) {
+            result.rejectValue("categorie", "NotNull", "Veuillez sélectionner une catégorie.");
+            model.addAttribute("categories", articleAVendreService.getAllCategories());
+            return "creer-article";
+        }
+        
+        if (principal != null) {
+            String pseudoUtilisateur = principal.getName();
+            articleAVendre.setNomVendeur(pseudoUtilisateur);
+
+            Utilisateur utilisateurConnecte = new Utilisateur();
+
+            Adresse adresseUtilisateur = utilisateurConnecte.getAdresse();
+			if (adresseUtilisateur != null) {
+			    articleAVendre.setRetrait(adresseUtilisateur);
+			} else {
+			    result.rejectValue("retrait", "NotNull", "Veuillez renseigner une adresse de retrait.");
+			}
+        } else {
+            throw new BusinessException("L'utilisateur doit être connecté pour créer un article.");
+        }
 
 		if (articleAVendre.getCategorie() == null) {
 			result.rejectValue("categorie", "NotNull", "Veuillez sélectionner une catégorie.");
