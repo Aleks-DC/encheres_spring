@@ -54,6 +54,7 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 		articleAVendreDAO.update(articleAVendre);
 	}
 
+<<<<<<< HEAD
 	@Override
 	@Transactional
 	public void delete(int noArticle) {
@@ -72,4 +73,26 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 		return violations.stream().map(v -> v.getPropertyPath() + ": " + v.getMessage())
 				.collect(Collectors.joining("\n"));
 	}
+=======
+    private String buildErrorMessage(Set<ConstraintViolation<ArticleAVendre>> violations) {
+        return violations.stream()
+                .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                .collect(Collectors.joining("\n"));
+    }
+    // TODO @Alexis BLL filtrage des articles
+    public List<ArticleAVendre> getByCategorie(long categorieId){
+    	return articleAVendreDAO.getByCategorie(categorieId);
+    }
+
+    @Override
+    public List<ArticleAVendre> searchByMotCle(String motCle) {
+        return articleAVendreDAO.searchByMotCle(motCle);
+    }
+
+    @Override
+    public List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle) {
+        return articleAVendreDAO.findByCategorieAndMotCle(categorieId, motCle);
+    }
+
+>>>>>>> a64d07541513931c81e30f4723e760405a483c9d
 }

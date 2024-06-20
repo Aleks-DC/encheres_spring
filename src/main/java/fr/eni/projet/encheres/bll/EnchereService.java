@@ -4,11 +4,11 @@ import java.util.List;
 
 import fr.eni.projet.encheres.bo.Enchere;
 
-public abstract class EnchereService {
+public interface EnchereService {
 	
-	abstract List<Enchere> consulterEnchere();
+	List<Enchere> consulterEnchere();
 	
-	abstract void creerEnchere();
+	void creerEnchere();
 	
 	
 }
