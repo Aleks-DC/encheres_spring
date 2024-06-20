@@ -122,7 +122,6 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		jdbcTemplate.update(sql, noArticle);
 	}
 	
-    @Override
     public Categorie getCategorieById(Long id) {
         String sql = "SELECT * FROM CATEGORIES WHERE no_categorie = ?";
         try {
