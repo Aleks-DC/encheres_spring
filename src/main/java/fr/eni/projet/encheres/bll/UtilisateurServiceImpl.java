@@ -60,7 +60,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	@Override
 	@Transactional
 	public void modifierUtilisateur(Utilisateur utilisateur) {
-		
 		BusinessException be = new BusinessException();
 		boolean isValid = true;
 		validerUtilisateur(utilisateur, be);
@@ -69,14 +68,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		isValid &= validerAdresseUnique(utilisateur.getAdresse(), be);
 		
 		if (isValid) {
-			// Mise à jour de l'adresse
 			Adresse adresse = utilisateur.getAdresse();
 			if (adresse.getId() != 0) {
 				adresseDAO.update(adresse);
 			} else {
 				adresseDAO.create(adresse);
 			}
-			// Mise à jour de l'utilisateur
 			utilisateurDAO.update(utilisateur);
 		}else {
 			throw be;

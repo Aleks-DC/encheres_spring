@@ -73,7 +73,8 @@ public class MonProfilController {
 				ObjectError error= new ObjectError("globalError", key);
 				bindingResult.addError(error);
 				});
-			return "profil-update";
+				System.out.println("Je suis dans le catch");
+				return "profil-update";
 			}
 		}
 	}
