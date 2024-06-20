@@ -5,24 +5,31 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import fr.eni.projet.encheres.bo.Categorie;
-import fr.eni.projet.encheres.dal.ArticleAVendreDAOImpl;
+import fr.eni.projet.encheres.dal.ArticleAVendreDAO;
 
 @Component
 public class StringToCategorieConverter implements Converter<String, Categorie> {
-	
-	@Autowired
-    private ArticleAVendreDAOImpl articleAVendreDAO;
 
-    public StringToCategorieConverter() {
-    }
+	@Autowired
+    private ArticleAVendreDAO articleAVendreDAO;
     
-    @Autowired
-    public void setArticleVendreDAO(ArticleAVendreDAOImpl articleAVendreDAO) {
-        this.articleAVendreDAO = articleAVendreDAO;
+    // Constructeur par défaut
+    public StringToCategorieConverter() {
     }
 
     @Override
-    public Categorie convert(String libelle) {
-        return articleAVendreDAO.getCategorieByLibelle(libelle);
+    public Categorie convert(String idString) { // On attend maintenant un ID (String)
+        if (idString == null || idString.isEmpty()) {
+            return null; // Gérer le cas où aucune catégorie n'est sélectionnée
+        }	
+
+        try {
+            Long id = Long.parseLong(idString);
+            return articleAVendreDAO.getCategorieById(id); // Récupérer la catégorie par son ID
+        } catch (NumberFormatException e) {
+            // Gérer le cas où la chaîne n'est pas un nombre valide (ne devrait pas arriver)
+            return null;
+        }
     }
 }
+

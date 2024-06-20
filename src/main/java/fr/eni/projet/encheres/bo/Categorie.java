@@ -1,7 +1,7 @@
 package fr.eni.projet.encheres.bo;
 
 public class Categorie {
-	private long id;
+	private Long id;
     private String libelle;
     
 	public Categorie() {
@@ -23,7 +23,7 @@ public class Categorie {
 		return builder.toString();
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
