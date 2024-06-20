@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.projet.encheres.bll.ArticleAVendreService;
-import fr.eni.projet.encheres.bll.UtilisateurService;
 import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.bo.Utilisateur;

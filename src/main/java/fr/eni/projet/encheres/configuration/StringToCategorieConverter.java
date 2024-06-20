@@ -25,7 +25,7 @@ public class StringToCategorieConverter implements Converter<String, Categorie> 
 
         try {
             Long id = Long.parseLong(idString);
-            return articleAVendreDAO.getCategorieById(id); // Récupérer la catégorie par son ID
+            return articleAVendreDAO.getByCategorie(id); // Récupérer la catégorie par son ID
         } catch (NumberFormatException e) {
             // Gérer le cas où la chaîne n'est pas un nombre valide (ne devrait pas arriver)
             return null;
