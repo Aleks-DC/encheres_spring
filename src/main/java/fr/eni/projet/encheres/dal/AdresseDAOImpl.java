@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,6 +22,7 @@ public class AdresseDAOImpl implements AdresseDAO {
 		+ " VALUES (:rue, :codePostal, :ville, :adresseEni)";
 	private final String FIND_BY_ID = "SELECT no_adresse, rue, code_postal, ville, adresse_eni FROM ADRESSES WHERE no_adresse = :noAdresse";
 	private final String UPDATE_ADRESSE = "UPDATE Adresses SET rue = :rue, code_postal = :codePostal, ville = :ville WHERE no_adresse = :id";
+	private final String FIND_ALL_ADRESSES = "SELECT * FROM ADRESSES";
 
 	
 	@Autowired
@@ -78,8 +80,7 @@ public class AdresseDAOImpl implements AdresseDAO {
 
 	@Override
 	public List<Adresse> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return jdbcTemplate.query(FIND_ALL_ADRESSES, new BeanPropertyRowMapper<>(Adresse.class));
 	}
 
 	@Override
