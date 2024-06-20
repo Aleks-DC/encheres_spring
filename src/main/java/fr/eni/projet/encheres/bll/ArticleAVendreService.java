@@ -4,6 +4,7 @@ import java.util.List;
 
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.bo.Categorie;
+import fr.eni.projet.encheres.bo.Utilisateur;
 import fr.eni.projet.encheres.exception.BusinessException;
 
 public interface ArticleAVendreService {

@@ -54,6 +54,12 @@ public class EnchereController {
 	    return "index";
 	}
 
+	@GetMapping("/articles/nouveau")
+	public String afficherFormulaireCreation(Model model) {
+		model.addAttribute("categories", articleAVendreService.getAllCategories());
+		model.addAttribute("articleAVendre", new ArticleAVendre());
+		return "creer-article";
+	}
 
     @PostMapping("/articles/nouveau")
     public String creerArticle(@Valid @ModelAttribute("articleAVendre") ArticleAVendre articleAVendre, 
