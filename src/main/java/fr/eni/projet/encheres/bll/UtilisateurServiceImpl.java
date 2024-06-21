@@ -3,7 +3,6 @@ package fr.eni.projet.encheres.bll;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,8 +12,6 @@ import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.Utilisateur;
 import fr.eni.projet.encheres.dal.AdresseDAO;
 import fr.eni.projet.encheres.dal.UtilisateurDAO;
-import fr.eni.projet.encheres.exception.BusinessCode;
-import fr.eni.projet.encheres.exception.BusinessException;
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService {
@@ -63,27 +60,22 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	@Override
 	@Transactional
 	public void modifierUtilisateur(Utilisateur utilisateur) {
-		BusinessException be = new BusinessException();
+		/*BusinessException be = new BusinessException();
 		boolean isValid = true;
 		validerUtilisateur(utilisateur, be);
 		isValid &= validerEmailUnique(utilisateur.getEmail(), be);
-		System.out.println("validerisValid");
-		/*isValid &= validerAdresseUnique(utilisateur.getAdresse(), be);*/
-		System.out.println(isValid);//=false
-		if (isValid) {
+		/*isValid &= validerAdresseUnique(utilisateur.getAdresse(), be);
+		if (isValid) {*/
 			Adresse adresse = utilisateur.getAdresse();
-			System.out.println("validerUtilisateur.getAdresse");
 			if (adresse.getId() != 0) {
 				adresseDAO.update(adresse);
-				System.out.println("validerupdate Adresse");
 			} else {
 				adresseDAO.create(adresse);
-				System.out.println("validerCreate Adresse");
 			}
 			utilisateurDAO.update(utilisateur);
-		}else {
+		/*}else {
 			throw be;
-		}
+		}*/
 	}
 
 	@Override
@@ -123,7 +115,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	}
 	
 	//Les méthodes de validation------------------------------------------------------------------------------------------------------
-		private boolean validerUtilisateur(Utilisateur u, BusinessException be) { 
+		/*private boolean validerUtilisateur(Utilisateur u, BusinessException be) { 
 			if (u == null) { 
 				be.add(BusinessCode.VALIDATION_UTILISATEUR_NULL);
 				return false;
@@ -132,7 +124,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 			return true;
 		}
 		
-		/*public boolean validerUtilisateurUnique(String pseudo, BusinessException be) {
+		public boolean validerUtilisateurUnique(String pseudo, BusinessException be) {
 			try {
 				Utilisateur utilisateur = utilisateurDAO.findByPseudo(pseudo);
 				if (utilisateur != null) {
@@ -144,16 +136,13 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 				return false;
 			}
 			return true;
-		}*/
+		}
 		
 		private boolean validerEmailUnique(String email, BusinessException be) {
 			try {
-				System.out.println(email);
-				System.out.println("Dans ma fonction valider email");
 				Utilisateur utilisateur = utilisateurDAO.findByEmail(email);
 				if (utilisateur != null) {
 					be.add(BusinessCode.VALIDATION_UTILISATEUR_UNIQUE_EMAIL);
-					System.out.println("EXCEPTION :Un utilisateur avec cet email existe");
 					return false;
 				}
 			} catch (DataAccessException e) {
@@ -161,7 +150,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 				throw new BusinessException ("Erreur lors de la validation de l'email unique", e);
 			}
 			return true;
-		}
+		}*/
 		
 		/*private boolean validerAdresseUnique(Adresse adresse, BusinessException be) {
 			try {

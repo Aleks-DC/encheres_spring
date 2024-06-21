@@ -14,7 +14,7 @@ public interface UtilisateurDAO {
 
 	List<Utilisateur> findAll(); // Read
 
-	void update(Utilisateur utilisateur); // Update
+	int update(Utilisateur utilisateur); // Update
 
 	void deleteByPseudo(String pseudo); // Delete
 }

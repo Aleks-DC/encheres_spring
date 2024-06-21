@@ -37,11 +37,7 @@
 	            
 	            <label  for="email">Email(*):</label>
 	            <input  type="email"  name="email" data-th-field="*{email}" required>
-				 <div th:if="${#fields.hasErrors('email')}" class="cards">
-        <ul>
-            <li th:each="error : ${#fields.errors('email')}" th:text="${error.defaultMessage}"></li>
-        </ul>
-    </div>
+				 <div th:if="${#fields.hasErrors('email')}" class="cards"></div>
 	        </div>
 	        
 	        

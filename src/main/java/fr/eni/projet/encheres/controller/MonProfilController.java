@@ -1,11 +1,12 @@
 package fr.eni.projet.encheres.controller;
 
+import java.security.Principal;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import fr.eni.projet.encheres.bll.UtilisateurService;
 import fr.eni.projet.encheres.bo.PasswordChangeForm;
 import fr.eni.projet.encheres.bo.Utilisateur;
-import fr.eni.projet.encheres.exception.BusinessException;
 import jakarta.validation.Valid;
 
 @Controller
@@ -34,6 +34,7 @@ public class MonProfilController {
 	        // Récupérer l'utilisateur actuellement authentifié
 	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	        String pseudo = authentication.getName();
+	        
 	        // Rechercher l'utilisateur par son pseudo
 	        Utilisateur utilisateur = utilisateurService.consulterUtilisateur(pseudo);
 	        if (utilisateur != null) {
@@ -48,7 +49,6 @@ public class MonProfilController {
 	    public String afficherFormulaireModification(Model model) {
 	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	        String pseudo = authentication.getName();
-	        
 	        Utilisateur utilisateur = utilisateurService.consulterUtilisateur(pseudo);
 	        if (utilisateur != null) {
 	            model.addAttribute("utilisateur", utilisateur);
@@ -59,24 +59,22 @@ public class MonProfilController {
 	    }
 	 
 	@PostMapping("/modifier")
-	public String updateUtilisateur (@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Model model) {
-		if (!bindingResult.hasErrors()) {
+	public String updateUtilisateur (@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Principal p,Model model) {
+		if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult);
-			try {
-				System.out.println("L'utilisateur modifié : "+ utilisateur);
-				utilisateurService.modifierUtilisateur(utilisateur);
-				return "redirect:/monProfil";
-			} catch (BusinessException e) {
-				System.out.println("j'ai récupérér le throw e");
+			return "profil-update";
+		}
+			//try {
+		this.utilisateurService.modifierUtilisateur(utilisateur);
+		return "redirect:/monProfil";
+			/*} catch (BusinessException e) {
 				e.getClefsExternalisations().forEach(key ->{
 				ObjectError error= new ObjectError("globalError", key);
 				bindingResult.addError(error);
 				});
-				System.out.println("Je suis dans le catch");
 				bindingResult.getAllErrors().forEach(System.out::println);
 			}
-		}
-		return "profil-update";
+			return "redirect:/monProfil";*/
 	}
 	
 	@GetMapping("/modifier/changeMdp")
@@ -93,6 +91,7 @@ public class MonProfilController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String pseudo = authentication.getName();
         try {
+        	
             utilisateurService.modifierMotDePasse(pseudo, form.getOldPassword(), form.getNewPassword());
             return "redirect:/monProfil";
         } catch (IllegalArgumentException e) {

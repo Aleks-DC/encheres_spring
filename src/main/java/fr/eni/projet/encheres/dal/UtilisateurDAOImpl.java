@@ -45,7 +45,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	}
 
 	@Override
-	public void update(Utilisateur utilisateur) {
+	public int update(Utilisateur utilisateur) {
 		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
 		namedParameters.addValue("pseudo", utilisateur.getPseudo());
 		namedParameters.addValue("nom", utilisateur.getNom());
@@ -57,7 +57,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		// namedParameters.addValue("administrateur", utilisateur.isAdmin());
 		namedParameters.addValue("noAdresse", utilisateur.getAdresse().getId());
 
-		jdbcTemplate.update(UPDATE_USER, namedParameters);
+		return jdbcTemplate.update(UPDATE_USER, namedParameters);
 	}
 
 	@Override
