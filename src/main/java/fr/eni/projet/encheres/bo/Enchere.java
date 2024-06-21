@@ -5,11 +5,12 @@ import java.util.Objects;
 
 public class Enchere {
 	private LocalDateTime date;
-    private int montant;
-    
-    private Utilisateur acquereur;
-    private ArticleAVendre articleAVendre;
-    
+	private int montant;
+
+	private Utilisateur acquereur;
+	private ArticleAVendre articleAVendre;
+	private String idUtilisateur;
+
 	public Enchere() {
 	}
 
@@ -51,6 +52,14 @@ public class Enchere {
 
 	public void setArticleAVendre(ArticleAVendre articleAVendre) {
 		this.articleAVendre = articleAVendre;
+	}
+
+	public String getIdUtilisateur() {
+		return idUtilisateur;
+	}
+
+	public void setIdUtilisateur(String idUtilisateur) {
+		this.idUtilisateur = idUtilisateur;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package fr.eni.projet.encheres.bll;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.bo.Categorie;
+import fr.eni.projet.encheres.bo.Enchere;
+import fr.eni.projet.encheres.bo.Utilisateur;
 import fr.eni.projet.encheres.dal.ArticleAVendreDAO;
 import fr.eni.projet.encheres.exception.BusinessException;
 import jakarta.validation.ConstraintViolation;
@@ -24,6 +27,9 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 
 	@Autowired
 	private Validator validator;
+	
+	@Autowired
+    private UtilisateurService utilisateurService;
 
 	@Override
 	public ArticleAVendre getById(long noArticle) {
@@ -55,6 +61,58 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 	public void delete(int id) {
 		articleAVendreDAO.delete(id);
 }
+	
+	@Override
+	@Transactional
+	public void encherir(long articleId, String pseudoUtilisateur, int montantEnchere) throws BusinessException {
+	    try {
+			// 1. Récupérer l'article et l'utilisateur
+			ArticleAVendre article = articleAVendreDAO.getById(articleId);
+			if (article == null) {
+			    throw new BusinessException("Article non trouvé.");
+			}
+
+			Utilisateur utilisateur = utilisateurService.consulterUtilisateur(pseudoUtilisateur);
+			if (utilisateur == null) {
+			    throw new BusinessException("Utilisateur non trouvé.");
+			}
+
+			// 2. Vérifications métier
+			if (article.getDateFinEncheres().isBefore(LocalDate.now())) {
+			    throw new BusinessException("Les enchères sont terminées pour cet article.");
+			}
+
+			if (utilisateur.getCredit() < montantEnchere) {
+			    throw new BusinessException("Vous n'avez pas assez de crédits pour enchérir.");
+			}
+
+			if (montantEnchere <= article.getPrixVente()) {
+			    throw new BusinessException("Votre enchère doit être supérieure à la meilleure offre actuelle.");
+			}
+			
+			Enchere ancienneEnchere = articleAVendreDAO.getDerniereEnchere(articleId);
+
+			// 3. Logique d'enchère
+			article.setPrixVente(montantEnchere);
+			utilisateur.setCredit(utilisateur.getCredit() - 1);
+
+			// 4. Enregistrement de l'enchère (dans une transaction)
+			articleAVendreDAO.update(article);
+			utilisateurService.updatePoint(utilisateur);
+			articleAVendreDAO.encherir(articleId, pseudoUtilisateur, montantEnchere);
+			
+			// Remboursement de l'ancien enchérisseur (si existant)
+			if (ancienneEnchere != null) {
+			    Utilisateur ancienEncherisseur = utilisateurService.consulterUtilisateur(ancienneEnchere.getIdUtilisateur());
+			    if (ancienEncherisseur != null) {
+			        ancienEncherisseur.setCredit(ancienEncherisseur.getCredit() + ancienneEnchere.getMontant());
+			        utilisateurService.updatePoint(ancienEncherisseur);
+			    }
+			}
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	@Transactional
@@ -102,4 +160,20 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
     public List<ArticleAVendre> getMesVentesTerminees(String pseudoVendeur) {
     	return articleAVendreDAO.getMesVentesTerminees(pseudoVendeur);
     }
+    
+    @Override
+    public List<ArticleAVendre> getEncheresOuvertes() {
+        return articleAVendreDAO.getEncheresOuvertes();
+    }
+
+    @Override
+    public List<ArticleAVendre> getMesEncheresRemportees(String pseudoAcquereur) {
+        return articleAVendreDAO.getMesEncheresRemportees(pseudoAcquereur);
+    }
+
+    @Override
+    public List<ArticleAVendre> getMesEncheresEnCours(String pseudoAcquereur) {
+        return articleAVendreDAO.getMesEncheresEnCours(pseudoAcquereur);
+    }
+
 }

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.Utilisateur;
+import fr.eni.projet.encheres.exception.BusinessException;
 
 @Repository
 public class UtilisateurDAOImpl implements UtilisateurDAO {
@@ -80,9 +82,14 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
 	@Override
 	public void deleteByPseudo(String pseudo) {
-		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-		namedParameters.addValue("pseudo", pseudo);
-		jdbcTemplate.update(DELETE_BY_PSEUDO, namedParameters);
+		try {
+			MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+			namedParameters.addValue("pseudo", pseudo);
+			jdbcTemplate.update(DELETE_BY_PSEUDO, namedParameters);
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	class UtilisateurRowMapper implements RowMapper<Utilisateur> {
@@ -105,4 +112,15 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			return utilisateur;
 		}
 	}
+	
+	@Override
+	public void updatePoint(Utilisateur utilisateur) {
+	    String sql = "UPDATE UTILISATEURS SET credit = :credit WHERE pseudo = :pseudo";
+
+	    MapSqlParameterSource params = new MapSqlParameterSource();
+	    params.addValue("credit", utilisateur.getCredit());
+	    params.addValue("pseudo", utilisateur.getPseudo());
+
+	}
+
 }

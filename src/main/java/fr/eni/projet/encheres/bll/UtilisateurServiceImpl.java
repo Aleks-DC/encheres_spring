@@ -93,4 +93,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		}
 	}
 
+	@Override
+	@Transactional
+	public void updatePoint(Utilisateur utilisateur) {
+		utilisateurDAO.updatePoint(utilisateur);
+	}
+
 }

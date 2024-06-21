@@ -29,40 +29,58 @@ public class EnchereController {
 	private ArticleAVendreService articleAVendreService;
 	
 	// TODO @Alexis Controller filtrage des articles
-	@GetMapping("/")
-	public String afficherAccueil(@RequestParam(name = "motCle", required = false) String motCle,
-	                              @RequestParam(name = "categorie", required = false) Long categorieId,
-	                              @RequestParam(name = "affichage", required = false) String affichage,
-	                              @RequestParam(name = "typeFiltre", required = false) String typeFiltre,
-	                              Model model, Principal principal) {
-	    List<ArticleAVendre> articlesAVendre = null;
+	
+    @GetMapping("/")
+    public String afficherAccueil(@RequestParam(name = "motCle", required = false) String motCle,
+                                  @RequestParam(name = "categorie", required = false) Long categorieId,
+                                  @RequestParam(name = "affichage", required = false) String affichage,
+                                  @RequestParam(name = "typeFiltre", required = false) String typeFiltre,
+                                  Model model, Principal principal) {
+        List<ArticleAVendre> articlesAVendre = null;
 
-	    if ("ventes".equals(affichage) && principal != null) {
-	        if ("enCours".equals(typeFiltre)) {
-	            articlesAVendre = articleAVendreService.getMesVentesEnCours(principal.getName());
-	        } else if ("nonDebutees".equals(typeFiltre)) {
-	            articlesAVendre = articleAVendreService.getMesVentesNonDebutees(principal.getName());
-	        } else if ("terminees".equals(typeFiltre)) {
-	            articlesAVendre = articleAVendreService.getMesVentesTerminees(principal.getName());
-	        } else {
-	            articlesAVendre = articleAVendreService.getToutesMesVentes(principal.getName());
-	        }
-	    } else {
-	        if (categorieId != null && motCle != null) {
-	            articlesAVendre = articleAVendreService.findByCategorieAndMotCle(categorieId, motCle);
-	        } else if (categorieId != null) {
-	            articlesAVendre = articleAVendreService.getByCategorie(categorieId);
-	        } else if (motCle != null) {
-	            articlesAVendre = articleAVendreService.searchByMotCle(motCle);
-	        } else {
-	            articlesAVendre = articleAVendreService.getAll();
-	        }
-	    }
+        // Vérifie si l'utilisateur souhaite filtrer ses ventes
+        if ("ventes".equals(affichage) && principal != null) {
+            // Filtrage des ventes selon le type de filtre sélectionné
+            if ("enCours".equals(typeFiltre)) {
+                articlesAVendre = articleAVendreService.getMesVentesEnCours(principal.getName());
+            } else if ("nonDebutees".equals(typeFiltre)) {
+                articlesAVendre = articleAVendreService.getMesVentesNonDebutees(principal.getName());
+            } else if ("terminees".equals(typeFiltre)) {
+                articlesAVendre = articleAVendreService.getMesVentesTerminees(principal.getName());
+            } else {
+                articlesAVendre = articleAVendreService.getToutesMesVentes(principal.getName());
+            }
+        } else {
+            // Filtrage des achats selon le type de filtre sélectionné
+            if ("ouvertes".equals(typeFiltre)) {
+                articlesAVendre = articleAVendreService.getEncheresOuvertes();
+            } else if ("remportees".equals(typeFiltre) && principal != null) {
+                articlesAVendre = articleAVendreService.getMesEncheresRemportees(principal.getName());
+            } else if ("enCours".equals(typeFiltre) && principal != null) {
+                articlesAVendre = articleAVendreService.getMesEncheresEnCours(principal.getName());
+            } else if (categorieId != null && motCle != null) {
+                // Filtrage par catégorie et mot-clé
+                articlesAVendre = articleAVendreService.findByCategorieAndMotCle(categorieId, motCle);
+            } else if (categorieId != null) {
+                // Filtrage par catégorie uniquement
+                articlesAVendre = articleAVendreService.getByCategorie(categorieId);
+            } else if (motCle != null) {
+                // Filtrage par mot-clé uniquement
+                articlesAVendre = articleAVendreService.searchByMotCle(motCle);
+            } else {
+                // Aucun filtre appliqué, affiche tous les articles
+                articlesAVendre = articleAVendreService.getAll();
+            }
+        }
 
-	    model.addAttribute("articlesAVendre", articlesAVendre);
-	    model.addAttribute("categories", articleAVendreService.getAllCategories());
-	    return "index";
-	}
+        // Ajoute les articles et les catégories au modèle pour les passer à la vue
+        model.addAttribute("articlesAVendre", articlesAVendre);
+        model.addAttribute("categories", articleAVendreService.getAllCategories());
+        
+        // Retourne le nom de la vue
+        return "index";
+    }
+
 
 
 	@GetMapping("/articles/nouveau")
@@ -153,10 +171,10 @@ public class EnchereController {
     public String afficherFormulaireModification(@PathVariable("id") long id, Model model, Principal principal) {
         ArticleAVendre article = articleAVendreService.getById(id);
         if (article == null) {
-            return "redirect:/"; // Rediriger si l'article n'existe pas
+            return "redirect:/";
         }
         if (!article.getNomVendeur().equals(principal.getName())) {
-            return "redirect:/"; // Rediriger si l'utilisateur n'est pas le vendeur
+            return "redirect:/";
         }
         if (article.getCategorie() == null) {
             article.setCategorie(new Categorie());
@@ -197,7 +215,7 @@ public class EnchereController {
             articleAVendreService.update(existingArticle);
 
             existingArticle = articleAVendreService.getById(id);
-            model.addAttribute("article", existingArticle); // Mettre à jour le modèle
+            model.addAttribute("article", existingArticle);
 
             redirectAttributes.addFlashAttribute("successMessage", "Article modifié avec succès.");
             return "redirect:/articles/" + id;
@@ -217,8 +235,7 @@ public class EnchereController {
             } else if (article.getNomVendeur().equals(principal.getName())) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Vous ne pouvez pas enchérir sur votre propre article.");
             } else {
-                // Récupérer le montant de la nouvelle enchère depuis le formulaire
-                int montantEnchere = article.getPrixVente() + 1; // Incrémenter le prix de 1 euro (à adapter selon votre logique)
+                int montantEnchere = article.getPrixVente() + 1;
 
                 articleAVendreService.encherir(id, principal.getName(), montantEnchere);
                 redirectAttributes.addFlashAttribute("successMessage", "Enchère enregistrée avec succès.");
