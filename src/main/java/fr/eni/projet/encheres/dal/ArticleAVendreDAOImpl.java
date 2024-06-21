@@ -236,28 +236,28 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	@Override
 	public List<ArticleAVendre> getToutesMesVentes(String pseudoVendeur) {
 		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? ";
-		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+		return jdbcTemplate.query(sql, new AlexRowMapper(), pseudoVendeur);
 	}
 
 	@Override
 	public List<ArticleAVendre> getMesVentesNonDebutees(String pseudoVendeur) {
 		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? AND statut_enchere = 0";
-		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+		return jdbcTemplate.query(sql, new AlexRowMapper(), pseudoVendeur);
 	}
 
 	@Override
 	public List<ArticleAVendre> getMesVentesEnCours(String pseudoVendeur) {
 		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? AND statut_enchere = 1";
-		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+		return jdbcTemplate.query(sql, new AlexRowMapper(), pseudoVendeur);
 	}
 
 	@Override
 	public List<ArticleAVendre> getMesVentesTerminees(String pseudoVendeur) {
 		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? AND statut_enchere = 2";
-		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+		return jdbcTemplate.query(sql, new AlexRowMapper(), pseudoVendeur);
 	}
 
-	class PerfectRowMapper implements RowMapper<ArticleAVendre> {
+	class AlexRowMapper implements RowMapper<ArticleAVendre> {
 		@Override
 		public ArticleAVendre mapRow(ResultSet rs, int rowNum) throws SQLException {
 			ArticleAVendre articleAVendre = new ArticleAVendre();
