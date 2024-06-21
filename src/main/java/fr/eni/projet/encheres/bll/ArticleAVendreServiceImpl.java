@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.bo.Categorie;
-import fr.eni.projet.encheres.bo.Utilisateur;
 import fr.eni.projet.encheres.dal.ArticleAVendreDAO;
 import fr.eni.projet.encheres.exception.BusinessException;
 import jakarta.validation.ConstraintViolation;
@@ -25,9 +24,6 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 
 	@Autowired
 	private Validator validator;
-
-	@Autowired
-	private UtilisateurService utilisateurService;
 
 	@Override
 	public ArticleAVendre getById(long noArticle) {
@@ -56,8 +52,8 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
 
 	@Override
 	@Transactional
-	public void delete(int noArticle) {
-		articleAVendreDAO.delete(noArticle);
+	public void delete(int id) {
+		articleAVendreDAO.delete(id);
 }
 
 	@Override
@@ -71,6 +67,7 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
                 .map(v -> v.getPropertyPath() + ": " + v.getMessage())
                 .collect(Collectors.joining("\n"));
     }
+    
     // TODO @Alexis BLL filtrage des articles
     public List<ArticleAVendre> getByCategorie(long categorieId){
     	return articleAVendreDAO.getByCategorie(categorieId);
@@ -84,5 +81,25 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
     @Override
     public List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle) {
         return articleAVendreDAO.findByCategorieAndMotCle(categorieId, motCle);
+    }
+    
+    
+    @Override
+    public List<ArticleAVendre> getToutesMesVentes(String pseudoVendeur) {
+    	return articleAVendreDAO.getToutesMesVentes(pseudoVendeur);
+    }
+    @Override
+    public List<ArticleAVendre> getMesVentesNonDebutees(String pseudoVendeur) {
+    	return articleAVendreDAO.getMesVentesNonDebutees(pseudoVendeur);
+    }
+
+    @Override
+    public List<ArticleAVendre> getMesVentesEnCours(String pseudoVendeur) {
+    	return articleAVendreDAO.getMesVentesEnCours(pseudoVendeur);
+    }
+
+    @Override
+    public List<ArticleAVendre> getMesVentesTerminees(String pseudoVendeur) {
+    	return articleAVendreDAO.getMesVentesTerminees(pseudoVendeur);
     }
 }

@@ -15,8 +15,6 @@ public class ArticleAVendre {
     @NotBlank(message = "La description est obligatoire.")
     private String description;
     @NotNull(message = "Veuillez saisir une date de début.")
-    // TODO: ne peux que commencer demain
-    @FutureOrPresent(message = "La date de début des enchères doit être aujourd'hui ou dans le futur.")
     private LocalDate dateDebutEncheres;
     @NotNull(message = "Veuillez saisir une date de fin.")
     @Future(message = "La date de fin des enchères doit être après la date de début.")

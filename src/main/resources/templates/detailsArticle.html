@@ -28,11 +28,11 @@
 							catégorie</span>
 					</p>
 					<p>
-						Meilleure offre : <span th:text="*{prixVente} + ' €'">Prix
+						Meilleure offre : <span th:text="*{prixVente} + ' Pts'">Prix
 							de l'enchère</span>
 					</p>
 					<p>
-						Mise à prix : <span th:text="*{prixInitial} + ' €'">Prix
+						Mise à prix : <span th:text="*{prixInitial} + ' pts'">Prix
 							initial</span>
 					</p>
 					<p>
@@ -50,7 +50,25 @@
 							de retrait</span>
 					</p>
 				</div>
-				<a class="btn-retour" th:href="@{/}">RETOUR</a>
+				<div class="SuperParentBouton">
+					<div sec:authorize="isAuthenticated()">
+						<div th:if="${#authentication.name == article.nomVendeur}">
+							<a class="btn-modifier"
+								th:href="@{/articles/{id}/modifier(id=*{id})}">MODIFIER</a> <a
+								class="btn-supprimer"
+								th:href="@{/articles/{id}/supprimer(id=*{id})}">SUPPRIMER</a>
+						</div>
+					</div>
+					<div sec:authorize="isAuthenticated()">
+						<div th:if="${#authentication.name != article.nomVendeur}">
+							<form th:action="@{/articles/{id}/encherir(id=*{id})}"
+								method="post">
+								<button type="submit" class="btn-encherir">ENCHERIR +1</button>
+							</form>
+						</div>
+					</div>
+					<a class="btn-retour" th:href="@{/}">RETOUR</a>
+				</div>
 			</div>
 		</article>
 	</main>
