@@ -34,6 +34,8 @@ public interface ArticleAVendreService {
 
 	List<ArticleAVendre> getMesVentesTerminees(String pseudoVendeur);
 
+	void encherir(long articleId, String pseudoUtilisateur, int montantEnchere) throws BusinessException;
+
 	
 
 }

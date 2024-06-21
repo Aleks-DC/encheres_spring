@@ -153,10 +153,10 @@ public class EnchereController {
     public String afficherFormulaireModification(@PathVariable("id") long id, Model model, Principal principal) {
         ArticleAVendre article = articleAVendreService.getById(id);
         if (article == null) {
-            return "redirect:/"; // Rediriger si l'article n'existe pas
+            return "redirect:/";
         }
         if (!article.getNomVendeur().equals(principal.getName())) {
-            return "redirect:/"; // Rediriger si l'utilisateur n'est pas le vendeur
+            return "redirect:/";
         }
         if (article.getCategorie() == null) {
             article.setCategorie(new Categorie());
@@ -197,7 +197,7 @@ public class EnchereController {
             articleAVendreService.update(existingArticle);
 
             existingArticle = articleAVendreService.getById(id);
-            model.addAttribute("article", existingArticle); // Mettre à jour le modèle
+            model.addAttribute("article", existingArticle);
 
             redirectAttributes.addFlashAttribute("successMessage", "Article modifié avec succès.");
             return "redirect:/articles/" + id;
@@ -217,8 +217,7 @@ public class EnchereController {
             } else if (article.getNomVendeur().equals(principal.getName())) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Vous ne pouvez pas enchérir sur votre propre article.");
             } else {
-                // Récupérer le montant de la nouvelle enchère depuis le formulaire
-                int montantEnchere = article.getPrixVente() + 1; // Incrémenter le prix de 1 euro (à adapter selon votre logique)
+                int montantEnchere = article.getPrixVente() + 1;
 
                 articleAVendreService.encherir(id, principal.getName(), montantEnchere);
                 redirectAttributes.addFlashAttribute("successMessage", "Enchère enregistrée avec succès.");

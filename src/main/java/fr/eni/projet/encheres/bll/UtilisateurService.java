@@ -3,6 +3,7 @@ package fr.eni.projet.encheres.bll;
 import java.util.List;
 
 import fr.eni.projet.encheres.bo.Utilisateur;
+import fr.eni.projet.encheres.exception.BusinessException;
 
 public interface UtilisateurService {
 	
@@ -14,6 +15,7 @@ public interface UtilisateurService {
 
 	List<Utilisateur> consulterUtilisateurs();
 
-	//Pour plus tard
 	void modifierMotDePasse(String pseudo, String ancienMotDePasse, String nouveauMotDePasse);
+
+	void updatePoint(Utilisateur utilisateur);
 }

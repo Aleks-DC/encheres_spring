@@ -11,6 +11,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.bo.Categorie;
+import fr.eni.projet.encheres.bo.Enchere;
 import fr.eni.projet.encheres.bo.Utilisateur;
 
 @Repository
@@ -32,6 +34,9 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 
 	@Autowired
 	private DataSource dataSource;
+	
+	@Autowired
+    private UtilisateurDAO utilisateurDAO;
 
 	public void creer(ArticleAVendre article) {
 		String sql = "INSERT INTO ARTICLES_A_VENDRE (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, id_utilisateur, no_categorie, photo, no_adresse_retrait) "
@@ -53,13 +58,14 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 				pstmt.setNull(7, Types.BIGINT);
 			}
 
+
 			pstmt.setString(8, article.getPhoto());
 
 			Long noAdresseRetrait = getNoAdresseRetraitUtilisateur(article.getNomVendeur());
 			if (noAdresseRetrait != null) {
 				pstmt.setLong(9, noAdresseRetrait);
 			} else {
-				pstmt.setNull(9, Types.BIGINT); // Ou une autre valeur par défaut si nécessaire
+				pstmt.setNull(9, Types.BIGINT);
 			}
 
 			int affectedRows = pstmt.executeUpdate();
@@ -130,11 +136,19 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	
 	@Override
 	public void encherir(long articleId, String pseudoUtilisateur, int montantEnchere) {
-	    String sqlUpdateArticle = "UPDATE ARTICLES_A_VENDRE SET prix_vente = ? WHERE no_article = ?";
-	    jdbcTemplate.update(sqlUpdateArticle, montantEnchere, articleId);
+	    try {
+			String sqlUpdateArticle = "UPDATE ARTICLES_A_VENDRE SET prix_vente = ? WHERE no_article = ?";
+			jdbcTemplate.update(sqlUpdateArticle, montantEnchere, articleId);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		}
 
-	    String sqlInsertEnchere = "INSERT INTO ENCHERES (no_article, id_utilisateur, date_enchere, montant_enchere) VALUES (?, ?, ?, ?)";
-	    jdbcTemplate.update(sqlInsertEnchere, articleId, pseudoUtilisateur, new java.util.Date(System.currentTimeMillis()), montantEnchere);
+	    try {
+			String sqlInsertEnchere = "INSERT INTO ENCHERES (no_article, id_utilisateur, date_enchere, montant_enchere) VALUES (?, ?, ?, ?)";
+			jdbcTemplate.update(sqlInsertEnchere, articleId, pseudoUtilisateur, new java.util.Date(System.currentTimeMillis()), montantEnchere);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 
@@ -202,7 +216,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		}
 	}
 
-	static class CategorieRowMapper implements RowMapper<Categorie> { // Classe interne statique
+	static class CategorieRowMapper implements RowMapper<Categorie> {
 		@Override
 		public Categorie mapRow(ResultSet rs, int rowNum) throws SQLException {
 			Categorie categorie = new Categorie();
@@ -230,6 +244,45 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_categorie = ? AND nom_article LIKE ?";
 		return jdbcTemplate.query(sql, new ArticleRowMapper(), categorieId, "%" + motCle + "%");
 	}
+	
+	@Override
+	public Enchere getDerniereEnchere(long articleId) {
+	    String sql = "SELECT TOP 1 * FROM ENCHERES WHERE no_article = ? ORDER BY date_enchere DESC";
+	    try {
+	        return jdbcTemplate.queryForObject(sql, new EnchereRowMapper(this, utilisateurDAO), articleId);
+	    } catch (EmptyResultDataAccessException e) {
+	        return null;
+	    }
+	}
+
+	
+	static class EnchereRowMapper implements RowMapper<Enchere> {
+	    private final ArticleAVendreDAOImpl articleAVendreDAO;
+	    private final UtilisateurDAO utilisateurDAO;
+
+	    public EnchereRowMapper(ArticleAVendreDAOImpl articleAVendreDAO, UtilisateurDAO utilisateurDAO) {
+	        this.articleAVendreDAO = articleAVendreDAO;
+	        this.utilisateurDAO = utilisateurDAO;
+	    }
+	    
+        @Override
+        public Enchere mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Enchere enchere = new Enchere();
+            enchere.setDate(rs.getTimestamp("date_enchere").toLocalDateTime()); 
+            enchere.setMontant(rs.getInt("montant_enchere"));
+
+            String idUtilisateur = rs.getString("id_utilisateur");
+            enchere.setIdUtilisateur(idUtilisateur);
+            Utilisateur acquereur = utilisateurDAO.findByPseudo(idUtilisateur);
+            enchere.setAcquereur(acquereur);
+
+            long noArticle = rs.getLong("no_article");
+            ArticleAVendre articleAVendre = articleAVendreDAO.getById(noArticle);
+            enchere.setArticleAVendre(articleAVendre);
+
+            return enchere;
+        }
+    }
 
 	// TODO @Alexis Filtrage par état de mes ventes
 
