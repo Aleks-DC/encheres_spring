@@ -4,6 +4,7 @@ import java.util.List;
 
 import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.bo.Categorie;
+import fr.eni.projet.encheres.bo.Enchere;
 
 
 public interface ArticleAVendreDAO {
@@ -29,4 +30,7 @@ public interface ArticleAVendreDAO {
 	List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle);
 	
     void encherir(long articleId, String pseudoUtilisateur, int montantEnchere);
+    
+    Enchere getDerniereEnchere(long articleId);
+
 }

@@ -8,6 +8,7 @@ public class Enchere {
     
     private Utilisateur acquereur;
     private ArticleAVendre articleAVendre;
+    private String idUtilisateur;
     
 	public Enchere() {
 	}
@@ -64,7 +65,12 @@ public class Enchere {
 	public void setArticleAVendre(ArticleAVendre articleAVendre) {
 		this.articleAVendre = articleAVendre;
 	}
-    
-	
-    
+
+	public String getIdUtilisateur() {
+		return idUtilisateur;
+	}
+
+	public void setIdUtilisateur(String idUtilisateur) {
+		this.idUtilisateur = idUtilisateur;
+	}
 }
