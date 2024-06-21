@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.Utilisateur;
-import fr.eni.projet.encheres.exception.BusinessException;
 
 @Repository
 public class UtilisateurDAOImpl implements UtilisateurDAO {
@@ -47,7 +46,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	}
 
 	@Override
-	public int update(Utilisateur utilisateur) {
+	public void update(Utilisateur utilisateur) {
 		MapSqlParameterSource namedParameters = new MapSqlParameterSource();
 		namedParameters.addValue("pseudo", utilisateur.getPseudo());
 		namedParameters.addValue("nom", utilisateur.getNom());
@@ -58,8 +57,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		// namedParameters.addValue("credit", utilisateur.getCredit());
 		// namedParameters.addValue("administrateur", utilisateur.isAdmin());
 		namedParameters.addValue("noAdresse", utilisateur.getAdresse().getId());
-
-		return jdbcTemplate.update(UPDATE_USER, namedParameters);
+		jdbcTemplate.update(UPDATE_USER, namedParameters);
 	}
 
 	@Override

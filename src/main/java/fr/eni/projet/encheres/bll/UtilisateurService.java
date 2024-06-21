@@ -3,7 +3,6 @@ package fr.eni.projet.encheres.bll;
 import java.util.List;
 
 import fr.eni.projet.encheres.bo.Utilisateur;
-import fr.eni.projet.encheres.exception.BusinessException;
 
 public interface UtilisateurService {
 	

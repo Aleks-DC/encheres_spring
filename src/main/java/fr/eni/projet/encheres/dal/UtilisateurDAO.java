@@ -3,7 +3,6 @@ package fr.eni.projet.encheres.dal;
 import java.util.List;
 
 import fr.eni.projet.encheres.bo.Utilisateur;
-import fr.eni.projet.encheres.exception.BusinessException;
 
 public interface UtilisateurDAO {
 	
@@ -15,7 +14,7 @@ public interface UtilisateurDAO {
 
 	List<Utilisateur> findAll(); // Read
 
-	int update(Utilisateur utilisateur); // Update
+	void update(Utilisateur utilisateur); // Update
 
 	void deleteByPseudo(String pseudo); // Delete
 	

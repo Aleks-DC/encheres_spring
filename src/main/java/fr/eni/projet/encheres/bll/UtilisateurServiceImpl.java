@@ -12,7 +12,6 @@ import fr.eni.projet.encheres.bo.Adresse;
 import fr.eni.projet.encheres.bo.Utilisateur;
 import fr.eni.projet.encheres.dal.AdresseDAO;
 import fr.eni.projet.encheres.dal.UtilisateurDAO;
-import fr.eni.projet.encheres.exception.BusinessException;
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService {
@@ -113,7 +112,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		} else {
 			throw new IllegalArgumentException("Ancien mot de passe incorrect");
 		}
-	
+	}
 
 	@Override
 	public void updatePoint(Utilisateur utilisateur) {
@@ -164,7 +163,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 	            // Récupérer toutes les adresses existantes
 	            List<Adresse> adressesExistantes = adresseDAO.findAll();
 
-<<<<<<< HEAD
 	            for (Adresse existingAdresse : adressesExistantes) {
 	                if (sontIdentiques(adresse, existingAdresse)) {
 	                    be.add(BusinessCode.VALIDATION_UTILISATEUR_UNIQUE_ADRESSE);
