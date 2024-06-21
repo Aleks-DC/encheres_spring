@@ -1,6 +1,7 @@
 package fr.eni.projet.encheres.controller;
 
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -44,19 +45,24 @@ public class UtilisateurController {
 	@PostMapping("/register/new")
 	public String soumettreFormulaire(@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
+			System.out.println(bindingResult);
 			return "register";
 		} else {
-			try {
-				System.out.println("Création de " + utilisateur);
+			//try {
+				System.out.println("Tantative de création" + utilisateur);
 				utilisateurService.creerUtilisateur(utilisateur);
+				System.out.println("Création de " + utilisateur);
 				return "redirect:/login";
-			} catch (BusinessException e) {
+			/*} catch (BusinessException e) {
+				System.out.println("Echec de la création de" + utilisateur);
+				e.printStackTrace();
 				e.getClefsExternalisations().forEach(key ->{
 					ObjectError error= new ObjectError("globalError", key);
 					bindingResult.addError(error);
 				});
+				System.out.println("Je suis dans le catch");
 				return "register";
-			}
+			}*/
 		}
 	}
 

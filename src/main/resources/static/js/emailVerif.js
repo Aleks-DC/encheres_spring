@@ -1,6 +1,6 @@
 function validateEmail() {
-	var email = document.getElementById("email").value;
-	var verifyEmail = document.getElementById("verifyEmail").value;
+	const email = document.getElementById("email").value;
+	const verifyEmail = document.getElementById("verifyEmail").value;
 	
 	// Vérification des emails
 	if (email !== verifyEmail) {
@@ -9,7 +9,7 @@ function validateEmail() {
 	}
 	
 	// Vérification du pattern de l'email
-	var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+	const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 	if (!emailPattern.test(email)) {
 		alert("L'adresse email n'est pas valide.");
 		return false;
@@ -17,3 +17,11 @@ function validateEmail() {
 
 	return true;
 }
+
+
+document.getElementById("submit").addEventListener('click', function(event){
+	event.preventDefault();
+	if (validateEmail()) {
+		document.getElementById("form").submit();
+	}
+});

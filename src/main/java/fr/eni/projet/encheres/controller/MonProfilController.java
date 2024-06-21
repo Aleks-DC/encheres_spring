@@ -60,23 +60,23 @@ public class MonProfilController {
 	 
 	@PostMapping("/modifier")
 	public String updateUtilisateur (@Valid @ModelAttribute("utilisateur") Utilisateur utilisateur, BindingResult bindingResult, Model model) {
-		if (bindingResult.hasErrors()) {
+		if (!bindingResult.hasErrors()) {
 			System.out.println(bindingResult);
-			return "profil-update";
-		}else {
 			try {
 				System.out.println("L'utilisateur modifié : "+ utilisateur);
 				utilisateurService.modifierUtilisateur(utilisateur);
 				return "redirect:/monProfil";
 			} catch (BusinessException e) {
+				System.out.println("j'ai récupérér le throw e");
 				e.getClefsExternalisations().forEach(key ->{
 				ObjectError error= new ObjectError("globalError", key);
 				bindingResult.addError(error);
 				});
 				System.out.println("Je suis dans le catch");
-				return "profil-update";
+				bindingResult.getAllErrors().forEach(System.out::println);
 			}
 		}
+		return "profil-update";
 	}
 	
 	@GetMapping("/modifier/changeMdp")

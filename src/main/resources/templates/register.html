@@ -9,36 +9,49 @@
 <title>S'enregistrer</title>
 <th:block id="ressources-css">
 	<link rel="stylesheet" th:href="@{/css/register.css}" />
+	<link rel="stylesheet" th:href="@{/css/tp-error.css}" />
 </th:block>
 
 </head>
 <body>
 	<main>
 		<h1>Nouveau Profil</h1>
-		<form th:action="@{/register/new}" method="post" th:object="${utilisateur}" onsubmit="return validateForm()">
+		<p class="cards" data-th-each="err : ${#fields.errors('global')}" data-th-text="#{${err}}"></p>
+		
+		<form id="form" th:action="@{/register/new}" method="post" th:object="${utilisateur}">
 			<label for="pseudo">Pseudo (*):</label>
-			<input type="text" id="pseudo" th:field="*{pseudo}" required />
+			<input type="text" name="pseudo" id="pseudo" th:field="*{pseudo}" required />
+			<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('pseudo')}"></div>
 
 			<label for="nom">Nom (*):</label>
-			<input type="text" id="nom" th:field="*{nom}" required />
+			<input type="text" name="nom" id="nom" th:field="*{nom}" required />
+			<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('nom')}"></div>
 
 			<label for="prenom">Prénom (*):</label>
-			<input type="text" id="prenom" th:field="*{prenom}" required />
+			<input type="text" name="prenom" id="prenom" th:field="*{prenom}" required />
+			<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('prenom')}"></div>
 
 			<label for="email">Email (*):</label>
-			<input type="email" id="email" th:field="*{email}" required />
+			<input type="email" name="email" id="email" th:field="*{email}" required />
+			<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('email')}"></div>
 
 			<label for="verifyEmail">Vérifier Email (*):</label>
 			<input type="email" id="verifyEmail" required />
+			
 
 			<label for="telephone">Téléphone:</label>
 			<input type="text" id="telephone" th:field="*{telephone}" />
 
 			<label for="adresse">Adresse (*):</label>
 			<div>
-				<input type="text" id="rue" th:field="*{adresse.rue}" placeholder="Rue" required />
-				<input type="text" id="codePostal" th:field="*{adresse.codePostal}" placeholder="Code Postal" required />
-				<input type="text" id="ville" th:field="*{adresse.ville}" placeholder="Ville" required />
+				<input type="text" name="rue" id="rue" th:field="*{adresse.rue}" placeholder="Rue" required />
+				<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('adresse.rue')}"></div>
+				
+				<input type="text" name="codePostal" id="codePostal" th:field="*{adresse.codePostal}" placeholder="Code Postal" required />
+				<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('adresse.codePostal')}"></div>
+				
+				<input type="text" name="ville" id="ville" th:field="*{adresse.ville}" placeholder="Ville" required />
+				<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('adresse.ville')}"></div>
 			</div>
 
 			<label for="motDePasse">Mot de passe (*):</label>
@@ -48,10 +61,12 @@
 			<input type="password" id="verifyMotDePasse" required />
 
 			<div class="button-group">
-				<button type="submit">Créer</button>
+				<button id="btnsubmit" type="submit">Créer</button>
 				<a th:href="@{/}" class="button">Annuler</a>
 			</div>
 		</form>
+		
+		<script th:src="@{/js/formVerif.js}"></script>
 	</main>
 </body>
 </html>

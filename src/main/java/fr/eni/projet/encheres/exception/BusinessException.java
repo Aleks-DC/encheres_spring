@@ -2,6 +2,7 @@ package fr.eni.projet.encheres.exception;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 public class BusinessException extends RuntimeException {
 
@@ -35,6 +36,10 @@ public class BusinessException extends RuntimeException {
 			clefsExternalisations = new ArrayList<>();
 		}
 		clefsExternalisations.add(clef);
+	}
+
+	public boolean containsCode(String code) {
+		return clefsExternalisations != null && clefsExternalisations.contains(code);
 	}
 
 }

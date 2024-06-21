@@ -7,16 +7,16 @@ import jakarta.validation.constraints.Size;
 public class Adresse {
 	private long id;
 	
-	@NotBlank
-	@Size(max=120)
+	@NotBlank(message = "Le champ 'rue' ne peut pas être vide.")
+	@Size(max=120, message = "Le champ 'rue' doit contenir au maximum 120 caractères.")
     private String rue;
 	
-	@NotBlank
-	@Pattern(regexp = "\\d{5}")
+	 @NotBlank(message = "Le champ 'codePostal' ne peut pas être vide.")
+	 @Pattern(regexp = "\\d{5}", message = "Le code postal doit être valide (ex: 12345).")
     private String codePostal;
 	
-	@NotBlank
-	@Size(max=50)
+    @NotBlank(message = "Le champ 'ville' ne peut pas être vide.")
+    @Size(max = 50, message = "Le champ 'ville' doit contenir au maximum 50 caractères.")
     private String ville;
     
 	public Adresse() {

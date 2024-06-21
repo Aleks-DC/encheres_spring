@@ -1,5 +1,6 @@
 package fr.eni.projet.encheres.bo;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +32,8 @@ public class Utilisateur {
     private String motDePasse;
     private int credit;
     private boolean admin;
+    
+    @Valid
     private Adresse adresse;
 
 

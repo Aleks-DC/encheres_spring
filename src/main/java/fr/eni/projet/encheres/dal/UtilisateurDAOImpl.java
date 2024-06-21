@@ -15,16 +15,17 @@ import fr.eni.projet.encheres.bo.Utilisateur;
 
 @Repository
 public class UtilisateurDAOImpl implements UtilisateurDAO {
-
+	
+	@Autowired
+	private NamedParameterJdbcTemplate jdbcTemplate;
 	private final String INSERT_USER = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse) VALUES (:pseudo, :nom, :prenom, :email, :telephone, :motDePasse, :credit, :administrateur, :noAdresse)";
 	private final String UPDATE_USER = "UPDATE UTILISATEURS SET nom=:nom, prenom=:prenom, email=:email, telephone=:telephone, no_adresse=:noAdresse WHERE pseudo=:pseudo";
 	private final String FIND_BY_PSEUDO = "SELECT pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse FROM UTILISATEURS WHERE pseudo = :pseudo";
 	private final String FIND_BY_EMAIL = "SELECT pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse FROM UTILISATEURS WHERE email = :email";
 	private final String FIND_ALL_USERS = "SELECT pseudo, nom, prenom, email, telephone, mot_de_passe, credit, administrateur, no_adresse FROM UTILISATEURS";
 	private final String DELETE_BY_PSEUDO = "DELETE FROM UTILISATEURS WHERE pseudo = :pseudo";
+	
 
-	@Autowired
-	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	@Override
 	public void create(Utilisateur utilisateur) {

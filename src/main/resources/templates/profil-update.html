@@ -15,9 +15,7 @@
 <body>
 	<main>
 	    <h1>Mon Profil</h1>
-	    <th:block data-th-if="${!#strings.isEmpty(action)}"> 
-			<div data-th-replace="~{fragments/errors/fragment-errors :: frag-errors}"></div> 
-		</th:block>	
+	    <p class="cards" data-th-each="err : ${#fields.errors('global')}" data-th-text="#{${err}}"></p>
 		
 	    <form action="#" data-th-action="@{/monProfil/modifier}" method="post" data-th-object ="${utilisateur}">
 	        <div>
@@ -28,10 +26,8 @@
 	         
 	            <label id="inputName" for="nom">Nom(*):</label>
 	           	<input id="inputName" type="text" name="nom" data-th-field="*{nom}"required>
-					<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('nom')}"></div> 
-
+				<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('nom')}"></div> 
 	        </div>
-	        
 	        
 	        <div>
 	            <label id="inputForname" for="prenom">Prénom(*):</label>
@@ -39,16 +35,19 @@
 				<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('prenom')}"></div> 
 
 	            
-	            <label id="inputMail" for="email">Email(*):</label>
-	            <input id="inputMail" type="email"  name="email" data-th-field="*{email}" required>
-				<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('email')}"></div> 
+	            <label  for="email">Email(*):</label>
+	            <input  type="email"  name="email" data-th-field="*{email}" required>
+				 <div th:if="${#fields.hasErrors('email')}" class="cards">
+        <ul>
+            <li th:each="error : ${#fields.errors('email')}" th:text="${error.defaultMessage}"></li>
+        </ul>
+    </div>
 	        </div>
 	        
 	        
 	        <div class="full-width">
 	            <label id="inputPhone" for="telephone">Téléphone:</label>
 	            <input id="inputPhone" type="tel" name="telephone" data-th-field="*{telephone}">
-				<div data-th-replace="~{fragments/errors/fragment-error :: frag-error('telephone')}"></div> 
 	        </div>
 	        
 	        
@@ -73,13 +72,13 @@
 	        
 	        
 	        <div class="button-group">
-	        	<!--  type button à passer en submit une fois la validation bien définit -->
 	            <button type="submit">Modifier</button>
-	            <a data-th-href="@{modifier/changeMdp}">Modifier Mot de passe</a> <!--  A faire plus tard  1-->
-	            <a data-th-href="@{/monProfil}">Supprimer Compte</a> <!--  A faire plus tard 2-->
+	            <a data-th-href="@{modifier/changeMdp}">Modifier Mot de passe</a> <!--  A faire juste après-->
 	            <a data-th-href="@{/monProfil}">Annuler</a>
+	            <a class="button delete-button" data-th-href="@{/monProfil}">Supprimer Compte</a> <!--  itération 3-->
 	        </div>
 	    </form>
+	    
     </main>
 </body>
 </html>
