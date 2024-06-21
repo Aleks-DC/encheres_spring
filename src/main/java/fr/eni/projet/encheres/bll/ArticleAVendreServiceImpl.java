@@ -160,4 +160,20 @@ public class ArticleAVendreServiceImpl implements ArticleAVendreService {
     public List<ArticleAVendre> getMesVentesTerminees(String pseudoVendeur) {
     	return articleAVendreDAO.getMesVentesTerminees(pseudoVendeur);
     }
+    
+    @Override
+    public List<ArticleAVendre> getEncheresOuvertes() {
+        return articleAVendreDAO.getEncheresOuvertes();
+    }
+
+    @Override
+    public List<ArticleAVendre> getMesEncheresRemportees(String pseudoAcquereur) {
+        return articleAVendreDAO.getMesEncheresRemportees(pseudoAcquereur);
+    }
+
+    @Override
+    public List<ArticleAVendre> getMesEncheresEnCours(String pseudoAcquereur) {
+        return articleAVendreDAO.getMesEncheresEnCours(pseudoAcquereur);
+    }
+
 }

@@ -289,28 +289,46 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 	@Override
 	public List<ArticleAVendre> getToutesMesVentes(String pseudoVendeur) {
 		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? ";
-		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+		return jdbcTemplate.query(sql, new AlexRowMapper(), pseudoVendeur);
 	}
 
 	@Override
 	public List<ArticleAVendre> getMesVentesNonDebutees(String pseudoVendeur) {
 		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? AND statut_enchere = 0";
-		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+		return jdbcTemplate.query(sql, new AlexRowMapper(), pseudoVendeur);
 	}
 
 	@Override
 	public List<ArticleAVendre> getMesVentesEnCours(String pseudoVendeur) {
 		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? AND statut_enchere = 1";
-		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+		return jdbcTemplate.query(sql, new AlexRowMapper(), pseudoVendeur);
 	}
 
 	@Override
 	public List<ArticleAVendre> getMesVentesTerminees(String pseudoVendeur) {
 		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? AND statut_enchere = 2";
-		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+		return jdbcTemplate.query(sql, new AlexRowMapper(), pseudoVendeur);
+	}
+	
+	@Override
+	public List<ArticleAVendre> getEncheresOuvertes() {
+	    String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE statut_enchere = 1";
+	    return jdbcTemplate.query(sql, new ArticleRowMapper());
 	}
 
-	class PerfectRowMapper implements RowMapper<ArticleAVendre> {
+	@Override
+	public List<ArticleAVendre> getMesEncheresRemportees(String pseudoAcquereur) {
+	    String sql = "SELECT a.* FROM ARTICLES_A_VENDRE a JOIN ENCHERES e ON a.no_article = e.no_article WHERE e.id_utilisateur = ? AND a.statut_enchere = 2";
+	    return jdbcTemplate.query(sql, new ArticleRowMapper(), pseudoAcquereur);
+	}
+
+	@Override
+	public List<ArticleAVendre> getMesEncheresEnCours(String pseudoAcquereur) {
+	    String sql = "SELECT a.* FROM ARTICLES_A_VENDRE a JOIN ENCHERES e ON a.no_article = e.no_article WHERE e.id_utilisateur = ? AND a.statut_enchere = 1";
+	    return jdbcTemplate.query(sql, new ArticleRowMapper(), pseudoAcquereur);
+	}
+
+	class AlexRowMapper implements RowMapper<ArticleAVendre> {
 		@Override
 		public ArticleAVendre mapRow(ResultSet rs, int rowNum) throws SQLException {
 			ArticleAVendre articleAVendre = new ArticleAVendre();
