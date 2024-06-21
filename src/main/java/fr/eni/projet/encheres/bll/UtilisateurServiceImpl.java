@@ -113,14 +113,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 		} else {
 			throw new IllegalArgumentException("Ancien mot de passe incorrect");
 		}
-	}
+	
 
 	@Override
 	public void updatePoint(Utilisateur utilisateur) {
 		// TODO Auto-generated method stub
 		
 	}
-	
+}	
 	//Les méthodes de validation------------------------------------------------------------------------------------------------------
 		/*private boolean validerUtilisateur(Utilisateur u, BusinessException be) { 
 			if (u == null) { 
