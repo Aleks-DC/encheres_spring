@@ -6,28 +6,39 @@ import fr.eni.projet.encheres.bo.ArticleAVendre;
 import fr.eni.projet.encheres.bo.Categorie;
 import fr.eni.projet.encheres.bo.Enchere;
 
-
 public interface ArticleAVendreDAO {
 
-	void creer(ArticleAVendre articleAVendre);
+	void creer(ArticleAVendre articleAVendre); // CRUD
 
 	ArticleAVendre getById(long noArticle);
 
-    List<ArticleAVendre> getAll();
-    
-    List<Categorie> getAllCategories();
+	List<ArticleAVendre> getAll();
 
-    void update(ArticleAVendre articleAVendre);
+	List<Categorie> getAllCategories();
 
-    void delete(int noArticle);
-    
-    Categorie getCategorieById(Long id);
+	void update(ArticleAVendre articleAVendre);
+
+	void delete(int noArticle);
+
+	// Filtres par catégorie ou mot clé
 	
+	Categorie getCategorieById(Long id);
+
 	List<ArticleAVendre> getByCategorie(long categorieId);
-	
+
 	List<ArticleAVendre> searchByMotCle(String motCle);
 
 	List<ArticleAVendre> findByCategorieAndMotCle(long categorieId, String motCle);
+
+	// Filtres par état des ventes
+	
+	List<ArticleAVendre> getToutesMesVentes(String pseudoVendeur);
+
+	List<ArticleAVendre> getMesVentesNonDebutees(String pseudoVendeur);
+
+	List<ArticleAVendre> getMesVentesEnCours(String pseudoVendeur);
+
+	List<ArticleAVendre> getMesVentesTerminees(String pseudoVendeur);
 	
     void encherir(long articleId, String pseudoUtilisateur, int montantEnchere);
     

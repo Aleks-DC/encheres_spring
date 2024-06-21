@@ -57,16 +57,16 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 			} else {
 				pstmt.setNull(7, Types.BIGINT);
 			}
-			
-            pstmt.setString(8, article.getPhoto());
-            
-            Long noAdresseRetrait = getNoAdresseRetraitUtilisateur(article.getNomVendeur()); 
-            if (noAdresseRetrait != null) {
-                pstmt.setLong(9, noAdresseRetrait);
-            } else {
-                pstmt.setNull(9, Types.BIGINT);
-            }
 
+
+			pstmt.setString(8, article.getPhoto());
+
+			Long noAdresseRetrait = getNoAdresseRetraitUtilisateur(article.getNomVendeur());
+			if (noAdresseRetrait != null) {
+				pstmt.setLong(9, noAdresseRetrait);
+			} else {
+				pstmt.setNull(9, Types.BIGINT);
+			}
 
 			int affectedRows = pstmt.executeUpdate();
 
@@ -84,14 +84,14 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 			throw new RuntimeException("Erreur lors de la création de l'article : " + e.getMessage(), e);
 		}
 	}
-	
+
 	private Long getNoAdresseRetraitUtilisateur(String idUtilisateur) {
-	    String sql = "SELECT no_adresse FROM UTILISATEURS WHERE pseudo = ?";
-	    try {
-	        return jdbcTemplate.queryForObject(sql, Long.class, idUtilisateur);
-	    } catch (EmptyResultDataAccessException e) {
-	        return null;
-	    }
+		String sql = "SELECT no_adresse FROM UTILISATEURS WHERE pseudo = ?";
+		try {
+			return jdbcTemplate.queryForObject(sql, Long.class, idUtilisateur);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -196,6 +196,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 			article.setDescription(rs.getString("description"));
 			article.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
 			article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+			article.setStatut(rs.getInt("statut_enchere"));
 			article.setPrixInitial(rs.getInt("prix_initial"));
 			article.setPrixVente(rs.getInt("prix_vente"));
 			article.setNomVendeur(rs.getString("id_utilisateur"));
@@ -225,7 +226,7 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
 		}
 	}
 
-	// TODO @Alexis DAO filtrage des articles
+	// TODO @Alexis DAO filtrage par catégorie et mots clé
 	@Override
 	public List<ArticleAVendre> getByCategorie(long categorieId) {
 		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE no_categorie = ?";
@@ -283,4 +284,59 @@ public class ArticleAVendreDAOImpl implements ArticleAVendreDAO {
         }
     }
 
+	// TODO @Alexis Filtrage par état de mes ventes
+
+	@Override
+	public List<ArticleAVendre> getToutesMesVentes(String pseudoVendeur) {
+		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? ";
+		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+	}
+
+	@Override
+	public List<ArticleAVendre> getMesVentesNonDebutees(String pseudoVendeur) {
+		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? AND statut_enchere = 0";
+		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+	}
+
+	@Override
+	public List<ArticleAVendre> getMesVentesEnCours(String pseudoVendeur) {
+		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? AND statut_enchere = 1";
+		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+	}
+
+	@Override
+	public List<ArticleAVendre> getMesVentesTerminees(String pseudoVendeur) {
+		String sql = "SELECT * FROM ARTICLES_A_VENDRE WHERE id_utilisateur = ? AND statut_enchere = 2";
+		return jdbcTemplate.query(sql, new PerfectRowMapper(), pseudoVendeur);
+	}
+
+	class PerfectRowMapper implements RowMapper<ArticleAVendre> {
+		@Override
+		public ArticleAVendre mapRow(ResultSet rs, int rowNum) throws SQLException {
+			ArticleAVendre articleAVendre = new ArticleAVendre();
+			articleAVendre.setId(rs.getLong("no_article"));
+			articleAVendre.setNom(rs.getString("nom_article"));
+			articleAVendre.setDescription(rs.getString("description"));
+			articleAVendre.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
+			articleAVendre.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+			articleAVendre.setStatut(rs.getInt("statut_enchere"));
+			articleAVendre.setPrixInitial(rs.getInt("prix_initial"));
+			articleAVendre.setPrixVente(rs.getInt("prix_vente"));
+
+			Utilisateur vendeur = new Utilisateur();
+			vendeur.setPseudo(rs.getString("id_utilisateur"));
+			articleAVendre.setVendeur(vendeur);
+
+			Adresse retrait = new Adresse();
+			retrait.setId(rs.getLong("no_adresse_retrait"));
+			articleAVendre.setRetrait(retrait);
+
+			Categorie categorie = new Categorie();
+			categorie.setId(rs.getLong("no_categorie"));
+			articleAVendre.setCategorie(categorie);
+
+			return articleAVendre;
+		}
+
+	}
 }

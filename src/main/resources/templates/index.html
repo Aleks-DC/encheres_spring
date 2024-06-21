@@ -51,9 +51,9 @@
 										<label for="achats">Achats</label>
 										<div class="selectOption" sec:authorize="isAuthenticated()" id="choixAchats">
 											<select>
-												<option value="ouvertes">Enchères ouvertes</option>
-												<option value="remportees">Mes enchères remportées</option>
-												<option value="enCours">Mes enchères en cours</option>
+												<option value="ouvertes" th:selected="${param.typeFiltre == 'ouvertes'}">Enchères ouvertes</option>
+												<option value="remportees" th:selected="${param.typeFiltre == 'remportees'}">Mes enchères remportées</option>
+												<option value="enCours" th:selected="${param.typeFiltre == 'enCours'}">Mes enchères en cours</option>
 											</select>
 										</div>
 									</div>
@@ -63,18 +63,18 @@
 										<label for="ventes">Mes ventes</label>
 										<div class="selectOption" sec:authorize="isAuthenticated()" id="choixVentes">
 											<select>
-												<option value="enCours">Mes ventes en cours</option>
-												<option value="nonDebutees">Mes ventes non débutées</option>
-												<option value="terminees">Mes ventes terminées</option>
+												 <option value="enCours" th:selected="${param.typeFiltre == 'enCours'}">Mes ventes en cours</option>
+                                                <option value="nonDebutees" th:selected="${param.typeFiltre == 'nonDebutees'}">Mes ventes non débutées</option>
+                                                <option value="terminees" th:selected="${param.typeFiltre == 'terminees'}">Mes ventes terminées</option>
 											</select>
 										</div>
 									</div>
 								</div>
 							</div>
 							<!-- Bouton de soumission dans le modal -->
-                        <div class="modal-footer">
-                            <button type="submit" class="submit">Appliquer les filtres</button>
-                        </div>
+							<div class="modal-footer">
+								<button type="submit" class="submit">Appliquer les filtres</button>
+							</div>
 						</div>
 					</div>
 
@@ -109,7 +109,7 @@
 						<!-- Détails de l'enchère -->
 						<div class="enchere-details">
 							<h4 th:text="${article.nom}">Nom de l'article</h4>
-							
+
 							<!-- TODO: Vérifier si ce champ est nécessaire -->
 							<!-- <input data-th-value="${utilisateur.pseudo}" name="pseudo" hidden="true"> -->
 							<p class="enchere-prix">
